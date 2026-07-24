@@ -12,7 +12,9 @@
   <a class="navbar-brand" href="{{ url_for('dashboard') }}">&#9724; SMA System</a>
   <div class="d-flex align-items-center gap-3">
     {% if user %}
-      <span class="text-white small">{{ user.full_name }}</span>
+      <span class="text-white small" id="sma-identity-badge" style="cursor:pointer" title="Click to set the name shown to other assessors">
+        👤 <span id="sma-identity-name">…</span>
+      </span>
       <a href="{{ url_for('new_assessment') }}" class="btn btn-warning btn-sm">+ New</a>
       <a href="{{ url_for('analysis') }}" class="btn btn-outline-light btn-sm">📊 Analysis</a>
       <a href="{{ url_for('admin_panel') }}" class="btn btn-outline-light btn-sm">⚙ Admin</a>
@@ -38,6 +40,35 @@
 </div>
 <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
 <script src="{{ url_for('static', filename='chart.min.js') }}"></script>
+<script>
+// Browser-local identity for the "who else is here" presence panel — a courtesy
+// label typed once per browser, not a login. Not authentication.
+window.SMA_IDENTITY = (function () {
+  let clientId = localStorage.getItem('sma_client_id');
+  if (!clientId) {
+    clientId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+             : 'c-' + Math.random().toString(36).slice(2) + Date.now();
+    localStorage.setItem('sma_client_id', clientId);
+  }
+  function getName() { return localStorage.getItem('sma_display_name') || ''; }
+  function setName(n) { localStorage.setItem('sma_display_name', n || ''); paint(); }
+  function paint() {
+    const el = document.getElementById('sma-identity-name');
+    if (el) el.textContent = getName() || 'set your name';
+  }
+  function promptForName(existing) {
+    const n = prompt('Your name (shown to other assessors while you work):', existing || '');
+    if (n !== null) setName(n.trim());
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!getName()) promptForName('');
+    paint();
+    const badge = document.getElementById('sma-identity-badge');
+    if (badge) badge.addEventListener('click', function () { promptForName(getName()); });
+  });
+  return { clientId: clientId, getName: getName };
+})();
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

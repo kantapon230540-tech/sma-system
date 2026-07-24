@@ -252,6 +252,13 @@ def init_db():
             created_at TEXT DEFAULT (datetime('now')),
             updated_at TEXT DEFAULT (datetime('now'))
         );
+        CREATE TABLE IF NOT EXISTS presence (
+            client_id TEXT PRIMARY KEY,
+            display_name TEXT,
+            assessment_id INTEGER NOT NULL REFERENCES assessments(id),
+            pillar TEXT,
+            last_seen TEXT NOT NULL DEFAULT (datetime('now'))
+        );
     """)
     # Migration: add responses.detail to existing DBs (per-role responder counts)
     cols = [r[1] for r in db.execute("PRAGMA table_info(responses)")]
@@ -922,6 +929,66 @@ def api_tmcount(assessment_id):
     db.execute("UPDATE assessments SET tm_count=? WHERE id=?", (tm_count, assessment_id))
     db.commit()
     return jsonify({"ok": True, "tm_count": tm_count, "required": tm_sample_size(tm_count)})
+
+
+PILLAR_LABELS = {"leadership": "Leadership", "tm_engagement": "TM Engagement",
+                  "organization": "Organization", "system": "System"}
+PRESENCE_STALE_SECONDS = 90
+
+# NOTE: the app has no real per-user login (login_required auto-signs everyone in as
+# the same account — see login_required above), so presence can't be keyed by user_id;
+# every visitor would collapse into one identity. Instead each browser generates a random
+# client_id (localStorage, see base.html) and types a display name once — a courtesy
+# label, not authentication.
+@app.route("/api/presence", methods=["POST"])
+@login_required
+def api_presence_ping():
+    data = request.get_json(force=True, silent=True) or {}
+    client_id = (data.get("client_id") or "").strip()
+    display_name = (data.get("display_name") or "").strip()
+    assessment_id = data.get("assessment_id")
+    pillar = data.get("pillar")
+    if not client_id or not assessment_id:
+        return jsonify({"error": "client_id and assessment_id required"}), 400
+    db = get_db()
+    db.execute("""INSERT INTO presence (client_id, display_name, assessment_id, pillar, last_seen)
+                  VALUES (?,?,?,?,datetime('now'))
+                  ON CONFLICT(client_id) DO UPDATE SET
+                    display_name=excluded.display_name,
+                    assessment_id=excluded.assessment_id,
+                    pillar=excluded.pillar,
+                    last_seen=excluded.last_seen""",
+               (client_id, display_name, assessment_id, pillar))
+    db.commit()
+    return jsonify({"ok": True})
+
+
+@app.route("/api/presence")
+@login_required
+def api_presence_list():
+    assessment_id = request.args.get("assessment_id", type=int)
+    exclude_client_id = request.args.get("client_id", "")
+    db = get_db()
+    sql = """SELECT p.client_id, p.display_name, p.assessment_id, a.site_name, p.pillar,
+                    p.last_seen,
+                    CAST((julianday('now') - julianday(p.last_seen)) * 86400 AS INTEGER) AS secs_ago
+             FROM presence p
+             JOIN assessments a ON a.id = p.assessment_id
+             WHERE p.client_id != ?
+               AND p.display_name != ''
+               AND p.last_seen >= datetime('now', ?)"""
+    params = [exclude_client_id, f"-{PRESENCE_STALE_SECONDS} seconds"]
+    if assessment_id:
+        sql += " AND p.assessment_id = ?"
+        params.append(assessment_id)
+    sql += " ORDER BY p.last_seen DESC"
+    rows = db.execute(sql, params).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["pillar_label"] = PILLAR_LABELS.get(d["pillar"], d["pillar"])
+        out.append(d)
+    return jsonify(out)
 
 
 @app.route("/api/answer", methods=["POST"])

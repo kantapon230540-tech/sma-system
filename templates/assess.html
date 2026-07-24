@@ -66,6 +66,11 @@
           <span class="small text-muted" id="tm-saved-note"></span>
         </div>
       </div>
+
+      <!-- ── Who else is here (presence, per-pillar) ── -->
+      <div class="mt-2 pt-2 border-top small" id="presence-box" style="display:none">
+        <span class="text-muted">👀 Also here:</span> <span id="presence-list"></span>
+      </div>
     </div>
 
     {% if self_assessment %}
@@ -731,6 +736,56 @@ function updateRowColor(row, answer) {
       .catch(() => { note.textContent = '⚠ not saved'; });
     }, 400);
   });
+})();
+
+// ── Presence: who else is on this assessment, and in which pillar ─────────────
+(function () {
+  const sections = document.querySelectorAll('.pillar-section');
+  if (!sections.length) return;
+
+  let currentPillar = sections[0].dataset.pillar;
+  const observer = new IntersectionObserver((entries) => {
+    let best = null;
+    entries.forEach(en => {
+      if (en.isIntersecting && (!best || en.intersectionRatio > best.intersectionRatio)) best = en;
+    });
+    if (best) currentPillar = best.target.dataset.pillar;
+  }, { threshold: [0.1, 0.3, 0.5] });
+  sections.forEach(s => observer.observe(s));
+
+  function ping() {
+    if (!window.SMA_IDENTITY || !SMA_IDENTITY.getName()) return;
+    fetch('/api/presence', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        client_id: SMA_IDENTITY.clientId,
+        display_name: SMA_IDENTITY.getName(),
+        assessment_id: ASSESSMENT_ID,
+        pillar: currentPillar
+      })
+    }).catch(() => {});
+  }
+  setTimeout(ping, 500);  // let SMA_IDENTITY's DOMContentLoaded name-prompt run first
+  setInterval(ping, 20000);
+
+  const box = document.getElementById('presence-box');
+  const list = document.getElementById('presence-list');
+  function poll() {
+    const cid = window.SMA_IDENTITY ? SMA_IDENTITY.clientId : '';
+    fetch('/api/presence?assessment_id=' + ASSESSMENT_ID + '&client_id=' + encodeURIComponent(cid))
+      .then(r => r.json())
+      .then(rows => {
+        if (!Array.isArray(rows) || !rows.length) { box.style.display = 'none'; return; }
+        list.innerHTML = rows.map(r =>
+          `<span class="badge bg-light text-dark border me-1">${r.display_name} — ${r.pillar_label || '…'}</span>`
+        ).join('');
+        box.style.display = '';
+      })
+      .catch(() => {});
+  }
+  poll();
+  setInterval(poll, 15000);
 })();
 
 // ── Responder panels (MFG count-based judgement) ──────────────────────────────

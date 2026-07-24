@@ -21,6 +21,10 @@
   </div>
 </div>
 
+<div class="card mb-3 p-2 px-3 small" id="active-now-box" style="display:none">
+  <span class="text-muted">🟢 Active now:</span> <span id="active-now-list"></span>
+</div>
+
 {% if not assessments %}
 <div class="card p-5 text-center text-muted">
   <div style="font-size:3rem">📋</div>
@@ -302,6 +306,28 @@
 
 {% block scripts %}
 <script>
+// Active-now presence panel (who's on which assessment/pillar, system-wide)
+(function () {
+  const box = document.getElementById('active-now-box');
+  const list = document.getElementById('active-now-list');
+  if (!box) return;
+  function poll() {
+    const cid = window.SMA_IDENTITY ? SMA_IDENTITY.clientId : '';
+    fetch('/api/presence?client_id=' + encodeURIComponent(cid))
+      .then(r => r.json())
+      .then(rows => {
+        if (!Array.isArray(rows) || !rows.length) { box.style.display = 'none'; return; }
+        list.innerHTML = rows.map(r =>
+          `<span class="badge bg-light text-dark border me-1">${r.display_name} — ${r.site_name} (${r.pillar_label || '…'})</span>`
+        ).join('');
+        box.style.display = '';
+      })
+      .catch(() => {});
+  }
+  poll();
+  setInterval(poll, 15000);
+})();
+
 // Sortable tables (click th.sortable to sort; click again to reverse)
 document.querySelectorAll('.sortable-table').forEach(table => {
   const tbody = table.querySelector('tbody');
