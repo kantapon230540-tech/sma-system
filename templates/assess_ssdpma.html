@@ -181,7 +181,10 @@
 
 {% block content %}
 <style>
-  .score-rail { position: sticky; top: 1rem; }
+  /* Three full score tables are taller than the viewport — scroll inside the rail (same as
+     SMA-WH) so the questionnaire beside it still scrolls independently. */
+  .score-rail { position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow-y: auto; }
+  @media (max-width: 991.98px) { .score-rail { max-height: none; overflow: visible; } }
   .q-yes { border-left: 3px solid #198754; }
   .q-no  { border-left: 3px solid #dc3545; }
   .q-na, .q-not_rolled_out { border-left: 3px solid #adb5bd; }
@@ -199,28 +202,53 @@
   </div>
 
   <!-- ── Filters (frozen while scrolling) ────────────────────────────── -->
-  <div class="card mb-3 p-3 sticky-filter">
-    <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
-      <span class="input-group input-group-sm" style="width:auto">
+  <div class="card mb-3 p-2 p-md-3 sticky-filter">
+    <!-- Always-visible bar: search + the toggle. Everything else collapses so the filter panel
+         doesn't eat half a phone/tablet screen (it is sticky, so it would eat it permanently). -->
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="input-group input-group-sm" style="width:auto;flex:1 1 180px;max-width:320px">
         <span class="input-group-text">🔍</span>
         <input type="search" id="q-search" class="form-control form-control-sm"
-               placeholder="Search questions or ID..." style="min-width:200px"
+               placeholder="Search questions or ID..."
                oninput="applyFilters()">
       </span>
+      <button class="btn btn-sm btn-outline-primary d-lg-none" type="button"
+              data-bs-toggle="collapse" data-bs-target="#filter-body" aria-expanded="false"
+              aria-controls="filter-body" id="filter-toggle">
+        ⚙ Filters <span class="badge bg-primary ms-1" id="active-filter-count" style="display:none">0</span>
+      </button>
       <button class="btn btn-sm btn-outline-secondary" onclick="clearFilters()">✕ Clear all</button>
     </div>
-    <div class="d-flex align-items-center gap-1 mb-2 flex-wrap" id="interview-bar">
-      <span class="small text-muted me-1" title="Show only the SMA questions and Solidification rubric levels this person answers — one interview covers both tracks">🎙 Interview:</span>
-      <button type="button" class="btn btn-sm btn-dark role-chip active" data-role="" onclick="setRole(this)">All</button>
-      {% for slug, label in role_canon %}
-        {% if role_counts.get(slug, 0) > 0 %}
-        <button type="button" class="btn btn-sm btn-outline-secondary role-chip" data-role="{{ slug }}" onclick="setRole(this)">
-          {{ label }} <span class="badge bg-light text-dark border ms-1">{{ role_counts[slug] }}</span>
-        </button>
-        {% endif %}
-      {% endfor %}
+
+    <!-- Collapsed by default under lg; always open on desktop -->
+    <div class="collapse d-lg-block filter-body mt-2" id="filter-body">
+
+    <!-- Group: interview (spans both tracks) -->
+    <div class="filter-group d-lg-flex align-items-start gap-3">
+      <button class="filter-group-head" type="button" data-bs-toggle="collapse" data-bs-target="#fg-interview">
+        🎙 Interview — one person's queue <span class="chev">▾</span>
+      </button>
+      <div class="collapse show flex-grow-1" id="fg-interview">
+        <div class="d-flex align-items-center gap-1 py-1 flex-lg-wrap flex-nowrap overflow-auto" id="interview-bar">
+          <button type="button" class="btn btn-sm btn-dark role-chip active" data-role="" onclick="setRole(this)">All</button>
+          {% for slug, label in role_canon %}
+            {% if role_counts.get(slug, 0) > 0 %}
+            <button type="button" class="btn btn-sm btn-outline-secondary role-chip text-nowrap" data-role="{{ slug }}" onclick="setRole(this)">
+              {{ label }} <span class="badge bg-light text-dark border ms-1">{{ role_counts[slug] }}</span>
+            </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
     </div>
-    <div class="row g-2">
+
+    <!-- Group: applies to every section -->
+    <div class="filter-group d-lg-flex align-items-start gap-3">
+      <button class="filter-group-head" type="button" data-bs-toggle="collapse" data-bs-target="#fg-common">
+        ⚑ All sections <span class="chev">▾</span>
+      </button>
+      <div class="collapse show flex-grow-1" id="fg-common">
+      <div class="row g-2 py-1">
 
       <!-- Section -->
       <div class="col-6 col-md-2">
@@ -253,8 +281,20 @@
         </div>
       </div>
 
+      </div>
+      </div>
+    </div>
+
+    <!-- Group: SMA-only properties -->
+    <div class="filter-group d-lg-flex align-items-start gap-3">
+      <button class="filter-group-head text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#fg-sma">
+        ① SMA — Manufacturing <span class="badge bg-primary-subtle text-primary-emphasis border">{{ progress.tracks.sma.items_total }} Q</span> <span class="chev">▾</span>
+      </button>
+      <div class="collapse show flex-grow-1" id="fg-sma">
+      <div class="row g-2 py-1">
+
       <!-- SMA: Pillar -->
-      <div class="col-6 col-md-2">
+      <div class="col-6 col-md-3">
         <div class="ms-dropdown" id="dd-pillar">
           <button class="ms-btn form-select form-select-sm text-start" onclick="toggleDd('dd-pillar')">
             <span class="ms-label">All Pillars (SMA)</span>
@@ -309,8 +349,21 @@
         </div>
       </div>
 
+      </div>
+      </div>
+    </div>
+
+    <!-- Group: Solidification-only properties (both Safety and DP tracks) -->
+    <div class="filter-group d-lg-flex align-items-start gap-3">
+      <button class="filter-group-head text-success" type="button" data-bs-toggle="collapse" data-bs-target="#fg-solid">
+        ②③ Solidification — Safety &amp; DP
+        <span class="badge bg-success-subtle text-success-emphasis border">{{ progress.tracks.safety_solid.items_total + progress.tracks.dp_solid.items_total }} items</span> <span class="chev">▾</span>
+      </button>
+      <div class="collapse show flex-grow-1" id="fg-solid">
+      <div class="row g-2 py-1">
+
       <!-- Solid: Pillar -->
-      <div class="col-6 col-md-2">
+      <div class="col-6 col-md-3">
         <div class="ms-dropdown" id="dd-solid-pillar">
           <button class="ms-btn form-select form-select-sm text-start" onclick="toggleDd('dd-solid-pillar')">
             <span class="ms-label">All Pillars (Solid)</span>
@@ -351,9 +404,19 @@
         </div>
       </div>
 
+      </div>
+      </div>
     </div>
-    <div class="mt-2 small text-muted">
-      Showing <span id="visible-count">{{ total_rows }}</span> of {{ total_rows }} questions
+
+    </div><!-- /filter-body -->
+
+    <!-- Stays visible even when the filters are collapsed: an item is a CARD, a level is one
+         answerable input, so a solid section shows far more inputs than cards (see the rail). -->
+    <div class="mt-2 small text-muted lh-sm" id="showing-line">
+      Showing <span id="visible-count">{{ total_rows }}</span> of {{ total_rows }} items ·
+      <span class="text-primary" id="vis-sma">SMA {{ progress.tracks.sma.items_total }} Q</span> ·
+      <span class="text-success" id="vis-safety_solid">Safety {{ progress.tracks.safety_solid.items_total }} items ({{ progress.tracks.safety_solid.total }} lv)</span> ·
+      <span class="text-danger" id="vis-dp_solid">DP {{ progress.tracks.dp_solid.items_total }} items ({{ progress.tracks.dp_solid.total }} lv)</span>
     </div>
   </div>
 
@@ -410,42 +473,143 @@
     <!-- Live score rail -->
     <div class="col-lg-4 order-1 order-lg-2">
       <div class="score-rail">
-        <div class="progress mb-1" style="height:6px">
-          <div class="progress-bar" id="progbar" style="width:{{ (answered_q/total_q*100)|round if total_q else 0 }}%"></div>
+        <!-- Combined progress: kept as a one-line roll-up only. The per-track bars below are the
+             ones to read — the three tracks don't share an answerable unit (see _ssdpma_progress). -->
+        <div class="d-flex justify-content-between align-items-center small text-muted">
+          <span>All tracks</span>
+          <span><span id="answered">{{ answered_q }}</span> / {{ total_q }} inputs · {{ total_rows }} items</span>
         </div>
-        <div class="small text-muted mb-2"><span id="answered">{{ answered_q }}</span> / {{ total_q }} answered</div>
+        <div class="progress mb-3" style="height:5px">
+          <div class="progress-bar bg-secondary" id="progbar" style="width:{{ progress.pct }}%"></div>
+        </div>
 
-        <!-- SMA panel (native) -->
-        <div class="card border-primary shadow-sm mb-2">
-          <div class="card-body py-2">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="fw-semibold text-primary">SMA (MFG)</span>
-              <span class="fs-4 fw-bold" id="sma_overall">—</span>
+        <!-- ── Track 1 · SMA — same Live Score layout as SMA-WH (dark band + progress, big
+             circle + level name, then the Pillar & Element table) ───────────────────────── -->
+        {% set S = scores.sma %}
+        <div class="card shadow-sm mb-2">
+          <div class="card-header fw-bold bg-dark text-white py-2 d-flex justify-content-between align-items-center">
+            <span>Live Score · <span class="text-info">SMA</span></span>
+            <div class="d-flex align-items-center gap-2">
+              <div class="progress mb-0" style="height:8px;width:70px">
+                <div class="progress-bar bg-info" id="prog_sma" style="width:{{ progress.tracks.sma.pct }}%"></div>
+              </div>
+              <span class="small text-white-50 text-nowrap" id="progtxt_sma">{{ progress.tracks.sma.answered }}/{{ progress.tracks.sma.total }}</span>
             </div>
-            <div class="small text-muted" id="sma_level">&nbsp;</div>
-            <div class="d-flex gap-3 small mt-1">
+          </div>
+          <div class="card-body py-2 text-center">
+            <div class="mb-1 small text-muted">Overall Safety Maturity</div>
+            <div id="sma_circle" class="score-circle mx-auto level-badge-{{ S.overall|int if S.overall else 0 }}"
+                 style="width:70px;height:70px;font-size:1.5rem">{{ "%.2f"|format(S.overall) if S.overall else "—" }}</div>
+            <div class="fw-bold mt-1" id="sma_level">{{ S.level_name or '—' }}</div>
+            <div class="d-flex justify-content-center gap-3 small mt-1 text-muted">
               <span>Safety-Aware <b id="sma_sa">—</b></span><span>System-Impl <b id="sma_si">—</b></span>
             </div>
-            <div class="d-flex gap-1 mt-1 flex-wrap" id="sma_pillars"></div>
-            <div class="d-flex gap-3 small mt-1 text-muted">
-              <span>Sys·Safety <b id="sma_sys_safety">—</b></span><span>Sys·DP <b id="sma_sys_dp">—</b></span>
-            </div>
+          </div>
+          <div class="card-header py-1 small fw-bold d-flex justify-content-between align-items-center">
+            <span>Pillar &amp; Element Scores</span>
+            <button class="btn btn-sm btn-link p-0 text-decoration-none d-lg-none" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#tbl-sma">▾</button>
+          </div>
+          <div class="collapse d-lg-block" id="tbl-sma">
+          <div class="card-body p-0">
+            <table class="table table-sm mb-0" style="font-size:.78rem">
+              <thead class="table-light"><tr><th style="width:62%">Pillar / Element</th><th class="text-center">Score</th></tr></thead>
+              <tbody>
+                {% for pillar in sma_pillars %}
+                  {% set ps = S.pillars.get(pillar.id, {}).get('score') %}
+                  <tr class="table-secondary">
+                    <td class="fw-semibold" style="font-size:.75rem">{{ pillar.name }}</td>
+                    <td class="text-center"><span class="badge level-badge-{{ ps or 0 }}" id="smapil-{{ pillar.id }}">{{ ps if ps is not none else '—' }}</span></td>
+                  </tr>
+                  {% for element in pillar.elements %}
+                    {% set es = S.pillars.get(pillar.id, {}).get('elements', {}).get(element.id) %}
+                    <tr>
+                      <td class="text-muted ps-3" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0" title="{{ element.name }}">{{ element.name }}</td>
+                      <td class="text-center"><span class="badge level-badge-{{ es or 0 }}" id="smael-{{ pillar.id }}-{{ element.id }}">{{ es if es is not none else '—' }}</span></td>
+                    </tr>
+                  {% endfor %}
+                  {% if pillar.id == 'system' %}
+                    <tr>
+                      <td class="text-muted ps-3" style="font-size:.7rem">🛡️ System · Safety</td>
+                      <td class="text-center"><span class="badge level-badge-{{ S.system_safety or 0 }}" id="sma_sys_safety">{{ S.system_safety if S.system_safety is not none else '—' }}</span></td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted ps-3" style="font-size:.7rem">🔥 System · DP</td>
+                      <td class="text-center"><span class="badge level-badge-{{ S.system_dp or 0 }}" id="sma_sys_dp">{{ S.system_dp if S.system_dp is not none else '—' }}</span></td>
+                    </tr>
+                  {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           </div>
         </div>
 
-        <!-- Solid panels -->
-        {% for key,label,color in [('safety_solid','Safety Solidification','success'),('dp_solid','DP Solidification','danger')] %}
-        <div class="card border-{{ color }} shadow-sm mb-2">
-          <div class="card-body py-2">
-            <div class="d-flex justify-content-between align-items-center">
-              <span class="fw-semibold text-{{ color }}">{{ label }}</span>
-              <span class="fs-4 fw-bold" id="{{ key }}_overall">—</span>
+        <!-- ── Tracks 2 & 3 · Solidification — same layout, but the hierarchy is
+             maturity pillar → item (an item's grade comes from its own rubric ladder) ───── -->
+        {% for key,label,color,head in [('safety_solid','Safety Solidification','success','bg-success'),
+                                        ('dp_solid','DP Solidification','danger','bg-danger')] %}
+        {% set T = scores[key] %}
+        {% set tp = progress.tracks[key] %}
+        <div class="card shadow-sm mb-2">
+          <div class="card-header fw-bold {{ head }} text-white py-2 d-flex justify-content-between align-items-center">
+            <span>Live Score · {{ 'Safety' if key == 'safety_solid' else 'DP' }} Solid</span>
+            <div class="d-flex align-items-center gap-2">
+              <div class="progress mb-0" style="height:8px;width:70px">
+                <div class="progress-bar bg-light" id="prog_{{ key }}" style="width:{{ tp.pct }}%"></div>
+              </div>
+              <span class="small text-white-50 text-nowrap" id="progtxt_{{ key }}">{{ tp.answered }}/{{ tp.total }}</span>
             </div>
-            <div class="small text-muted mt-1">Maturity · 5 axes</div>
-            <div class="d-flex gap-1 flex-wrap" id="{{ key }}_pillars"></div>
-            <div class="small text-muted mt-2">GRC · 3 axes</div>
-            <div class="d-flex gap-1 flex-wrap" id="{{ key }}_axes"></div>
+          </div>
+          <div class="card-body py-2 text-center">
+            <div class="mb-1 small text-muted">{{ label }} maturity</div>
+            <div id="{{ key }}_circle" class="score-circle mx-auto level-badge-{{ T.overall|int if T.overall else 0 }}"
+                 style="width:70px;height:70px;font-size:1.5rem">{{ "%.2f"|format(T.overall) if T.overall is not none else "—" }}</div>
+            <div class="fw-bold mt-1" id="{{ key }}_grade">{{ ('Grade ' ~ T.overall_grade) if T.overall_grade else '—' }}</div>
+            <div class="small text-muted mt-1" id="itemtxt_{{ key }}">{{ tp.items_done }}/{{ tp.items_total }} items complete · {{ tp.answered }}/{{ tp.total }} levels judged</div>
             <div class="small text-warning mt-1" id="{{ key }}_gap" style="display:none"></div>
+          </div>
+          <div class="card-header py-1 small fw-bold d-flex justify-content-between align-items-center">
+            <span>Pillar &amp; Item Grades</span>
+            <button class="btn btn-sm btn-link p-0 text-decoration-none d-lg-none" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#tbl-{{ key }}">▾</button>
+          </div>
+          <div class="collapse d-lg-block" id="tbl-{{ key }}">
+          <div class="card-body p-0">
+            <table class="table table-sm mb-0" style="font-size:.78rem">
+              <thead class="table-light"><tr><th style="width:62%">Pillar / Item</th><th class="text-center">Grade</th></tr></thead>
+              <tbody>
+                {% for pil in solid_pillars %}
+                  {% set secs = bank.sections[key] | selectattr('solid_pillar','equalto',pil.id) | list %}
+                  {% if secs %}
+                    {% set ps = T.pillars.get(pil.id, {}) %}
+                    <tr class="table-secondary">
+                      <td class="fw-semibold" style="font-size:.75rem">{{ pil.name }} <span class="text-muted fw-normal">({{ secs|length }})</span></td>
+                      <td class="text-center"><span class="badge level-badge-{{ ps.score or 0 }}" id="solpil-{{ key }}-{{ pil.id }}">{{ (ps.grade ~ ' ' ~ ps.score) if ps.score is not none else '—' }}</span></td>
+                    </tr>
+                    {% for s in secs %}
+                      {% set it = solid_item_scores.get(s.id, {}) %}
+                      <tr>
+                        <td class="text-muted ps-3" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0" title="{{ s.topic }}">
+                          <a href="javascript:void(0)" onclick="jumpSolid('{{ s.id }}')" class="text-decoration-none text-muted">{{ s.topic }}</a>
+                          <span class="text-muted" style="font-size:.65rem" id="raillv-{{ s.id }}">{{ it.levels_answered or 0 }}/{{ it.levels_total or 0 }}</span>
+                        </td>
+                        <td class="text-center"><span class="badge level-badge-{{ it.score or 0 }}" id="railitem-{{ s.id }}">{{ (it.grade ~ ' ' ~ it.score) if it.score is not none else '—' }}</span></td>
+                      </tr>
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+                <tr><td class="text-muted fst-italic" colspan="2" style="font-size:.66rem;background:#eef2f7">GRC axes</td></tr>
+                {% for ax in grc_axes %}
+                  {% set axs = T.axes.get(ax, {}) %}
+                  <tr>
+                    <td class="text-muted ps-3" style="font-size:.72rem">{{ ax }}</td>
+                    <td class="text-center"><span class="badge level-badge-{{ axs.score or 0 }}" id="solax-{{ key }}-{{ ax }}">{{ (axs.grade ~ ' ' ~ axs.score) if axs.score is not none else '—' }}</span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           </div>
         </div>
         {% endfor %}
@@ -458,15 +622,17 @@
 {% block scripts %}
 <script>
 const ASSESSMENT_ID = {{ assessment.id }};
-const TOTAL = {{ total_q }};
-const SMASLAB = {leadership:'LD', tm_engagement:'TM', organization:'Org', system:'Sys'};
-const SOLSLAB = {issue_solving:'Iss', risk_management:'Risk', business_strategy:'Biz', independency:'Ind', integration:'Intg'};
 const saveTimers = {};
 function toggleCrit(btn){ const b=btn.nextElementSibling; b.style.display = b.style.display==='none'?'block':'none'; }
 function jump(qid){ const el=document.getElementById('qrow-'+qid); if(!el) return;
   if(el.offsetParent===null) clearFilters();   // target hidden by an active filter/role queue — reset so it can scroll into view
   // 'instant', not 'smooth': Bootstrap's :root{scroll-behavior:smooth} smooth-scroll never
   // actually runs on this very tall page (Chrome), so a smooth request silently goes nowhere.
+  el.scrollIntoView({behavior:'instant',block:'center'});
+  el.style.transition='background .3s'; el.style.background='#fff3cd'; setTimeout(()=>el.style.background='',1200); }
+// Rail item row → its solidification card in the questionnaire
+function jumpSolid(sid){ const el=document.querySelector(`.filterable-row[data-solid-id="${sid}"]`); if(!el) return;
+  if(el.offsetParent===null) clearFilters();
   el.scrollIntoView({behavior:'instant',block:'center'});
   el.style.transition='background .3s'; el.style.background='#fff3cd'; setTimeout(()=>el.style.background='',1200); }
 
@@ -521,6 +687,9 @@ function applyFilters() {
   const solidFiltersActive = fSolidPillars.length || fAxes.length || fClasses.length;
 
   let visible = 0;
+  // Count per track, and for the solid tracks count VISIBLE rubric levels too — a solid card is
+  // one row but up to 5 answerable levels, which is why "36 items" looks like far more on screen.
+  const vis = {sma:{items:0,levels:0}, safety_solid:{items:0,levels:0}, dp_solid:{items:0,levels:0}};
   document.querySelectorAll('.filterable-row').forEach(row => {
     const section = row.dataset.section;
     const answer = row.dataset.answer || '';
@@ -562,10 +731,25 @@ function applyFilters() {
 
     const show = matchSection && matchStatus && matchSearch && matchTypeSpecific && matchRole;
     row.classList.toggle('hidden-by-filter', !show);
-    if (show) visible++;
+    if (show) {
+      visible++;
+      const v = vis[section];
+      if (v) {
+        v.items++;
+        v.levels += (section === 'sma')
+          ? 1
+          : row.querySelectorAll('.ladder-row:not(.hidden-by-filter)').length;
+      }
+    }
   });
 
   document.getElementById('visible-count').textContent = visible;
+  document.getElementById('vis-sma').textContent = `SMA ${vis.sma.items} Q`;
+  document.getElementById('vis-safety_solid').textContent =
+    `Safety ${vis.safety_solid.items} items (${vis.safety_solid.levels} lv)`;
+  document.getElementById('vis-dp_solid').textContent =
+    `DP ${vis.dp_solid.items} items (${vis.dp_solid.levels} lv)`;
+  updateFilterBadge();
 
   document.querySelectorAll('.pillar-group').forEach(g => {
     const anyVisible = Array.from(g.querySelectorAll('.filterable-row')).some(r => !r.classList.contains('hidden-by-filter'));
@@ -577,6 +761,16 @@ function applyFilters() {
       .some(r => !r.classList.contains('hidden-by-filter'));
     sec.classList.toggle('hidden-by-filter', !anyVisible);
   });
+}
+
+// How many filters are active — shown on the collapsed ⚙ Filters button so a phone user can see
+// the list is filtered without opening the panel.
+function updateFilterBadge() {
+  let n = document.querySelectorAll('.sticky-filter .ms-menu input[type=checkbox]:checked').length;
+  if ((document.getElementById('q-search')?.value || '').trim()) n++;
+  if (activeRole) n++;
+  const b = document.getElementById('active-filter-count');
+  if (b) { b.textContent = n; b.style.display = n ? '' : 'none'; }
 }
 
 function clearFilters() {
@@ -602,42 +796,52 @@ function setRole(btn) {
 }
 
 function num(v){ return (v==null)?'—':(Math.round(v*100)/100); }
-function smaChip(lbl,v){
-  const d=document.createElement('span'); d.className='badge grade-chip '+(v==null?'bg-light text-muted border':(v<2?'bg-danger':v<3?'bg-warning text-dark':v<4?'bg-info':v<5?'bg-primary':'bg-success'));
-  d.textContent=lbl+' '+(v==null?'—':v); d.title=lbl; return d;
+// Rail badges use the shared .level-badge-N palette (same as SMA-WH), so a 1–5 score maps to the
+// same colour everywhere in the app; null renders as a grey em-dash badge.
+function setBadge(id, score, text){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = 'badge level-badge-' + (score || 0);
+  el.textContent = (score == null) ? '—' : (text != null ? text : score);
 }
-function gradeChip(lbl,o){
-  const d=document.createElement('span'); d.className='badge grade-chip ';
-  if(!o || o.score==null){ d.className+='bg-light text-muted border'; d.textContent=lbl+' —'; d.title=lbl+' — no data'; return d; }
-  d.className += (o.score<2?'bg-danger':o.score<3?'bg-warning text-dark':o.score<4?'bg-info':o.score<5?'bg-primary':'bg-success');
-  d.textContent=lbl+' '+o.grade+(o.thin?'*':'');
-  d.title=lbl+' — '+o.grade+' ('+o.n+' item'+(o.n===1?'':'s')+(o.thin?', thin — low confidence':'')+')';
-  return d;
+function setCircle(id, val){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = 'score-circle mx-auto level-badge-' + (val ? Math.trunc(val) : 0);
+  el.textContent = (val == null) ? '—' : val.toFixed(2);
 }
 function renderSMA(t){
   if(!t) return;
-  document.getElementById('sma_overall').textContent = num(t.overall);
-  document.getElementById('sma_level').textContent = t.level_name || ' ';
+  setCircle('sma_circle', t.overall);
+  document.getElementById('sma_level').textContent = t.level_name || '—';
   document.getElementById('sma_sa').textContent = num(t.safety_awareness);
   document.getElementById('sma_si').textContent = num(t.system_implementation);
-  document.getElementById('sma_sys_safety').textContent = num(t.system_safety);
-  document.getElementById('sma_sys_dp').textContent = num(t.system_dp);
-  const pil=document.getElementById('sma_pillars'); pil.innerHTML='';
-  Object.keys(SMASLAB).forEach(k=>{ let v=(t.pillars||{})[k]; if(v&&typeof v==='object') v=v.score; pil.appendChild(smaChip(SMASLAB[k], v)); });
+  setBadge('sma_sys_safety', t.system_safety);
+  setBadge('sma_sys_dp', t.system_dp);
+  Object.entries(t.pillars || {}).forEach(([pid, p]) => {
+    setBadge('smapil-' + pid, p.score);
+    Object.entries(p.elements || {}).forEach(([eid, es]) => setBadge('smael-' + pid + '-' + eid, es));
+  });
 }
 const SOLID_GRADE_BG = {1:'bg-danger',2:'bg-warning text-dark',3:'bg-info',4:'bg-primary',5:'bg-success'};
 function renderSolid(key,t){
   if(!t) return;
-  document.getElementById(key+'_overall').textContent = (t.overall==null?'—':(t.overall+' '+t.overall_grade));
-  const pil=document.getElementById(key+'_pillars'); pil.innerHTML='';
-  Object.keys(SOLSLAB).forEach(k=>{ pil.appendChild(gradeChip(SOLSLAB[k], (t.pillars||{})[k])); });
-  const ax=document.getElementById(key+'_axes'); ax.innerHTML='';
-  ['Governance','Risk','Compliance'].forEach(k=>{ ax.appendChild(gradeChip(k.slice(0,4), (t.axes||{})[k])); });
+  setCircle(key+'_circle', t.overall);
+  document.getElementById(key+'_grade').textContent = t.overall_grade ? ('Grade '+t.overall_grade) : '—';
+  // pillar + GRC rows. '*' marks a thin pillar (too few judged items to trust the grade yet).
+  Object.entries(t.pillars || {}).forEach(([pid,p]) =>
+    setBadge('solpil-'+key+'-'+pid, p.score, p.score==null?null:(p.grade+(p.thin?'*':'')+' '+p.score)));
+  Object.entries(t.axes || {}).forEach(([ax,a]) =>
+    setBadge('solax-'+key+'-'+ax, a.score, a.score==null?null:(a.grade+(a.thin?'*':'')+' '+a.score)));
   const gap=document.getElementById(key+'_gap');
   if(t.axis_untagged>0){ gap.style.display=''; gap.textContent='⚠ '+t.axis_untagged+' answered item(s) have no GRC tag'; }
   else { gap.style.display='none'; }
   // reflect each item's derived grade + level-progress + card status back onto its own card
   (t.items||[]).forEach(it=>{
+    // …and onto its row in the rail table
+    setBadge('railitem-'+it.id, it.score, it.score==null?null:(it.grade+' '+it.score));
+    const lv=document.getElementById('raillv-'+it.id);
+    if(lv) lv.textContent = it.levels_answered+'/'+it.levels_total;
     const badge=document.getElementById('itemgrade-'+it.id);
     if(badge){
       if(it.score!=null){ badge.textContent=it.grade+' · '+it.score; badge.className='badge '+SOLID_GRADE_BG[it.score]; }
@@ -652,7 +856,21 @@ function renderSolid(key,t){
   });
 }
 function updatePanels(s){ if(!s) return; renderSMA(s.sma); renderSolid('safety_solid', s.safety_solid); renderSolid('dp_solid', s.dp_solid); }
-function setProgress(a){ document.getElementById('answered').textContent=a; document.getElementById('progbar').style.width=Math.round(a/TOTAL*100)+'%'; }
+// p = the server's progress dict (per-track + roll-up). Each track renders its own bar because
+// SMA counts questions while the solid tracks count rubric levels.
+function setProgress(p){
+  if(!p || !p.tracks) return;
+  document.getElementById('answered').textContent = p.answered;
+  document.getElementById('progbar').style.width = p.pct+'%';
+  Object.keys(p.tracks).forEach(k=>{
+    const t=p.tracks[k], bar=document.getElementById('prog_'+k), txt=document.getElementById('progtxt_'+k);
+    if(bar) bar.style.width = t.pct+'%';
+    if(txt) txt.textContent = `${t.answered}/${t.total}`;   // compact, sits in the dark header band
+    const items = document.getElementById('itemtxt_'+k);    // solid tracks only
+    if(items) items.textContent =
+      `${t.items_done}/${t.items_total} items complete · ${t.answered}/${t.total} levels judged`;
+  });
+}
 
 // ── plain save (SMA no-responder + solid per-level yes/no) ──
 function save(qid, answer, comment){
@@ -660,7 +878,7 @@ function save(qid, answer, comment){
   saveTimers[qid]=setTimeout(()=>{
     fetch('/api/answer',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({assessment_id:ASSESSMENT_ID, question_id:qid, answer:answer||'', comment:comment||''})})
-    .then(r=>r.json()).then(data=>{ if(data.ssdpma) updatePanels(data.ssdpma); if(typeof data.answered==='number') setProgress(data.answered);
+    .then(r=>r.json()).then(data=>{ if(data.ssdpma) updatePanels(data.ssdpma); setProgress(data.progress);
       const row=document.getElementById('qrow-'+qid) || document.querySelector(`.solid-level-yesno[data-qid="${qid}"]`)?.closest('.ladder-row');
       if(row){ row.className=row.className.replace(/q-\w+/g,''); if(answer) row.classList.add('q-'+answer); } });
   },200);
@@ -704,7 +922,7 @@ function saveResponder(panel){
     fetch('/api/answer',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({assessment_id:ASSESSMENT_ID, question_id:qid, detail, comment})})
     .then(r=>r.json()).then(data=>{
-      if(data.ssdpma) updatePanels(data.ssdpma); if(typeof data.answered==='number') setProgress(data.answered);
+      if(data.ssdpma) updatePanels(data.ssdpma); setProgress(data.progress);
       const d=data.derived||''; const badge=panel.querySelector('.rsp-result');
       const M={yes:['Yes','bg-success'],no:['No','bg-danger'],na:['N/A','bg-secondary'],not_rolled_out:['Not rolled out','bg-secondary']};
       const m=M[d]||['— incomplete','bg-secondary']; badge.textContent=m[0]; badge.className='rsp-result badge '+m[1];
@@ -738,6 +956,6 @@ document.querySelectorAll('.responder-panel').forEach(panel=>{
 
 // initial paint
 updatePanels({{ scores|tojson }});
-setProgress({{ answered_q }});
+setProgress({{ progress|tojson }});
 </script>
 {% endblock %}

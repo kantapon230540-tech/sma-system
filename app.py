@@ -626,7 +626,8 @@ def dashboard():
         if a["type"] == "ssdpma":
             bank = load_ssdpma_bank()
             scores = calculate_ssdpma_scores(bank, ans) if ans else None
-            total_q, answered = _ssdpma_progress(bank, ans)
+            prog = _ssdpma_progress(bank, ans)
+            total_q, answered = prog["total"], prog["answered"]
         else:
             pillars  = load_questions(a["type"], a["scope"])
             all_qs   = all_questions_flat(pillars)
@@ -724,16 +725,44 @@ def _sma_qmap(bank):
                 loc[q["id"]] = (p, e)
     return qmap, loc
 
+SSDPMA_TRACK_META = {
+    "sma":          ("SMA (MFG)",             "questions"),
+    "safety_solid": ("Safety Solidification", "levels"),
+    "dp_solid":     ("DP Solidification",     "levels"),
+}
+
 def _ssdpma_progress(bank, ans):
-    """Total answerable = 233 SMA Qs + every solid item's OWN rubric levels (each level is its
-    own Judge input now, so it's the atomic answerable unit — same convention as SMA questions)."""
-    ids = [q["id"] for p in bank["sma"]["pillars"] for e in p["elements"] for q in e["questions"]]
-    for s in bank["sections"]["safety_solid"] + bank["sections"]["dp_solid"]:
-        for lv in s.get("solid_rubric") or []:
-            ids.append(f"{s['id']}__L{lv['level']}")
-    total = len(ids)
-    answered = sum(1 for i in ids if ans.get(i) not in (None, ""))
-    return total, answered
+    """Progress per track, because the three tracks do NOT share an answerable unit: one SMA
+    question = one input, but one solid item = one input PER rubric level (each level is its own
+    Judge call). Reporting them under a single denominator makes the page look emptier than it is,
+    so each track carries its own count, and the solid tracks also carry whole-item completion
+    (an item counts as done only when every level of its ladder is answered)."""
+    tracks = {}
+    sma_ids = [q["id"] for p in bank["sma"]["pillars"] for e in p["elements"] for q in e["questions"]]
+    sma_done = sum(1 for i in sma_ids if ans.get(i) not in (None, ""))
+    tracks["sma"] = {"total": len(sma_ids), "answered": sma_done,
+                     "items_total": len(sma_ids), "items_done": sma_done, "items_partial": 0}
+    for code in ("safety_solid", "dp_solid"):
+        total = done = items_done = items_partial = 0
+        items = bank["sections"][code]
+        for s in items:
+            lvl_ids = [f"{s['id']}__L{lv['level']}" for lv in s.get("solid_rubric") or []]
+            n = sum(1 for i in lvl_ids if ans.get(i) not in (None, ""))
+            total += len(lvl_ids)
+            done  += n
+            if lvl_ids and n == len(lvl_ids): items_done += 1
+            elif n:                           items_partial += 1
+        tracks[code] = {"total": total, "answered": done, "items_total": len(items),
+                        "items_done": items_done, "items_partial": items_partial}
+    for key, t in tracks.items():
+        t["label"], t["unit"] = SSDPMA_TRACK_META[key]
+        t["pct"] = round(t["answered"] / t["total"] * 100) if t["total"] else 0
+    prog = {"tracks": tracks,
+            "total":    sum(t["total"] for t in tracks.values()),
+            "answered": sum(t["answered"] for t in tracks.values()),
+            "items_total": sum(t["items_total"] for t in tracks.values())}
+    prog["pct"] = round(prog["answered"] / prog["total"] * 100) if prog["total"] else 0
+    return prog
 
 def _assess_ssdpma(db, assessment, user):
     bank   = load_ssdpma_bank()
@@ -748,7 +777,7 @@ def _assess_ssdpma(db, assessment, user):
             if s.get("class") == "carryover" and s.get("sma_group_qids"):
                 for qid in s["sma_group_qids"]:
                     solid_link.setdefault(qid, []).append({"track": label, "topic": s["topic"], "id": s["id"]})
-    total, answered = _ssdpma_progress(bank, ans)
+    prog = _ssdpma_progress(bank, ans)
     all_sma_qs = all_questions_flat(bank["sma"]["pillars"])
     q_method_tag = {q["id"]: _ssdpma_method_tag(q) for q in all_sma_qs}
     q_respondent_tags = {q["id"]: _ssdpma_respondent_tags(q) for q in all_sma_qs}
@@ -800,7 +829,7 @@ def _assess_ssdpma(db, assessment, user):
         all_methods=[m for m in ("interview", "document", "genba") if m in set(q_method_tag.values())],
         all_answered_by=sorted({t for tags in q_respondent_tags.values() for t in tags}),
         total_rows=len(all_sma_qs) + len(bank["sections"]["safety_solid"]) + len(bank["sections"]["dp_solid"]),
-        total_q=total, answered_q=answered, user=user, unread=0)
+        progress=prog, total_q=prog["total"], answered_q=prog["answered"], user=user, unread=0)
 
 
 @app.route("/assess/<int:assessment_id>")
@@ -957,9 +986,9 @@ def api_answer():
     ans      = answers_only(resp)
     if assessment["type"] == "ssdpma":
         bank = load_ssdpma_bank()
-        total, answered = _ssdpma_progress(bank, ans)
-        return jsonify({"ssdpma": calculate_ssdpma_scores(bank, ans),
-                        "answered": answered, "total": total,
+        prog = _ssdpma_progress(bank, ans)
+        return jsonify({"ssdpma": calculate_ssdpma_scores(bank, ans), "progress": prog,
+                        "answered": prog["answered"], "total": prog["total"],
                         "qid": qid, "derived": answer, "level_names": LEVEL_NAMES})
     all_qs   = all_questions_flat(pillars)
     scores   = calculate_scores(pillars, ans)
@@ -1022,9 +1051,9 @@ def api_scores(assessment_id):
         bank = load_ssdpma_bank()
         resp = get_responses_dict(db, assessment_id)
         ans  = answers_only(resp)
-        total, answered = _ssdpma_progress(bank, ans)
-        return jsonify({"ssdpma": calculate_ssdpma_scores(bank, ans),
-                        "answered": answered, "total": total, "level_names": LEVEL_NAMES})
+        prog = _ssdpma_progress(bank, ans)
+        return jsonify({"ssdpma": calculate_ssdpma_scores(bank, ans), "progress": prog,
+                        "answered": prog["answered"], "total": prog["total"], "level_names": LEVEL_NAMES})
     pillars  = load_questions(assessment["type"], assessment["scope"])
     resp     = get_responses_dict(db, assessment_id)
     ans      = answers_only(resp)
@@ -1038,7 +1067,7 @@ def _result_ssdpma(db, assessment, user):
     resp   = get_responses_dict(db, assessment["id"])
     ans    = answers_only(resp)
     scores = calculate_ssdpma_scores(bank, ans)
-    total, answered = _ssdpma_progress(bank, ans)
+    prog = _ssdpma_progress(bank, ans)
     # per-solid-pillar item detail from the computed track items (each item = Yes/No)
     def track_detail(code):
         by = {p["id"]: {"name": p["name"], "rows": []} for p in bank["solid_pillars"]}
@@ -1073,7 +1102,8 @@ def _result_ssdpma(db, assessment, user):
                 "solid": it, "gap": gap})
     gc = db.execute("SELECT * FROM gcs WHERE id=?",(assessment["gc_id"],)).fetchone() if assessment["gc_id"] else None
     return render_template("result_ssdpma.html",
-        assessment=assessment, scores=scores, total_q=total, answered_q=answered,
+        assessment=assessment, scores=scores, progress=prog,
+        total_q=prog["total"], answered_q=prog["answered"],
         safety_detail=track_detail("safety_solid"), dp_detail=track_detail("dp_solid"),
         solid_pillars=bank["solid_pillars"], grc_axes=GRC_AXES,
         topic_matrix=topic_matrix,

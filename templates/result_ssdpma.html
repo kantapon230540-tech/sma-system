@@ -18,7 +18,10 @@
       <h4 class="mb-0">{{ assessment.site_name }} <span class="badge bg-dark">SSDPMA</span></h4>
       <div class="text-muted small">
         {% if gc %}{{ gc.name }} · {% endif %}{{ assessment.assessment_date or 'no date' }}
-        · {{ answered_q }}/{{ total_q }} answered
+        · completion:
+        <span class="text-primary">SMA {{ progress.tracks.sma.answered }}/{{ progress.tracks.sma.total }} Q</span>
+        · <span class="text-success">Safety {{ progress.tracks.safety_solid.answered }}/{{ progress.tracks.safety_solid.total }} lv ({{ progress.tracks.safety_solid.items_done }}/{{ progress.tracks.safety_solid.items_total }} items)</span>
+        · <span class="text-danger">DP {{ progress.tracks.dp_solid.answered }}/{{ progress.tracks.dp_solid.total }} lv ({{ progress.tracks.dp_solid.items_done }}/{{ progress.tracks.dp_solid.items_total }} items)</span>
       </div>
     </div>
     <div class="btn-group">

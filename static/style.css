@@ -132,6 +132,24 @@ body { background: var(--bg); font-family: 'Segoe UI', sans-serif; color: var(--
   box-shadow: 0 4px 12px rgba(0,0,0,.10);
 }
 
+/* Filter groups (SSDPMA): one collapsible block per track so the sticky panel stays small */
+.filter-group + .filter-group { border-top: 1px solid #eef0f4; margin-top: .35rem; padding-top: .35rem; }
+.filter-group-head {
+  background: none; border: 0; padding: .15rem 0; width: 100%;
+  display: flex; align-items: center; gap: .4rem;
+  font-size: .78rem; font-weight: 600; color: #6c757d; text-align: left;
+}
+@media (min-width: 992px) {           /* heading beside its controls, not above them */
+  .filter-group-head { width: 200px; flex: 0 0 200px; padding-top: .45rem; }
+}
+.filter-group-head .chev { margin-left: auto; transition: transform .15s; }
+.filter-group-head[aria-expanded="false"] .chev { transform: rotate(-90deg); }
+/* On phones/tablets the whole panel is sticky, so cap it and scroll inside instead of letting it
+   push the questionnaire off-screen. */
+@media (max-width: 991.98px) {
+  .filter-body { max-height: 60vh; overflow-y: auto; }
+}
+
 /* Multi-select dropdowns */
 .ms-dropdown { position: relative; }
 .ms-btn {
