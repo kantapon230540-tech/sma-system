@@ -41,6 +41,22 @@ def _ssdpma_method_tag(q):
 
 SSDPMA_METHOD_LABELS = {"interview": "Interview", "document": "Document", "genba": "Genba"}
 
+# Evidence is captured per assessor, so each person's note is attributable at closeout.
+# Default roster; an assessment may override it (assessments.assessors_json) when a different
+# team runs the site. Names are the storage key — renaming one starts a new, empty note.
+ASSESSOR_DEFAULTS = ["Jarinya", "Thanida", "Wanwisa", "Kantapon"]
+MAX_ASSESSORS = 8
+
+def assessment_assessors(assessment):
+    """Roster for this assessment, falling back to ASSESSOR_DEFAULTS."""
+    raw = (assessment or {}).get("assessors_json") if isinstance(assessment, dict) else None
+    if raw:
+        try:
+            names = [str(n).strip() for n in json.loads(raw) if str(n).strip()]
+            if names: return names[:MAX_ASSESSORS]
+        except Exception: pass
+    return list(ASSESSOR_DEFAULTS)
+
 # answered_by is free-text pasted from the source spreadsheet — 35+ near-duplicate
 # variants (casing, trailing "/", comma/and-joined combos, one literal "/").
 # Classify into a small canonical, multi-label role taxonomy for filtering;
@@ -265,6 +281,14 @@ def init_db():
     # the required interview sample size for teammate-answered judgement criteria.
     if "tm_count" not in acols:
         db.execute("ALTER TABLE assessments ADD COLUMN tm_count INTEGER")
+    # Migration: per-assessor evidence notes. responses.comment stays exactly as it was (the
+    # shared/general note, still what the PDF and Excel exports read); responses.comments holds
+    # {assessor_name: text} alongside it, so nothing already written is moved or lost.
+    if "comments" not in cols:
+        db.execute("ALTER TABLE responses ADD COLUMN comments TEXT")
+    # Migration: the assessor roster an assessment collects evidence from. NULL → ASSESSOR_DEFAULTS.
+    if "assessors_json" not in acols:
+        db.execute("ALTER TABLE assessments ADD COLUMN assessors_json TEXT")
     if db.execute("SELECT COUNT(*) FROM users").fetchone()[0] == 0:
         db.execute("INSERT INTO users (username, full_name, password_hash) VALUES (?,?,?)",
             ("admin","Administrator",generate_password_hash("admin123",method="pbkdf2:sha256")))
@@ -599,12 +623,15 @@ def calculate_ssdpma_scores(bank, responses):
 
 
 def get_responses_dict(db, assessment_id):
-    rows = db.execute("SELECT question_id, answer, comment, detail FROM responses WHERE assessment_id=?",(assessment_id,)).fetchall()
+    rows = db.execute("SELECT question_id, answer, comment, detail, comments FROM responses WHERE assessment_id=?",(assessment_id,)).fetchall()
     out = {}
     for r in rows:
         try: det = json.loads(r["detail"]) if r["detail"] else None
         except Exception: det = None
-        out[r["question_id"]] = {"answer":r["answer"],"comment":r["comment"] or "","detail":det}
+        try: cmts = json.loads(r["comments"]) if r["comments"] else {}
+        except Exception: cmts = {}
+        out[r["question_id"]] = {"answer":r["answer"],"comment":r["comment"] or "","detail":det,
+                                 "comments":cmts if isinstance(cmts, dict) else {}}
     return out
 
 def answers_only(resp_dict):
@@ -829,6 +856,10 @@ def _assess_ssdpma(db, assessment, user):
         all_methods=[m for m in ("interview", "document", "genba") if m in set(q_method_tag.values())],
         all_answered_by=sorted({t for tags in q_respondent_tags.values() for t in tags}),
         total_rows=len(all_sma_qs) + len(bank["sections"]["safety_solid"]) + len(bank["sections"]["dp_solid"]),
+        assessors=assessment_assessors(assessment),
+        # Only questions that actually have notes — the JS renders the 4 boxes on demand rather
+        # than putting 306×5 textareas in the DOM up front.
+        comments_map={qid: v["comments"] for qid, v in resp.items() if v.get("comments")},
         progress=prog, total_q=prog["total"], answered_q=prog["answered"], user=user, unread=0)
 
 
@@ -951,6 +982,61 @@ def api_tmcount(assessment_id):
     db.execute("UPDATE assessments SET tm_count=? WHERE id=?", (tm_count, assessment_id))
     db.commit()
     return jsonify({"ok": True, "tm_count": tm_count, "required": tm_sample_size(tm_count)})
+
+
+@app.route("/api/comment", methods=["POST"])
+@login_required
+def api_comment():
+    """Save ONE assessor's evidence note for one question. Deliberately separate from /api/answer:
+    four people type into the same question concurrently, and a read-modify-write of the whole
+    response row would let the last writer clobber the others' notes. Here only the addressed
+    author's key is touched; `answer`, `detail` and the shared `comment` are never written."""
+    data = request.get_json() or {}
+    assessment_id, qid = data.get("assessment_id"), data.get("question_id")
+    author, text = (data.get("author") or "").strip(), data.get("text", "")
+    db = get_db()
+    assessment = db.execute("SELECT * FROM assessments WHERE id=?", (assessment_id,)).fetchone()
+    if not assessment or not qid: return jsonify({"error": "not found"}), 404
+    if not author: return jsonify({"error": "author required"}), 400
+    if author not in assessment_assessors(dict(assessment)):
+        return jsonify({"error": "unknown assessor"}), 400
+
+    db.execute("""INSERT INTO responses (assessment_id,question_id,comments,updated_at)
+                  VALUES (?,?,?,datetime('now'))
+                  ON CONFLICT(assessment_id,question_id) DO NOTHING""",
+               (assessment_id, qid, "{}"))
+    row = db.execute("SELECT comments FROM responses WHERE assessment_id=? AND question_id=?",
+                     (assessment_id, qid)).fetchone()
+    try: cmts = json.loads(row["comments"]) if row and row["comments"] else {}
+    except Exception: cmts = {}
+    if not isinstance(cmts, dict): cmts = {}
+    if text.strip(): cmts[author] = text
+    else: cmts.pop(author, None)
+    db.execute("UPDATE responses SET comments=?, updated_at=datetime('now') WHERE assessment_id=? AND question_id=?",
+               (json.dumps(cmts, ensure_ascii=False), assessment_id, qid))
+    db.commit()
+    return jsonify({"ok": True, "question_id": qid, "authors": sorted(cmts), "n": len(cmts)})
+
+
+@app.route("/api/assessors/<int:assessment_id>", methods=["POST"])
+@login_required
+def api_assessors(assessment_id):
+    """Replace this assessment's assessor roster. Renaming a name does NOT move notes already
+    filed under the old name — they stay in the row and simply stop being displayed."""
+    db = get_db()
+    if not db.execute("SELECT id FROM assessments WHERE id=?", (assessment_id,)).fetchone():
+        return jsonify({"error": "not found"}), 404
+    names, seen = [], set()
+    for n in (request.get_json() or {}).get("names", []):
+        n = str(n).strip()
+        if n and n.lower() not in seen:
+            seen.add(n.lower()); names.append(n)
+    if not names: return jsonify({"error": "at least one assessor required"}), 400
+    names = names[:MAX_ASSESSORS]
+    db.execute("UPDATE assessments SET assessors_json=? WHERE id=?",
+               (json.dumps(names, ensure_ascii=False), assessment_id))
+    db.commit()
+    return jsonify({"ok": True, "names": names})
 
 
 @app.route("/api/answer", methods=["POST"])
