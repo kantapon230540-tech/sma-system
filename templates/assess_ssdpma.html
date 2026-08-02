@@ -56,6 +56,20 @@
   </div>
 {% endmacro %}
 
+{# Per-assessor evidence. The boxes are built by JS on first open (306 questions × 4 boxes is too
+   much DOM to ship up front); the badge shows how many assessors have already written. #}
+{% macro evidence_block(qid) %}
+  {% set filled = (resp.get(qid, {}).get('comments') or {}) %}
+  <div class="evidence-block mt-1" data-qid="{{ qid }}">
+    <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none evidence-toggle" style="font-size:.75rem">
+      🗒 Assessor evidence
+      <span class="badge {{ 'bg-primary' if filled else 'bg-light text-muted border' }} ev-count">{{ filled|length }}/{{ assessors|length }}</span>
+      <span class="ev-chev">▾</span>
+    </button>
+    <div class="evidence-body mt-1" style="display:none"></div>
+  </div>
+{% endmacro %}
+
 {% macro sma_question(q, pillar_id) %}
   {% set ans = resp.get(q.id, {}).get('answer', '') %}
   {% set det = resp.get(q.id, {}).get('detail') or {} %}
@@ -97,11 +111,13 @@
           {% if q.standard %}<span class="badge bg-secondary-subtle text-secondary-emphasis border">📋 {{ q.standard[:30] }}</span>{% endif %}
         </div>
         {% if q.responders %}{{ responder_panel(q, ans, det) }}{% else %}{{ plain_yesno(q.id, ans) }}{% endif %}
-        <textarea class="form-control form-control-sm comment-field" id="cmt-{{ q.id }}" rows="1" placeholder="Comment / evidence…" data-qid="{{ q.id }}">{{ cmt }}</textarea>
+        <textarea class="form-control form-control-sm comment-field" id="cmt-{{ q.id }}" rows="1" placeholder="General / shared note…" data-qid="{{ q.id }}">{{ cmt }}</textarea>
+        {{ evidence_block(q.id) }}
       </div>
     </div>
   </div>
 {% endmacro %}
+
 
 {% macro solid_grade_badge(item_score) %}
   {% if item_score and item_score.score is not none %}
@@ -175,6 +191,9 @@
           </div>
         {% endfor %}
       </div>
+      <textarea class="form-control form-control-sm comment-field mt-2" id="cmt-{{ s.id }}" rows="1"
+                placeholder="General / shared note…" data-qid="{{ s.id }}">{{ resp.get(s.id, {}).get('comment', '') }}</textarea>
+      {{ evidence_block(s.id) }}
     </div>
   </div>
 {% endmacro %}
@@ -198,7 +217,26 @@
     <h5 class="mb-0">{{ assessment.site_name }}
       <span class="badge bg-dark">SSDPMA</span>
       <span class="text-muted small">Solidification Safety &amp; DP Maturity Assessment</span></h5>
-    <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-sm btn-outline-primary" type="button" onclick="openAssessors()">
+        🗒 Assessors <span class="badge bg-primary" id="assessor-count">{{ assessors|length }}</span>
+      </button>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Assessor roster — the names the per-question evidence boxes are filed under -->
+  <div class="card mb-3 p-3" id="assessor-editor" style="display:none">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <span class="fw-semibold small">Assessors for this assessment</span>
+      <button class="btn-close btn-sm" type="button" onclick="closeAssessors()"></button>
+    </div>
+    <div class="row g-2" id="assessor-inputs"></div>
+    <div class="d-flex align-items-center gap-2 mt-2">
+      <button class="btn btn-sm btn-primary" type="button" onclick="saveAssessors()">Save</button>
+      <button class="btn btn-sm btn-outline-secondary" type="button" onclick="addAssessorInput()">+ add</button>
+      <span class="small text-muted" id="assessor-msg">Renaming someone leaves notes already filed under the old name in place — they just stop showing.</span>
+    </div>
   </div>
 
   <!-- ── Filters (frozen while scrolling) ────────────────────────────── -->
@@ -622,6 +660,8 @@
 {% block scripts %}
 <script>
 const ASSESSMENT_ID = {{ assessment.id }};
+let ASSESSORS = {{ assessors|tojson }};
+const COMMENTS = {{ comments_map|tojson }};   // {qid: {assessor: text}} — only questions with notes
 const saveTimers = {};
 function toggleCrit(btn){ const b=btn.nextElementSibling; b.style.display = b.style.display==='none'?'block':'none'; }
 function jump(qid){ const el=document.getElementById('qrow-'+qid); if(!el) return;
@@ -900,6 +940,102 @@ document.querySelectorAll('.comment-field').forEach(ta=>{
     save(qid, answer, this.value);
   });
 });
+
+// ── Per-assessor evidence ──────────────────────────────────────────────────
+// One box per assessor per question. Boxes are built on first open: 306 questions × 4 would be
+// 1,200+ textareas in the DOM at load, which makes the page crawl. Each box saves on its own to
+// /api/comment, so two assessors typing on the same question never overwrite each other.
+function evBoxHTML(qid, name, text){
+  const id = 'ev-' + qid + '-' + name.replace(/\W+/g,'_');
+  return `<div class="d-flex align-items-start gap-2 mb-1">
+    <label class="badge bg-secondary text-nowrap mt-1" style="min-width:5.5rem;text-align:left" for="${id}">${escHtml(name)}</label>
+    <textarea class="form-control form-control-sm ev-field" id="${id}" rows="1"
+              data-qid="${escHtml(qid)}" data-author="${escHtml(name)}"
+              placeholder="Evidence seen by ${escHtml(name)}…">${escHtml(text||'')}</textarea>
+    <span class="small text-muted ev-status" style="min-width:3.2rem"></span>
+  </div>`;
+}
+function renderEvidence(block){
+  const qid = block.dataset.qid, body = block.querySelector('.evidence-body');
+  const mine = COMMENTS[qid] || {};
+  body.innerHTML = ASSESSORS.map(n => evBoxHTML(qid, n, mine[n])).join('');
+  body.querySelectorAll('.ev-field').forEach(ta => {
+    ta.style.height = 'auto'; ta.style.height = Math.max(ta.scrollHeight, 31) + 'px';
+    ta.addEventListener('input', function(){ this.style.height='auto'; this.style.height=this.scrollHeight+'px'; });
+    ta.addEventListener('blur', () => saveEvidence(ta));
+  });
+  block.dataset.rendered = '1';
+}
+function saveEvidence(ta){
+  const qid = ta.dataset.qid, author = ta.dataset.author, text = ta.value;
+  const store = COMMENTS[qid] || (COMMENTS[qid] = {});
+  if ((store[author] || '') === text) return;          // nothing changed — don't touch the row
+  const status = ta.parentElement.querySelector('.ev-status');
+  if (status) status.textContent = 'saving…';
+  fetch('/api/comment', {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({assessment_id: ASSESSMENT_ID, question_id: qid, author, text})})
+    .then(r => r.json())
+    .then(d => {
+      if (d.error) { if (status) status.textContent = '⚠ ' + d.error; return; }
+      if (text.trim()) store[author] = text; else delete store[author];
+      if (status) { status.textContent = '✓ saved'; setTimeout(()=>status.textContent='', 1500); }
+      updateEvCount(qid);
+    })
+    .catch(() => { if (status) status.textContent = '⚠ offline'; });
+}
+function updateEvCount(qid){
+  const block = document.querySelector(`.evidence-block[data-qid="${qid}"]`);
+  if (!block) return;
+  const n = Object.keys(COMMENTS[qid] || {}).filter(k => ASSESSORS.includes(k)).length;
+  const b = block.querySelector('.ev-count');
+  b.textContent = n + '/' + ASSESSORS.length;
+  b.className = 'badge ev-count ' + (n ? 'bg-primary' : 'bg-light text-muted border');
+}
+document.addEventListener('click', ev => {
+  const btn = ev.target.closest('.evidence-toggle');
+  if (!btn) return;
+  const block = btn.closest('.evidence-block'), body = block.querySelector('.evidence-body');
+  if (!block.dataset.rendered) renderEvidence(block);
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  block.querySelector('.ev-chev').textContent = open ? '▾' : '▴';
+});
+
+// ── Assessor roster ────────────────────────────────────────────────────────
+function openAssessors(){
+  const wrap = document.getElementById('assessor-inputs');
+  wrap.innerHTML = '';
+  ASSESSORS.forEach(n => addAssessorInput(n));
+  document.getElementById('assessor-editor').style.display = '';
+}
+function closeAssessors(){ document.getElementById('assessor-editor').style.display = 'none'; }
+function addAssessorInput(value){
+  const wrap = document.getElementById('assessor-inputs');
+  if (wrap.querySelectorAll('input').length >= 8) return;
+  const col = document.createElement('div');
+  col.className = 'col-6 col-md-3';
+  col.innerHTML = `<input type="text" class="form-control form-control-sm assessor-name" placeholder="Name" value="${escHtml(typeof value==='string'?value:'')}">`;
+  wrap.appendChild(col);
+}
+function saveAssessors(){
+  const names = [...document.querySelectorAll('.assessor-name')].map(i => i.value.trim()).filter(Boolean);
+  const msg = document.getElementById('assessor-msg');
+  if (!names.length) { msg.textContent = '⚠ at least one assessor is required'; return; }
+  msg.textContent = 'saving…';
+  fetch('/api/assessors/' + ASSESSMENT_ID, {method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({names})})
+    .then(r => r.json())
+    .then(d => {
+      if (d.error) { msg.textContent = '⚠ ' + d.error; return; }
+      ASSESSORS = d.names;
+      document.getElementById('assessor-count').textContent = ASSESSORS.length;
+      // rebuild any open/rendered evidence blocks against the new roster
+      document.querySelectorAll('.evidence-block[data-rendered]').forEach(b => renderEvidence(b));
+      document.querySelectorAll('.evidence-block').forEach(b => updateEvCount(b.dataset.qid));
+      msg.textContent = '✓ saved';
+      setTimeout(closeAssessors, 700);
+    });
+}
 
 // ── native responder widget (mirrors assess.html) ──
 let _pc=0;
