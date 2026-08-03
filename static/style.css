@@ -143,7 +143,9 @@ body { background: var(--bg); font-family: 'Segoe UI', sans-serif; color: var(--
   .filter-group-head { width: 200px; flex: 0 0 200px; padding-top: .45rem; }
 }
 .filter-group-head .chev { margin-left: auto; transition: transform .15s; }
-.filter-group-head[aria-expanded="false"] .chev { transform: rotate(-90deg); }
+.filter-group-head[aria-expanded="false"] .chev,
+#filter-toggle[aria-expanded="false"] .chev { display: inline-block; transform: rotate(-90deg); }
+#filter-toggle .chev { display: inline-block; transition: transform .15s; }
 /* On phones/tablets the whole panel is sticky, so cap it and scroll inside instead of letting it
    push the questionnaire off-screen. */
 @media (max-width: 991.98px) {

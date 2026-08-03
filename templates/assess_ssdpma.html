@@ -250,16 +250,18 @@
                placeholder="Search questions or ID..."
                oninput="applyFilters()">
       </span>
-      <button class="btn btn-sm btn-outline-primary d-lg-none" type="button"
+      <button class="btn btn-sm btn-outline-primary" type="button"
               data-bs-toggle="collapse" data-bs-target="#filter-body" aria-expanded="false"
               aria-controls="filter-body" id="filter-toggle">
         ⚙ Filters <span class="badge bg-primary ms-1" id="active-filter-count" style="display:none">0</span>
+        <span class="chev">▾</span>
       </button>
       <button class="btn btn-sm btn-outline-secondary" onclick="clearFilters()">✕ Clear all</button>
     </div>
 
-    <!-- Collapsed by default under lg; always open on desktop -->
-    <div class="collapse d-lg-block filter-body mt-2" id="filter-body">
+    <!-- Hidable at every width. Opens by default on desktop and stays closed on phones/tablets,
+         but the choice is the user's and is remembered — see initFilterPanel(). -->
+    <div class="collapse filter-body mt-2" id="filter-body">
 
     <!-- Group: interview (spans both tracks) -->
     <div class="filter-group d-lg-flex align-items-start gap-3">
@@ -805,6 +807,21 @@ function applyFilters() {
 
 // How many filters are active — shown on the collapsed ⚙ Filters button so a phone user can see
 // the list is filtered without opening the panel.
+// The filter panel is sticky, so whatever it costs in height it costs on every screen of
+// scrolling. Default: open on desktop, closed on phones/tablets — but once the assessor opens or
+// closes it themselves that choice wins, and is remembered for the next question they open.
+function initFilterPanel(){
+  const body = document.getElementById('filter-body');
+  const btn  = document.getElementById('filter-toggle');
+  if(!body || !btn) return;
+  const saved = localStorage.getItem('ssdpma_filters_open');
+  const open  = (saved === null) ? (window.innerWidth >= 992) : (saved === '1');
+  body.classList.toggle('show', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  body.addEventListener('shown.bs.collapse',  () => localStorage.setItem('ssdpma_filters_open','1'));
+  body.addEventListener('hidden.bs.collapse', () => localStorage.setItem('ssdpma_filters_open','0'));
+}
+
 function updateFilterBadge() {
   let n = document.querySelectorAll('.sticky-filter .ms-menu input[type=checkbox]:checked').length;
   if ((document.getElementById('q-search')?.value || '').trim()) n++;
@@ -1091,6 +1108,7 @@ document.querySelectorAll('.responder-panel').forEach(panel=>{
 });
 
 // initial paint
+initFilterPanel();
 updatePanels({{ scores|tojson }});
 setProgress({{ progress|tojson }});
 </script>
