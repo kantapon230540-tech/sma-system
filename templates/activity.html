@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Activity · {{ assessment.site_name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <div>
+    <h4 class="mb-0">Change log</h4>
+    <div class="text-muted small">
+      {{ assessment.site_name }} · {{ assessment.type|upper }}
+      {% if assessment.assessment_date %} · {{ assessment.assessment_date }}{% endif %}
+    </div>
+  </div>
+  <a href="{{ url_for('assess', assessment_id=assessment.id) }}" class="btn btn-sm btn-outline-primary">
+    ← Back to assessment
+  </a>
+</div>
+
+<div class="alert alert-warning py-2 small">
+  <b>Not an audit trail.</b> This system signs every visitor in as the same account, so the
+  server cannot verify who made a change. The name below is the one that browser typed into its
+  identity badge &mdash; useful for coordinating a live assessment, not evidence of authorship.
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    {% if rows %}
+    <div class="table-responsive">
+      <table class="table table-sm mb-0 align-middle">
+        <thead class="table-light">
+          <tr>
+            <th style="width:150px">When</th>
+            <th style="width:120px">Who</th>
+            <th>What</th>
+            <th style="width:180px">Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in rows %}
+          <tr>
+            <td class="small text-muted text-nowrap">{{ r.created_at }}</td>
+            <td class="small"><b>{{ r.actor or 'Unknown' }}</b></td>
+            <td class="small">
+              {{ r.verb }}
+              {% if r.question_id %}
+                <a href="{{ url_for('assess', assessment_id=assessment.id) }}#qrow-{{ r.question_id }}"
+                   class="text-decoration-none">{{ r.question_id }}</a>
+              {% endif %}
+              {% if r.label %}<div class="text-muted" style="font-size:.75rem">{{ r.label[:120] }}</div>{% endif %}
+            </td>
+            <td class="small">
+              {% if r.action in ('answer', 'clear') %}
+                {% if r.old_value %}<span class="text-muted">{{ r.old_value }} →</span>{% endif %}
+                <span class="badge q-{{ r.new_value or 'na' }} text-dark border">{{ r.new_value or 'cleared' }}</span>
+              {% elif r.new_value %}
+                <span class="text-muted">{{ r.new_value[:80] }}</span>
+              {% elif r.old_value %}
+                <span class="text-muted text-decoration-line-through">{{ r.old_value[:80] }}</span>
+              {% else %}—{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-4 text-center text-muted">
+      Nothing recorded yet. Changes are logged from the moment this feature went live &mdash;
+      answers saved before that are not in here.
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% if rows|length >= 1000 %}
+  <div class="small text-muted mt-2">Showing the most recent 1,000 entries.</div>
+{% endif %}
+{% endblock %}

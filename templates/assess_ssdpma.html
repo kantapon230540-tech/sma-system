@@ -528,6 +528,40 @@
     <!-- Live score rail -->
     <div class="col-lg-4 order-1 order-lg-2">
       <div class="score-rail">
+
+        <!-- ── Who's on this assessment right now, and what has just changed ─────────────
+             Polled, not websockets: PythonAnywhere's free tier can't hold persistent
+             connections. "In this assessment" counts you plus anyone whose browser has
+             pinged in the last 90s. -->
+        <div class="card shadow-sm mb-2">
+          <div class="card-header py-2 d-flex justify-content-between align-items-center"
+               style="background:#eef1ff">
+            <span class="fw-bold small">
+              <span id="presence-dot" class="live-pulse" style="color:#198754">●</span>
+              <span id="presence-count">1</span> in this assessment
+            </span>
+            <button class="btn btn-sm btn-link p-0 small text-decoration-none" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#activity-body"
+                    id="activity-toggle" aria-expanded="false">
+              Activity <span class="badge bg-secondary" id="activity-count">0</span>
+            </button>
+          </div>
+          <div class="card-body py-2">
+            <div class="small" id="presence-list"><span class="text-muted">just you</span></div>
+            <div class="collapse mt-2" id="activity-body">
+              <div class="border-top pt-2" id="activity-list"
+                   style="max-height:260px;overflow-y:auto;font-size:.78rem">
+                <span class="text-muted">No changes recorded yet.</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <a href="{{ url_for('activity_page', assessment_id=assessment.id) }}"
+                   class="small text-decoration-none">Full history →</a>
+                <span class="text-muted" style="font-size:.7rem">names are self-declared</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Combined progress: kept as a one-line roll-up only. The per-track bars below are the
              ones to read — the three tracks don't share an answerable unit (see _ssdpma_progress). -->
         <div class="d-flex justify-content-between align-items-center small text-muted">
@@ -678,6 +712,10 @@
 <script>
 const ASSESSMENT_ID = {{ assessment.id }};
 let ASSESSORS = {{ assessors|tojson }};
+// base.html's identity picker offers these as one-click choices, so the name in the change
+// log is the same string as the evidence-box label. Kept in sync by saveAssessors().
+window.ASSESSORS = ASSESSORS;
+function whoAmI(){ return (window.SMA_IDENTITY && SMA_IDENTITY.getName()) || ''; }
 const COMMENTS = {{ comments_map|tojson }};   // {qid: {assessor: text}} — only questions with notes
 const saveTimers = {};
 function toggleCrit(btn){ const b=btn.nextElementSibling; b.style.display = b.style.display==='none'?'block':'none'; }
@@ -952,8 +990,8 @@ function save(qid, answer, comment){
   clearTimeout(saveTimers[qid]);
   saveTimers[qid]=setTimeout(()=>{
     fetch('/api/answer',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({assessment_id:ASSESSMENT_ID, question_id:qid, answer:answer||'', comment:comment||''})})
-    .then(r=>r.json()).then(data=>{ if(data.ssdpma) updatePanels(data.ssdpma); setProgress(data.progress);
+      body:JSON.stringify({assessment_id:ASSESSMENT_ID, question_id:qid, answer:answer||'', comment:comment||'', actor:whoAmI()})})
+    .then(r=>r.json()).then(data=>{ if(data.ssdpma) updatePanels(data.ssdpma); setProgress(data.progress); pollActivity();
       const row=document.getElementById('qrow-'+qid) || document.querySelector(`.solid-level-yesno[data-qid="${qid}"]`)?.closest('.ladder-row');
       if(row){ row.className=row.className.replace(/q-\w+/g,''); if(answer) row.classList.add('q-'+answer); } });
   },200);
@@ -1058,11 +1096,12 @@ function saveAssessors(){
   if (!names.length) { msg.textContent = '⚠ at least one assessor is required'; return; }
   msg.textContent = 'saving…';
   fetch('/api/assessors/' + ASSESSMENT_ID, {method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({names})})
+    body: JSON.stringify({names, actor: whoAmI()})})
     .then(r => r.json())
     .then(d => {
       if (d.error) { msg.textContent = '⚠ ' + d.error; return; }
       ASSESSORS = d.names;
+      window.ASSESSORS = ASSESSORS;
       document.getElementById('assessor-count').textContent = ASSESSORS.length;
       // rebuild any open/rendered evidence blocks against the new roster
       document.querySelectorAll('.evidence-block[data-rendered]').forEach(b => renderEvidence(b));
@@ -1091,9 +1130,9 @@ function saveResponder(panel){
   clearTimeout(saveTimers[qid]);
   saveTimers[qid]=setTimeout(()=>{
     fetch('/api/answer',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({assessment_id:ASSESSMENT_ID, question_id:qid, detail, comment})})
+      body:JSON.stringify({assessment_id:ASSESSMENT_ID, question_id:qid, detail, comment, actor:whoAmI()})})
     .then(r=>r.json()).then(data=>{
-      if(data.ssdpma) updatePanels(data.ssdpma); setProgress(data.progress);
+      if(data.ssdpma) updatePanels(data.ssdpma); setProgress(data.progress); pollActivity();
       const d=data.derived||''; const badge=panel.querySelector('.rsp-result');
       const M={yes:['Yes','bg-success'],no:['No','bg-danger'],na:['N/A','bg-secondary'],not_rolled_out:['Not rolled out','bg-secondary']};
       const m=M[d]||['— incomplete','bg-secondary']; badge.textContent=m[0]; badge.className='rsp-result badge '+m[1];
@@ -1124,6 +1163,106 @@ document.querySelectorAll('.responder-panel').forEach(panel=>{
     else if(e.target.closest('.section-toggle')){ e.preventDefault(); const body=e.target.closest('.rsp-section').querySelector('.section-body'); const hidden=body.style.display==='none'; body.style.display=hidden?'':'none'; e.target.closest('.section-toggle').textContent=hidden?'▾':'▸'; }
   });
 });
+
+// ── Live presence + change log ───────────────────────────────────────────────
+// Polling, not websockets — PythonAnywhere's free tier drops persistent connections.
+// Ping every 20s, read every 15s, and treat anyone quiet for 90s as gone (server-side
+// PRESENCE_STALE_SECONDS), so a closed tab disappears on its own without a goodbye.
+(function () {
+  // Poll budget matters on the free tier: 4 assessors × 3 timers is real traffic. The change
+  // feed drops to a slow tick while it's collapsed (only the count badge is on screen) and
+  // stops entirely in a background tab.
+  const PING_MS = 20000, POLL_MS = 15000, ACT_OPEN_MS = 12000, ACT_SHUT_MS = 45000;
+
+  // Which track you're reading, so others see "Kantapon — Safety Solid" rather than a bare name.
+  let track = 'sma';
+  const groups = document.querySelectorAll('.pillar-group[data-section]');
+  if (groups.length) {
+    const io = new IntersectionObserver(es => {
+      let best = null;
+      es.forEach(e => { if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) best = e; });
+      if (best) track = best.target.dataset.section;
+    }, {threshold: [0.05, 0.3]});
+    groups.forEach(g => io.observe(g));
+  }
+
+  function ping() {
+    if (!window.SMA_IDENTITY) return;
+    fetch('/api/presence', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({client_id: SMA_IDENTITY.clientId, display_name: whoAmI(),
+                            assessment_id: ASSESSMENT_ID, pillar: track})}).catch(()=>{});
+  }
+
+  const countEl = document.getElementById('presence-count');
+  const listEl  = document.getElementById('presence-list');
+  function pollPresence() {
+    const cid = window.SMA_IDENTITY ? SMA_IDENTITY.clientId : '';
+    fetch('/api/presence?assessment_id=' + ASSESSMENT_ID + '&client_id=' + encodeURIComponent(cid))
+      .then(r => r.json())
+      .then(rows => {
+        if (!Array.isArray(rows)) return;
+        countEl.textContent = rows.length + 1;          // +1 = this browser
+        listEl.innerHTML = rows.length
+          ? `<span class="badge bg-primary me-1">${escHtml(whoAmI() || 'You')} (you)</span>` +
+            rows.map(r => `<span class="badge bg-light text-dark border me-1">${escHtml(r.display_name)}${r.pillar_label ? ' — ' + escHtml(r.pillar_label) : ''}</span>`).join('')
+          : '<span class="text-muted">just you</span>';
+      }).catch(()=>{});
+  }
+
+  // Change log. `after` keeps the poll cheap: only rows newer than the newest one already shown.
+  let lastId = 0, seen = [];
+  const actList = document.getElementById('activity-list');
+  const actCount = document.getElementById('activity-count');
+  function actRow(r) {
+    const who = escHtml(r.actor || 'Unknown');
+    const what = escHtml(r.verb || r.action);
+    const q = r.question_id
+      ? ` <a href="#qrow-${escHtml(r.question_id)}" onclick="jump('${escHtml(r.question_id)}');return false"
+             class="text-decoration-none">${escHtml(r.question_id)}</a>` : '';
+    let val = '';
+    if (r.action === 'answer')      val = ` <span class="badge q-${escHtml(r.new_value)} text-dark border">${escHtml(r.old_value ? r.old_value + ' → ' : '')}${escHtml(r.new_value)}</span>`;
+    else if (r.action === 'clear')  val = ` <span class="text-muted">(was ${escHtml(r.old_value || '—')})</span>`;
+    else if (r.action === 'roster') val = ` <span class="text-muted">${escHtml(r.new_value || '')}</span>`;
+    else if (r.new_value)           val = ` <span class="text-muted">${escHtml(r.new_value.slice(0, 60))}</span>`;
+    const ago = r.secs_ago < 60 ? 'just now'
+              : r.secs_ago < 3600 ? Math.floor(r.secs_ago/60) + 'm ago'
+              : Math.floor(r.secs_ago/3600) + 'h ago';
+    const label = r.label ? `<div class="text-muted" style="font-size:.72rem;padding-left:.5rem">${escHtml(r.label.slice(0,90))}</div>` : '';
+    return `<div class="border-bottom py-1"><b>${who}</b> ${what}${q}${val}
+              <span class="text-muted float-end" style="font-size:.7rem">${ago}</span>${label}</div>`;
+  }
+  window.pollActivity = function () {
+    fetch(`/api/activity/${ASSESSMENT_ID}?limit=40`)
+      .then(r => r.json())
+      .then(d => {
+        if (!d || !Array.isArray(d.rows)) return;
+        actCount.textContent = d.total;
+        seen = d.rows;
+        if (d.rows.length) lastId = d.rows[0].id;
+        actList.innerHTML = d.rows.length ? d.rows.map(actRow).join('')
+                                          : '<span class="text-muted">No changes recorded yet.</span>';
+      }).catch(()=>{});
+  };
+
+  const actBody = document.getElementById('activity-body');
+  function isOpen(){ return actBody.classList.contains('show'); }
+  let actTimer = null;
+  function scheduleActivity() {
+    clearInterval(actTimer);
+    actTimer = setInterval(() => {
+      if (document.hidden) return;          // a backgrounded tab has nobody watching it
+      pollActivity();
+    }, isOpen() ? ACT_OPEN_MS : ACT_SHUT_MS);
+  }
+  actBody.addEventListener('shown.bs.collapse',  () => { pollActivity(); scheduleActivity(); });
+  actBody.addEventListener('hidden.bs.collapse', scheduleActivity);
+
+  setTimeout(ping, 600);   setInterval(ping, PING_MS);
+  pollPresence();          setInterval(() => { if (!document.hidden) pollPresence(); }, POLL_MS);
+  pollActivity();          scheduleActivity();
+  // Re-ping straight away when the name changes, so others don't wait 20s to see it.
+  if (window.SMA_IDENTITY && SMA_IDENTITY.onChange) SMA_IDENTITY.onChange(() => { ping(); pollPresence(); });
+})();
 
 // initial paint
 initFilterPanel();
