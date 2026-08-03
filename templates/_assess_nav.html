@@ -1,0 +1,32 @@
+{# Per-assessment navigation. Set `nav_here` to one of assess|result|findings|activity
+   before including, so the page you're on is marked and not re-linked.
+
+   "← All" is the way back to the global list; everything left of it stays inside THIS
+   assessment. The old single "← Dashboard" button went home, which is why the assessment's
+   own pages were hard to reach from the questionnaire. #}
+<div class="btn-group btn-group-sm" role="group" aria-label="This assessment">
+  {% if nav_here == 'assess' %}
+    <span class="btn btn-sm btn-primary disabled">✎ Assess</span>
+  {% else %}
+    <a href="{{ url_for('assess', assessment_id=assessment.id) }}" class="btn btn-sm btn-outline-primary">✎ Assess</a>
+  {% endif %}
+
+  {% if nav_here == 'result' %}
+    <span class="btn btn-sm btn-primary disabled">📊 Results</span>
+  {% else %}
+    <a href="{{ url_for('result', assessment_id=assessment.id) }}" class="btn btn-sm btn-outline-primary">📊 Results</a>
+  {% endif %}
+
+  {% if nav_here == 'findings' %}
+    <span class="btn btn-sm btn-primary disabled">📋 Findings</span>
+  {% else %}
+    <a href="{{ url_for('findings', assessment_id=assessment.id) }}" class="btn btn-sm btn-outline-primary">📋 Findings</a>
+  {% endif %}
+
+  {% if nav_here == 'activity' %}
+    <span class="btn btn-sm btn-primary disabled">🕘 Activity</span>
+  {% else %}
+    <a href="{{ url_for('activity_page', assessment_id=assessment.id) }}" class="btn btn-sm btn-outline-primary">🕘 Activity</a>
+  {% endif %}
+</div>
+<a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-secondary" title="All assessments">← All</a>
