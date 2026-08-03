@@ -86,6 +86,87 @@ def assessment_assessors(assessment):
         except Exception: pass
     return list(ASSESSOR_DEFAULTS)
 
+
+# ─── Activity log ─────────────────────────────────────────────────────────────
+# Records who changed what, so a shared assessment session can be replayed afterwards.
+#
+# IMPORTANT — this is a change log, not an audit trail. login_required auto-signs every
+# visitor in as the same account, so the server has no authenticated identity to attribute a
+# change to; `actor` is whatever name the browser sent (the one typed into the identity badge).
+# It is honest-user attribution, useful for "who cleared LD-014?" during a live assessment.
+# It is NOT evidence of authorship and must not be cited as such in a validation report.
+# Making it audit-grade needs real per-user logins — see HANDOFF.md.
+ACTIVITY_ACTIONS = {
+    "answer":         "answered",
+    "clear":          "cleared the answer for",
+    "evidence":       "wrote evidence on",
+    "evidence_clear": "removed evidence from",
+    "upload":         "attached a file to",
+    "delete_file":    "deleted a file from",
+    "roster":         "changed the assessor roster",
+    "tm_count":       "set the teammate count",
+    "status":         "changed the assessment status",
+    "delete":         "deleted the assessment",
+}
+ACTIVITY_KEEP = 3000          # per assessment; trimmed on write so the table can't grow forever
+
+def actor_name(data=None):
+    """The display name the browser volunteered with this request. See log_activity."""
+    if data is None:
+        data = request.get_json(silent=True) or {}
+    if not isinstance(data, dict):
+        data = {}
+    return (str(data.get("actor") or "").strip())[:60] or "Unknown"
+
+def log_activity(db, assessment_id, actor, action, question_id=None,
+                 old_value=None, new_value=None):
+    """Append one change. Never raises: a failed log must not fail the user's edit."""
+    try:
+        db.execute("""INSERT INTO activity
+                        (assessment_id, actor, action, question_id, old_value, new_value)
+                      VALUES (?,?,?,?,?,?)""",
+                   (assessment_id, actor, action, question_id,
+                    None if old_value is None else str(old_value)[:400],
+                    None if new_value is None else str(new_value)[:400]))
+        db.execute("""DELETE FROM activity WHERE assessment_id=? AND id <= (
+                        SELECT id FROM activity WHERE assessment_id=?
+                        ORDER BY id DESC LIMIT 1 OFFSET ?)""",
+                   (assessment_id, assessment_id, ACTIVITY_KEEP))
+    except Exception:
+        pass
+
+_QLABELS = {}
+
+def question_labels(assessment_type, scope=None):
+    """{question_id: short human label} for the activity feed, built once per type."""
+    key = (assessment_type, scope)
+    if key in _QLABELS:
+        return _QLABELS[key]
+    labels = {}
+    try:
+        if assessment_type == "ssdpma":
+            bank = load_ssdpma_bank()
+            for p in bank["sma"]["pillars"]:
+                for e in p.get("elements", []):
+                    for q in e.get("questions", []):
+                        labels[q["id"]] = q.get("text", "")
+            for sec, items in bank.get("sections", {}).items():
+                track = "Safety Solid" if sec == "safety_solid" else "DP Solid"
+                for it in items:
+                    labels[it["id"]] = f'{track} · {it.get("topic","")}'
+                    for lv in it.get("solid_rubric", []):
+                        labels[f'{it["id"]}__L{lv.get("level")}'] = \
+                            f'{track} · {it.get("topic","")} — level {lv.get("level")}'
+        else:
+            for p in load_questions(assessment_type, scope):
+                for e in p.get("elements", []):
+                    for q in e.get("questions", []):
+                        labels[q["id"]] = q.get("text", "")
+    except Exception:
+        pass
+    _QLABELS[key] = labels
+    return labels
+
 # answered_by is free-text pasted from the source spreadsheet — 35+ near-duplicate
 # variants (casing, trailing "/", comma/and-joined combos, one literal "/").
 # Classify into a small canonical, multi-label role taxonomy for filtering;
@@ -304,6 +385,20 @@ def init_db():
             pillar TEXT,
             last_seen TEXT NOT NULL DEFAULT (datetime('now'))
         );
+        -- Change log. NOT an authenticated audit trail: `actor` is the name the browser
+        -- volunteered (see log_activity). Deliberately has no FK cascade — rows survive so a
+        -- deleted assessment still leaves a record that it was deleted, and by whom.
+        CREATE TABLE IF NOT EXISTS activity (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            assessment_id INTEGER NOT NULL,
+            actor TEXT,
+            action TEXT NOT NULL,
+            question_id TEXT,
+            old_value TEXT,
+            new_value TEXT,
+            created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+        CREATE INDEX IF NOT EXISTS idx_activity_lookup ON activity(assessment_id, id DESC);
     """)
     # Migration: add responses.detail to existing DBs (per-role responder counts)
     cols = [r[1] for r in db.execute("PRAGMA table_info(responses)")]
@@ -1021,12 +1116,15 @@ def api_tmcount(assessment_id):
         except (TypeError, ValueError):
             return jsonify({"error": "tm_count must be a whole number"}), 400
     db.execute("UPDATE assessments SET tm_count=? WHERE id=?", (tm_count, assessment_id))
+    log_activity(db, assessment_id, actor_name(), "tm_count", None, None, tm_count)
     db.commit()
     return jsonify({"ok": True, "tm_count": tm_count, "required": tm_sample_size(tm_count)})
 
 
 PILLAR_LABELS = {"leadership": "Leadership", "tm_engagement": "TM Engagement",
-                  "organization": "Organization", "system": "System"}
+                  "organization": "Organization", "system": "System",
+                  # SSDPMA sends its track instead of an SMA pillar
+                  "sma": "SMA", "safety_solid": "Safety Solid", "dp_solid": "DP Solid"}
 PRESENCE_STALE_SECONDS = 90
 
 # NOTE: the app has no real per-user login (login_required auto-signs everyone in as
@@ -1069,7 +1167,6 @@ def api_presence_list():
              FROM presence p
              JOIN assessments a ON a.id = p.assessment_id
              WHERE p.client_id != ?
-               AND p.display_name != ''
                AND p.last_seen >= datetime('now', ?)"""
     params = [exclude_client_id, f"-{PRESENCE_STALE_SECONDS} seconds"]
     if assessment_id:
@@ -1081,8 +1178,57 @@ def api_presence_list():
     for r in rows:
         d = dict(r)
         d["pillar_label"] = PILLAR_LABELS.get(d["pillar"], d["pillar"])
+        # Someone who never set a name still counts as a person in the room.
+        d["display_name"] = (d.get("display_name") or "").strip() or "Guest"
         out.append(d)
     return jsonify(out)
+
+
+@app.route("/api/activity/<int:assessment_id>")
+@login_required
+def api_activity(assessment_id):
+    """Recent changes, newest first. `after` returns only rows newer than that id, so the
+    page can poll cheaply and only paint what it hasn't seen."""
+    db = get_db()
+    assessment = db.execute("SELECT * FROM assessments WHERE id=?", (assessment_id,)).fetchone()
+    if not assessment: return jsonify({"error": "not found"}), 404
+    limit = min(max(request.args.get("limit", 40, type=int), 1), 200)
+    after = request.args.get("after", type=int)
+    sql = """SELECT id, actor, action, question_id, old_value, new_value, created_at,
+                    CAST((julianday('now') - julianday(created_at)) * 86400 AS INTEGER) AS secs_ago
+             FROM activity WHERE assessment_id=?"""
+    params = [assessment_id]
+    if after:
+        sql += " AND id > ?"; params.append(after)
+    sql += " ORDER BY id DESC LIMIT ?"; params.append(limit)
+    labels = question_labels(assessment["type"], assessment["scope"])
+    rows = []
+    for r in db.execute(sql, params).fetchall():
+        d = dict(r)
+        d["verb"]  = ACTIVITY_ACTIONS.get(d["action"], d["action"])
+        d["label"] = labels.get(d["question_id"] or "", "")
+        rows.append(d)
+    total = db.execute("SELECT COUNT(*) FROM activity WHERE assessment_id=?",
+                       (assessment_id,)).fetchone()[0]
+    return jsonify({"rows": rows, "total": total})
+
+
+@app.route("/activity/<int:assessment_id>")
+@login_required
+def activity_page(assessment_id):
+    db = get_db()
+    assessment = db.execute("SELECT * FROM assessments WHERE id=?", (assessment_id,)).fetchone()
+    if not assessment: abort(404)
+    labels = question_labels(assessment["type"], assessment["scope"])
+    rows = []
+    for r in db.execute("""SELECT * FROM activity WHERE assessment_id=?
+                           ORDER BY id DESC LIMIT 1000""", (assessment_id,)).fetchall():
+        d = dict(r)
+        d["verb"]  = ACTIVITY_ACTIONS.get(d["action"], d["action"])
+        d["label"] = labels.get(d["question_id"] or "", "")
+        rows.append(d)
+    return render_template("activity.html", assessment=assessment, rows=rows,
+                           user=current_user())
 
 
 @app.route("/api/comment", methods=["POST"])
@@ -1111,10 +1257,16 @@ def api_comment():
     try: cmts = json.loads(row["comments"]) if row and row["comments"] else {}
     except Exception: cmts = {}
     if not isinstance(cmts, dict): cmts = {}
+    had = author in cmts
     if text.strip(): cmts[author] = text
     else: cmts.pop(author, None)
     db.execute("UPDATE responses SET comments=?, updated_at=datetime('now') WHERE assessment_id=? AND question_id=?",
                (json.dumps(cmts, ensure_ascii=False), assessment_id, qid))
+    # The author is the roster name whose box was typed into, so it's the actor here.
+    if text.strip():
+        log_activity(db, assessment_id, author, "evidence", qid, None, text)
+    elif had:
+        log_activity(db, assessment_id, author, "evidence_clear", qid, None, None)
     db.commit()
     return jsonify({"ok": True, "question_id": qid, "authors": sorted(cmts), "n": len(cmts)})
 
@@ -1134,8 +1286,13 @@ def api_assessors(assessment_id):
             seen.add(n.lower()); names.append(n)
     if not names: return jsonify({"error": "at least one assessor required"}), 400
     names = names[:MAX_ASSESSORS]
+    old = assessment_assessors(dict(db.execute("SELECT * FROM assessments WHERE id=?",
+                                               (assessment_id,)).fetchone()))
     db.execute("UPDATE assessments SET assessors_json=? WHERE id=?",
                (json.dumps(names, ensure_ascii=False), assessment_id))
+    if old != names:
+        log_activity(db, assessment_id, actor_name(), "roster",
+                     None, ", ".join(old), ", ".join(names))
     db.commit()
     return jsonify({"ok": True, "names": names})
 
@@ -1161,6 +1318,10 @@ def api_answer():
         if derived is not None:
             answer = derived
             detail_json = json.dumps(detail)
+    # Snapshot the old answer before the upsert so the change log can show "yes → no".
+    prev = db.execute("SELECT answer FROM responses WHERE assessment_id=? AND question_id=?",
+                      (assessment_id, qid)).fetchone()
+    old_answer = (prev["answer"] if prev else None) or ""
     db.execute(
         """INSERT INTO responses (assessment_id,question_id,answer,comment,detail,updated_at)
            VALUES (?,?,?,?,?,datetime('now'))
@@ -1168,6 +1329,9 @@ def api_answer():
            DO UPDATE SET answer=excluded.answer,comment=excluded.comment,detail=excluded.detail,updated_at=excluded.updated_at""",
         (assessment_id,qid,answer,data.get("comment",""),detail_json)
     )
+    if (answer or "") != old_answer:      # typing in a comment box shouldn't log a change
+        log_activity(db, assessment_id, actor_name(data),
+                     "answer" if answer else "clear", qid, old_answer, answer)
     db.commit()
     resp     = get_responses_dict(db, assessment_id)
     ans      = answers_only(resp)
@@ -1201,6 +1365,8 @@ def api_upload(assessment_id, question_id):
     if len(content) > MAX_FILE_MB*1024*1024: return jsonify({"error":"File too large"}),400
     db.execute("INSERT INTO attachments (assessment_id,question_id,original_name,mime_type,file_data) VALUES (?,?,?,?,?)",
                (assessment_id,question_id,file.filename,file.content_type,content))
+    log_activity(db, assessment_id, (request.form.get("actor") or "").strip()[:60] or "Unknown",
+                 "upload", question_id, None, file.filename)
     db.commit()
     att_id = db.execute("SELECT last_insert_rowid()").fetchone()[0]
     return jsonify({"id":att_id,"original_name":file.filename,
@@ -1219,9 +1385,12 @@ def serve_attachment(att_id):
 @login_required
 def delete_attachment(att_id):
     db = get_db()
-    if not db.execute("SELECT id FROM attachments WHERE id=?",(att_id,)).fetchone():
+    row = db.execute("SELECT * FROM attachments WHERE id=?",(att_id,)).fetchone()
+    if not row:
         return jsonify({"error":"not found"}),404
     db.execute("DELETE FROM attachments WHERE id=?",(att_id,))
+    log_activity(db, row["assessment_id"], actor_name(), "delete_file",
+                 row["question_id"], row["original_name"], None)
     db.commit()
     return jsonify({"ok":True})
 
@@ -1386,6 +1555,7 @@ def api_update_finding(finding_id):
 def api_mark_done(assessment_id):
     db = get_db()
     db.execute("UPDATE assessments SET status='done' WHERE id=?",(assessment_id,))
+    log_activity(db, assessment_id, actor_name(), "status", None, "in_progress", "done")
     db.commit()
     return jsonify({"ok":True})
 
@@ -1491,9 +1661,13 @@ def export_excel(assessment_id):
 @login_required
 def delete_assessment(assessment_id):
     db = get_db()
+    gone = db.execute("SELECT site_name FROM assessments WHERE id=?", (assessment_id,)).fetchone()
     for t,c in [("findings","assessment_id"),("attachments","assessment_id"),
                 ("responses","assessment_id"),("assessments","id")]:
         db.execute(f"DELETE FROM {t} WHERE {c}=?",(assessment_id,))
+    # activity rows are intentionally kept: the deletion itself is the thing worth recording.
+    log_activity(db, assessment_id, (request.form.get("actor") or "").strip()[:60] or "Unknown",
+                 "delete", None, gone["site_name"] if gone else None, None)
     db.commit()
     return redirect(url_for("dashboard"))
 

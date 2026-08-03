@@ -50,23 +50,69 @@ window.SMA_IDENTITY = (function () {
              : 'c-' + Math.random().toString(36).slice(2) + Date.now();
     localStorage.setItem('sma_client_id', clientId);
   }
+  const listeners = [];
   function getName() { return localStorage.getItem('sma_display_name') || ''; }
-  function setName(n) { localStorage.setItem('sma_display_name', n || ''); paint(); }
+  function setName(n) {
+    localStorage.setItem('sma_display_name', (n || '').trim());
+    paint(); listeners.forEach(f => { try { f(getName()); } catch (e) {} });
+  }
   function paint() {
     const el = document.getElementById('sma-identity-name');
     if (el) el.textContent = getName() || 'set your name';
   }
+
+  // Pick from the assessment's roster when the page exposes one (window.ASSESSORS), so the
+  // name in the change log matches the name on the evidence boxes. Free text otherwise.
   function promptForName(existing) {
-    const n = prompt('Your name (shown to other assessors while you work):', existing || '');
-    if (n !== null) setName(n.trim());
+    const roster = Array.isArray(window.ASSESSORS) ? window.ASSESSORS : [];
+    if (!roster.length) {
+      const n = prompt('Your name (shown to other assessors while you work):', existing || '');
+      if (n !== null) setName(n);
+      return;
+    }
+    document.getElementById('sma-idmodal')?.remove();
+    const wrap = document.createElement('div');
+    wrap.id = 'sma-idmodal';
+    wrap.className = 'modal fade';
+    wrap.innerHTML = `<div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content">
+      <div class="modal-header py-2"><h6 class="modal-title mb-0">Who is working here?</h6></div>
+      <div class="modal-body">
+        <p class="small text-muted">Shown to the other assessors on this page and recorded next
+           to your changes. Not a login &mdash; you can change it any time.</p>
+        <div class="d-grid gap-1">
+          ${roster.map(n => `<button type="button" class="btn btn-sm ${n === existing ? 'btn-primary' : 'btn-outline-primary'} sma-idpick" data-n="${n.replace(/"/g,'&quot;')}">${n}</button>`).join('')}
+        </div>
+        <input class="form-control form-control-sm mt-2" id="sma-idother" placeholder="or type another name"
+               value="${roster.includes(existing) ? '' : (existing || '').replace(/"/g,'&quot;')}">
+      </div>
+      <div class="modal-footer py-1">
+        <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" id="sma-idsave">Save</button>
+      </div></div></div>`;
+    document.body.appendChild(wrap);
+    const m = new bootstrap.Modal(wrap);
+    wrap.querySelectorAll('.sma-idpick').forEach(b =>
+      b.addEventListener('click', () => { setName(b.dataset.n); m.hide(); }));
+    wrap.querySelector('#sma-idsave').addEventListener('click', () => {
+      const v = wrap.querySelector('#sma-idother').value.trim();
+      if (v) setName(v);
+      m.hide();
+    });
+    wrap.addEventListener('hidden.bs.modal', () => wrap.remove());
+    m.show();
   }
+
   document.addEventListener('DOMContentLoaded', function () {
-    if (!getName()) promptForName('');
     paint();
     const badge = document.getElementById('sma-identity-badge');
     if (badge) badge.addEventListener('click', function () { promptForName(getName()); });
+    if (!getName()) setTimeout(() => promptForName(''), 300);   // let the page set ASSESSORS first
   });
-  return { clientId: clientId, getName: getName };
+  return {
+    clientId: clientId, getName: getName, setName: setName,
+    ask: promptForName,
+    onChange: function (f) { listeners.push(f); }
+  };
 })();
 </script>
 {% block scripts %}{% endblock %}
