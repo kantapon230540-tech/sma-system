@@ -97,7 +97,7 @@
           <div class="mb-1">
             <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none" onclick="toggleCrit(this)" style="font-size:.78rem">ⓘ criteria &amp; guidance ▾</button>
             <div class="small mt-1 px-2 py-1 rounded" style="display:none;background:#f3f4ff;border-left:3px solid #5458e8">
-              {% if q.judgement_criteria %}<div class="mb-1"><b>⚖ Judgement criteria</b><div class="text-muted" style="white-space:pre-line">{{ q.judgement_criteria }}</div></div>{% endif %}
+              {% if q.judgement_criteria %}<div class="mb-1"><b>⚖ Judgement criteria</b><div class="text-muted" style="white-space:pre-line">{{ q.judgement_criteria | no_jp }}</div></div>{% endif %}
               {% if q.decision_rule %}<div class="mb-1"><span class="badge bg-primary">Rule: Yes when ≥ {{ q.decision_rule.min_yes }} respondent(s) answer Yes</span></div>{% endif %}
               {% if q.level_criteria %}<div class="mb-1"><b>📋 Level criteria</b><div class="text-muted" style="white-space:pre-line">{{ q.level_criteria }}</div></div>{% endif %}
               {% if q.interview_content %}<div class="mb-1"><b>🎙 Interview</b><div class="text-muted" style="white-space:pre-line">{{ q.interview_content }}</div></div>{% endif %}

@@ -54,6 +54,22 @@ SYSTEM_LABEL_FIX = {
 def system_label(raw):
     return SYSTEM_LABEL_FIX.get(raw, raw)
 
+
+# The MFG check sheet is bilingual: every criterion carries the English text and the Japanese
+# original on its own line(s). Assessors here work in English, so the Japanese is dropped at
+# DISPLAY time only — the JSON keeps it, because it is the controlled BSJ wording and the
+# English is a translation of it. Verified line-by-line over all four guidance fields: no
+# predominantly-English line contains CJK, so no English is lost. Japanese lines that embed
+# latin acronyms (KPI, RA, 3S, SBU, CFT) are still Japanese lines and are dropped correctly.
+_CJK_RE = re.compile(r"[぀-ヿ㐀-䶿一-鿿]")
+
+@app.template_filter("no_jp")
+def no_jp(text):
+    if not text: return text
+    kept = [ln for ln in str(text).split("\n") if not _CJK_RE.search(ln)]
+    while kept and not kept[-1].strip(): kept.pop()
+    return "\n".join(kept).strip()
+
 # Evidence is captured per assessor, so each person's note is attributable at closeout.
 # Default roster; an assessment may override it (assessments.assessors_json) when a different
 # team runs the site. Names are the storage key — renaming one starts a new, empty note.
