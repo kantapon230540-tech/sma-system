@@ -10,9 +10,9 @@
       {% if assessment.assessment_date %} · {{ assessment.assessment_date }}{% endif %}
     </div>
   </div>
-  <a href="{{ url_for('assess', assessment_id=assessment.id) }}" class="btn btn-sm btn-outline-primary">
-    ← Back to assessment
-  </a>
+  <div class="d-flex align-items-center gap-2">
+    {% set nav_here = 'activity' %}{% include "_assess_nav.html" %}
+  </div>
 </div>
 
 <div class="alert alert-warning py-2 small">

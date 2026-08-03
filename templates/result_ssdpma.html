@@ -24,9 +24,8 @@
         · <span class="text-danger">DP {{ progress.tracks.dp_solid.answered }}/{{ progress.tracks.dp_solid.total }} lv ({{ progress.tracks.dp_solid.items_done }}/{{ progress.tracks.dp_solid.items_total }} items)</span>
       </div>
     </div>
-    <div class="btn-group">
-      <a href="{{ url_for('assess', assessment_id=assessment.id) }}" class="btn btn-sm btn-outline-primary">✎ Continue</a>
-      <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
+    <div class="d-flex align-items-center gap-2">
+      {% set nav_here = 'result' %}{% include "_assess_nav.html" %}
     </div>
   </div>
 

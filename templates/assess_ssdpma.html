@@ -222,7 +222,7 @@
       <button class="btn btn-sm btn-outline-primary" type="button" onclick="openAssessors()">
         🗒 Assessors <span class="badge bg-primary" id="assessor-count">{{ assessors|length }}</span>
       </button>
-      <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
+      {% set nav_here = 'assess' %}{% include "_assess_nav.html" %}
     </div>
   </div>
 
