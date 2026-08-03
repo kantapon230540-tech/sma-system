@@ -41,6 +41,19 @@ def _ssdpma_method_tag(q):
 
 SSDPMA_METHOD_LABELS = {"interview": "Interview", "document": "Document", "genba": "Genba"}
 
+# q["standard"] is column E ("System / システム") of the MFG check sheet's System Checklist —
+# 166 questions, 23 systems, present on the System pillar only. The extractor stripped the kanji
+# from the Japanese second line, so three values kept latin residue ("LOTO標準" -> "LOTO"). The
+# raw string stays the filter VALUE (it is what the data holds); only the label is tidied.
+SYSTEM_LABEL_FIX = {
+    "LOTO Standard LOTO":     "LOTO Standard",
+    "Mixing MUST-11 MUST11":  "Mixing MUST-11",
+    "Fire Risk Assessment RA": "Fire Risk Assessment",
+}
+
+def system_label(raw):
+    return SYSTEM_LABEL_FIX.get(raw, raw)
+
 # Evidence is captured per assessor, so each person's note is attributable at closeout.
 # Default roster; an assessment may override it (assessments.assessors_json) when a different
 # team runs the site. Names are the storage key — renaming one starts a new, empty note.
@@ -855,6 +868,11 @@ def _assess_ssdpma(db, assessment, user):
         all_levels=sorted({q["level"] for q in all_sma_qs}),
         all_methods=[m for m in ("interview", "document", "genba") if m in set(q_method_tag.values())],
         all_answered_by=sorted({t for tags in q_respondent_tags.values() for t in tags}),
+        # System filter (System pillar only — column E of the MFG check sheet)
+        q_system={q["id"]: (q.get("standard") or "") for q in all_sma_qs},
+        all_systems=sorted(({(q.get("standard") or "") for q in all_sma_qs} - {""}),
+                           key=lambda s: system_label(s).lower()),
+        system_label=system_label,
         total_rows=len(all_sma_qs) + len(bank["sections"]["safety_solid"]) + len(bank["sections"]["dp_solid"]),
         assessors=assessment_assessors(assessment),
         # Only questions that actually have notes — the JS renders the 4 boxes on demand rather

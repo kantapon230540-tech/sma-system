@@ -79,6 +79,7 @@
   <div class="sma-q filterable-row px-2 py-2 {% if ans %}q-{{ ans }}{% endif %}" id="qrow-{{ q.id }}" data-qid="{{ q.id }}" data-answer="{{ ans }}"
        data-section="sma" data-pillar="{{ pillar_id }}" data-level="{{ q.level }}"
        data-methods="{{ method_tag }}" data-answered-by="{{ respondent_tags | join(',') }}"
+       data-system="{{ q_system.get(q.id, '') }}"
        data-iroles="{{ q_canon_roles.get(q.id, []) | join(',') }}">
     <div class="d-flex align-items-start gap-2">
       <span class="text-muted small mt-1" style="min-width:2.4rem">{{ q.no }}.</span>
@@ -342,6 +343,20 @@
           <div class="ms-menu shadow">
             {% for p in sma_pillars %}
             <label class="ms-item"><input type="checkbox" value="{{ p.id }}" onchange="applyFilters()"> {{ p.name }}</label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- SMA: System (column E of the MFG check sheet — System pillar questions only) -->
+      <div class="col-6 col-md-3">
+        <div class="ms-dropdown" id="dd-system">
+          <button class="ms-btn form-select form-select-sm text-start" onclick="toggleDd('dd-system')">
+            <span class="ms-label">All Systems (SMA)</span>
+          </button>
+          <div class="ms-menu shadow">
+            {% for sysname in all_systems %}
+            <label class="ms-item"><input type="checkbox" value="{{ sysname }}" onchange="applyFilters()"> {{ system_label(sysname) }}</label>
             {% endfor %}
           </div>
         </div>
@@ -704,6 +719,7 @@ function applyFilters() {
   updateDdLabel('dd-section', 'All Sections');
   updateDdLabel('dd-status', 'All Status');
   updateDdLabel('dd-pillar', 'All Pillars (SMA)');
+  updateDdLabel('dd-system', 'All Systems (SMA)');
   updateDdLabel('dd-level', 'All Levels (SMA)');
   updateDdLabel('dd-method', 'All Methods (SMA)');
   updateDdLabel('dd-answered-by', 'All Respondents (SMA)');
@@ -715,6 +731,7 @@ function applyFilters() {
   const fStatuses = getChecked('dd-status');
   const fPillars = getChecked('dd-pillar');
   const fLevels = getChecked('dd-level');
+  const fSystems = getChecked('dd-system');
   const fMethods = getChecked('dd-method');
   const fAnsweredBys = getChecked('dd-answered-by');
   const fSolidPillars = getChecked('dd-solid-pillar');
@@ -725,7 +742,7 @@ function applyFilters() {
   // Type-specific filters SCOPE the view: filtering on a solid-only property (pillar/axis/class)
   // means the user is looking at solid items, so SMA rows hide entirely — and vice versa. A row
   // type only survives cross-hiding if it has its own active filters (then each side shows its matches).
-  const smaFiltersActive = fPillars.length || fLevels.length || fMethods.length || fAnsweredBys.length;
+  const smaFiltersActive = fPillars.length || fLevels.length || fMethods.length || fAnsweredBys.length || fSystems.length;
   const solidFiltersActive = fSolidPillars.length || fAxes.length || fClasses.length;
 
   let visible = 0;
@@ -754,6 +771,7 @@ function applyFilters() {
         (fPillars.length === 0 || fPillars.includes(pillar)) &&
         (fLevels.length === 0 || fLevels.includes(level)) &&
         (fMethods.length === 0 || fMethods.some(m => methods.includes(m))) &&
+        (fSystems.length === 0 || fSystems.includes(row.dataset.system || '')) &&
         (fAnsweredBys.length === 0 || fAnsweredBys.some(t => answeredByTags.includes(t)));
       if (activeRole) matchRole = (row.dataset.iroles || '').split(',').includes(activeRole);
     } else {
@@ -831,7 +849,7 @@ function updateFilterBadge() {
 }
 
 function clearFilters() {
-  ['dd-section','dd-status','dd-pillar','dd-level','dd-method','dd-answered-by','dd-solid-pillar','dd-axis','dd-class'].forEach(id => {
+  ['dd-section','dd-status','dd-pillar','dd-system','dd-level','dd-method','dd-answered-by','dd-solid-pillar','dd-axis','dd-class'].forEach(id => {
     document.querySelectorAll(`#${id} input[type=checkbox]`).forEach(cb => cb.checked = false);
   });
   const sb = document.getElementById('q-search'); if (sb) sb.value = '';
