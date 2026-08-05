@@ -481,11 +481,19 @@ def _element_score(questions, responses):
             return max(1, lv - 1)
     return 5
 
+def _judged(questions, responses):
+    """How many of these questions have been given any answer, and how many there are.
+    N/A and Not-rolled-out count as judged (a decision was made) even though they are
+    excluded from the score itself."""
+    return (sum(1 for q in questions if responses.get(q["id"]) not in (None, "")),
+            len(questions))
+
 def calculate_scores(pillars, responses):
     pillar_scores = {}
     for pillar in pillars:
-        element_scores = {}
+        element_scores, element_counts = {}, {}
         for element in pillar["elements"]:
+            element_counts[element["id"]] = _judged(element["questions"], responses)
             applicable = [q for q in element["questions"]
                           if responses.get(q["id"]) not in ("na","not_rolled_out",None,"")]
             if not applicable:
@@ -500,7 +508,14 @@ def calculate_scores(pillars, responses):
                     score = max(1, lv - 1); break
             element_scores[element["id"]] = score
         valid = [s for s in element_scores.values() if s is not None]
-        pillar_scores[pillar["id"]] = {"score": min(valid) if valid else None, "elements": element_scores}
+        pa, pt = _judged([q for e in pillar["elements"] for q in e["questions"]], responses)
+        # `counts` is added alongside `elements`; the existing shape is untouched so the
+        # MFG page's panel code keeps working.
+        pillar_scores[pillar["id"]] = {"score": min(valid) if valid else None,
+                                       "elements": element_scores,
+                                       "counts": {k: {"answered": v[0], "total": v[1]}
+                                                  for k, v in element_counts.items()},
+                                       "answered": pa, "total": pt}
 
     def avg(*vals):
         v = [x for x in vals if x is not None]
@@ -515,6 +530,7 @@ def calculate_scores(pillars, responses):
     # System items breakdown: group system-pillar questions by 'standard', score each like an element
     system_items = []
     system_safety = system_dp = None
+    system_counts = {"safety": {"answered": 0, "total": 0}, "dp": {"answered": 0, "total": 0}}
     sysp = next((p for p in pillars if p["id"] == "system"), None)
     if sysp:
         groups, order = {}, []
@@ -542,10 +558,16 @@ def calculate_scores(pillars, responses):
             return min(es) if es else None
         system_safety = _subset_min(lambda q: not q.get("dp"))
         system_dp     = _subset_min(lambda q: q.get("dp"))
+        allsys = [q for element in sysp["elements"] for q in element["questions"]]
+        sa_, st_ = _judged([q for q in allsys if not q.get("dp")], responses)
+        da_, dt_ = _judged([q for q in allsys if q.get("dp")], responses)
+        system_counts = {"safety": {"answered": sa_, "total": st_},
+                         "dp":     {"answered": da_, "total": dt_}}
 
     return {"overall":overall,"safety_awareness":sa,"system_implementation":si,
             "pillars":pillar_scores, "system_items":system_items,
             "system_safety":system_safety, "system_dp":system_dp,
+            "system_counts":system_counts,
             "level_name":LEVEL_NAMES.get(int(overall) if overall else 0,"—")}
 
 SOLID_GRADE = {1:"C",2:"B-",3:"B",4:"B+",5:"A"}
@@ -708,13 +730,17 @@ def _solid_item_score(section, responses):
             level_answers[lv["level"]] = v
     return _ladder_score(level_answers), level_answers
 
-def _solid_group(scores):
+def _solid_group(scores, total=None):
     """Aggregate a set of item scores (1-5) into one group score: MIN across items — the
-    weakest item caps the group, mirroring calculate_scores' pillar=min(elements) rule."""
+    weakest item caps the group, mirroring calculate_scores' pillar=min(elements) rule.
+    `total` is how many items belong to the group, so the rail can show n/total — a group
+    scored on 1 of 8 items reads the same as one scored on all 8 without it."""
+    if total is None: total = len(scores)
     if not scores:
-        return {"score": None, "grade": None, "n": 0, "thin": True}
+        return {"score": None, "grade": None, "n": 0, "total": total, "thin": True}
     sc = min(scores)
-    return {"score": sc, "grade": SOLID_GRADE[sc], "n": len(scores), "thin": len(scores) < MIN_ITEMS_FOR_RANK}
+    return {"score": sc, "grade": SOLID_GRADE[sc], "n": len(scores), "total": total,
+            "thin": len(scores) < MIN_ITEMS_FOR_RANK}
 
 def _solid_track(sections, responses, solid_pillars):
     """Solidification score for one track. Every item's grade is derived from its own 5-level
@@ -722,6 +748,10 @@ def _solid_track(sections, responses, solid_pillars):
     reported three ways: 5-axis maturity pillars, 3-axis GRC, and one partition-independent overall."""
     items = []
     pillar_sc, axis_sc, all_sc = {}, {}, []
+    pillar_n, axis_n = {}, {}          # how many items EXIST in each group, scored or not
+    for s in sections:
+        pillar_n[s["solid_pillar"]] = pillar_n.get(s["solid_pillar"], 0) + 1
+        if s.get("axis"): axis_n[s["axis"]] = axis_n.get(s["axis"], 0) + 1
     for s in sections:
         score, level_answers = _solid_item_score(s, responses)
         linked = bool(s.get("class") == "carryover" and s.get("sma_group_qids"))
@@ -736,9 +766,10 @@ def _solid_track(sections, responses, solid_pillars):
             if s.get("axis"):
                 axis_sc.setdefault(s["axis"], []).append(score)
             all_sc.append(score)
-    pillars = {p["id"]: _solid_group(pillar_sc.get(p["id"], [])) for p in solid_pillars}
-    axes    = {ax: _solid_group(axis_sc.get(ax, [])) for ax in GRC_AXES}
-    overall = _solid_group(all_sc)
+    pillars = {p["id"]: _solid_group(pillar_sc.get(p["id"], []), pillar_n.get(p["id"], 0))
+               for p in solid_pillars}
+    axes    = {ax: _solid_group(axis_sc.get(ax, []), axis_n.get(ax, 0)) for ax in GRC_AXES}
+    overall = _solid_group(all_sc, len(sections))
     untagged = sum(1 for it in items if it["score"] is not None and not it["axis"])
     return {"overall": overall["score"], "overall_grade": overall["grade"],
             "answered": len(all_sc),
