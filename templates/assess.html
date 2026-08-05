@@ -600,14 +600,14 @@
                 {% if scores.system_counts and scores.system_counts.dp.total %}
                 <tr>
                   <td class="text-muted ps-3" style="font-size:.7rem">🛡️ System · Safety</td>
-                  {% for c in compares %}<td></td>{% endfor %}
+                  {% for c in compares %}{% set cv = c.scores.system_safety %}<td class="text-center"><span class="badge level-badge-{{ cv or 0 }}" style="font-size:.62rem;padding:2px 5px">{{ cv if cv is not none else '—' }}</span></td>{% endfor %}
                   <td class="text-center text-nowrap"><span class="badge level-badge-{{ scores.system_safety or 0 }}" id="sys-safety-badge" style="font-size:.62rem;padding:2px 5px">{{ scores.system_safety if scores.system_safety is not none else '—' }}</span>
                     <span class="text-muted d-block" style="font-size:.6rem" id="sys-safety-n">{{ scores.system_counts.safety.answered }}/{{ scores.system_counts.safety.total }}</span></td>
                   {% if show_delta %}<td></td>{% endif %}
                 </tr>
                 <tr>
                   <td class="text-muted ps-3" style="font-size:.7rem">🔥 System · DP</td>
-                  {% for c in compares %}<td></td>{% endfor %}
+                  {% for c in compares %}{% set cv = c.scores.system_dp %}<td class="text-center"><span class="badge level-badge-{{ cv or 0 }}" style="font-size:.62rem;padding:2px 5px">{{ cv if cv is not none else '—' }}</span></td>{% endfor %}
                   <td class="text-center text-nowrap"><span class="badge level-badge-{{ scores.system_dp or 0 }}" id="sys-dp-badge" style="font-size:.62rem;padding:2px 5px">{{ scores.system_dp if scores.system_dp is not none else '—' }}</span>
                     <span class="text-muted d-block" style="font-size:.6rem" id="sys-dp-n">{{ scores.system_counts.dp.answered }}/{{ scores.system_counts.dp.total }}</span></td>
                   {% if show_delta %}<td></td>{% endif %}
@@ -617,7 +617,7 @@
                 {% for item in scores.system_items %}
                 <tr>
                   <td class="text-muted ps-4" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0;font-size:.7rem" title="{{ item.name }}"><span class="badge {{ 'bg-info' if item.track=='dp' else 'bg-secondary' }}" style="font-size:.5rem;padding:1px 3px;vertical-align:middle">{{ 'DP' if item.track=='dp' else 'S' }}</span> {{ item.name }}</td>
-                  {% for c in compares %}<td></td>{% endfor %}
+                  {% for c in compares %}{% set ci = (c.scores.system_items or []) | selectattr('id','equalto',item.id) | first %}{% set cv = ci.score if ci else none %}<td class="text-center"><span class="badge level-badge-{{ cv or 0 }}" style="font-size:.62rem;padding:2px 5px">{{ cv if cv is not none else '—' }}</span></td>{% endfor %}
                   <td class="text-center text-nowrap"><span class="badge level-badge-{{ item.score or 0 }}" id="sysitem-badge-{{ item.id }}" style="font-size:.62rem;padding:2px 5px">{{ item.score if item.score is not none else '—' }}</span>
                     <span class="text-muted d-block" style="font-size:.6rem" id="sysitem-n-{{ item.id }}">{{ item.answered }}/{{ item.total }}</span></td>
                   {% if show_delta %}<td></td>{% endif %}
