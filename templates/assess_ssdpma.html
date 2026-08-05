@@ -98,7 +98,16 @@
       <span class="text-muted small mt-1" style="min-width:2.4rem">{{ q.no }}.</span>
       <div class="flex-grow-1">
         <div class="mb-1"><span class="badge bg-light text-dark border me-1">L{{ q.level }}</span>
-          <span class="fw-semibold">{{ q.text }}</span></div>
+          <span class="fw-semibold">{{ q.text }}</span>
+          {# The check sheet merges one question cell across two rows when the same question has
+             a second judgement criterion. Both rows are scored, so both are shown — this marks
+             the second one so it doesn't read as a duplicate. #}
+          {% if q.continues %}
+            <a href="#qrow-{{ q.continues }}" onclick="jump('{{ q.continues }}')"
+               class="badge bg-light text-secondary border text-decoration-none ms-1"
+               title="Same question as {{ q.continues }}, judged against a second criterion">
+              ↑ 2nd criterion of {{ q.continues }}</a>
+          {% endif %}</div>
         {% if solid_link.get(q.id) %}
           <div class="mb-1">
             {% for lk in solid_link[q.id] %}

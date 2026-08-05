@@ -283,7 +283,7 @@
        {
         "id": "MFG-LD-003",
         "no": 3,
-        "text": null,
+        "text": "Have applicable site-specific OH&S regulations been identified, and site-specific safety procedures been implemented that they are compliant with local regulation and SBU standards?\n安全衛生法令が特定されているか？また、安全手順が法令に準拠しているか確認するため、評価が実施されているか？",
         "level": 1,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -294,7 +294,8 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Applicable site-specific OH&S regulations have been identified and current safety procedures and processes have been evaluated to ensure they are compliant with local regulation. SBU requirements."
+        "level_criteria": "Applicable site-specific OH&S regulations have been identified and current safety procedures and processes have been evaluated to ensure they are compliant with local regulation. SBU requirements.",
+        "continues": "MFG-LD-002"
        },
        {
         "id": "MFG-LD-007",
@@ -317,7 +318,7 @@
        {
         "id": "MFG-LD-008",
         "no": 8,
-        "text": null,
+        "text": "Are safety results (KPIs) being monitored by leadership?\n管理者は、安全結果をモニタリングしているか？",
         "level": 2,
         "answered_by": "Plant manager Production general manager",
         "audit_methods": [
@@ -329,7 +330,8 @@
          "plant_manager",
          "production_gm"
         ],
-        "level_criteria": "Safety performance (Safety KPIs) based on OH&S policy is monitored and tracked by site leadership. KPI"
+        "level_criteria": "Safety performance (Safety KPIs) based on OH&S policy is monitored and tracked by site leadership. KPI",
+        "continues": "MFG-LD-007"
        },
        {
         "id": "MFG-LD-009",
@@ -395,7 +397,7 @@
        {
         "id": "MFG-LD-017",
         "no": 17,
-        "text": null,
+        "text": "Does Leadership use \"Leading indicators\" in their safety result tracking?\n安全関連の指標について、先行指標（プロセスKPI）を使っているか？",
         "level": 4,
         "answered_by": "Plant manager",
         "audit_methods": [
@@ -406,7 +408,8 @@
         "responders": [
          "plant_manager"
         ],
-        "level_criteria": "Leadership keeps track of leading indicators to determine the results of investments made to improve health and safety at the facility"
+        "level_criteria": "Leadership keeps track of leading indicators to determine the results of investments made to improve health and safety at the facility",
+        "continues": "MFG-LD-016"
        },
        {
         "id": "MFG-LD-019",
@@ -4437,7 +4440,7 @@
        {
         "id": "MFG-SY-074",
         "no": 74,
-        "text": null,
+        "text": "Are the site's safety rules analyzed in depth and are the risks regarding the change evaluated considered when a proposed change is being deliberated? \n起案された変更（3M/4M）を審議する際、事業所の安全ルール・作業標準が十分に分析され、変更に関するリスクが評価されているか？",
         "level": 3,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4455,7 +4458,8 @@
          "min_yes": 3,
          "sample_n": 3,
          "source": "sample of 3 (all)"
-        }
+        },
+        "continues": "MFG-SY-073"
        },
        {
         "id": "MFG-SY-092",
