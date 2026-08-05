@@ -74,7 +74,11 @@
        "standard": null,
        "judgement_criteria": "Line-management conducts floor observations(e.g. site tours) and provides feedback to teammates to ensure adherence to safety rules, such as procedures, standards, etc. \n手順、規格などの安全ルールが遵守されるように、製造課長・主任・職長は巡回等の現場確認を行い、技能員へフィードバックを行っている。",
        "responders": [
-        "production_manager"
+        "production_manager",
+        "foreperson",
+        "supervisor",
+        "maintenance_manager",
+        "maintenance_foreman"
        ],
        "level_criteria": "Site tour(s) indicate that line-management conducts floor observations to ensure adherence to safety rules, such as procedures, standards, etc.",
        "onsite_observation": "Sample >3 work areas and observe the extend to which the supervisor is actively supervising/coaching\n3か所以上の作業地区を任意選択し、監督者（主任・職長）が積極的に監督および指示を実施している範囲を観察する。",
@@ -114,7 +118,9 @@
        "standard": null,
        "judgement_criteria": "A review of the hazard reporting records for the last month show that at least 50% of hazards reported were from teammates on the factory floor. \n前月の危険状況報告記録を検証すると、報告された危険状況の50%以上は技能員によるものであった。",
        "responders": [
-        "production_manager"
+        "production_gm",
+        "production_manager",
+        "maintenance_manager"
        ],
        "level_criteria": "Hazard reporting records indicate that teammates are actively involved in reporting and addressing hazards and risks in their daily jobs",
        "interview_content": "What was the last hazard (e.g., hidden danger/near miss) reported from within your department and who reported it?\n自部署において、直近で報告された危険源（潜在的危険源、ヒヤリ等）は、何ですか？誰がそれを報告しましたか？",
@@ -132,7 +138,11 @@
        "standard": null,
        "judgement_criteria": "In a sample of 3 managers, all 3 can explain when rewards are provided for good safety behavior/performance, and give the examples. \n任意選択した3人の管理者の全員が、優れた安全活動/成績を賞賛した事例を説明できる。",
        "responders": [
-        "production_manager"
+        "production_gm",
+        "production_manager",
+        "maintenance_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Good safety behaviors of teammates are rewarded and recognized by managements.",
        "interview_content": "How do you praise for safety behavior or performance?\nどのように優れた安全行動や成績を褒める/称賛していますか？",
@@ -268,7 +278,8 @@
        "standard": null,
        "judgement_criteria": "To solve issues on H&S, site leadership follow safety KPIs, and give directions to review the safety program if necessary. \n工場長は安全課題を解決するため、安全関連KPIをフォローし、必要に応じて安全施策の見直しを指示している。",
        "responders": [
-        "plant_manager"
+        "plant_manager",
+        "production_gm"
        ],
        "level_criteria": "Safety performance (Safety KPIs) based on OH&S policy is monitored and tracked by site leadership. KPI"
       },
@@ -301,7 +312,10 @@
        "standard": null,
        "judgement_criteria": "A sample of 3 managers all confirm that there are repercussions/consequences for teammates that do not follow the Safety Rules and Procedures. \n任意選択した3人の管理者が、安全規則や手順を違反した従業員には罰則が発生することを示した。",
        "responders": [
-        "production_manager"
+        "plant_manager",
+        "production_gm",
+        "production_manager",
+        "maintenance_manager"
        ],
        "level_criteria": "Leadership often emphasizes the importance of the Safety Rules and breaking the rules results in repercussions/consequences.",
        "interview_content": "Are there repercussions/consequences for teammates who break the safety rules and procedures?\n（安全）ルール違反をした従業員に対し、影響/結果（罰則）はありますか？",
@@ -380,7 +394,11 @@
        "standard": null,
        "judgement_criteria": "A sample of 3 managers, 1 can explain how they motivate teams to find best practices and how they allocate resources to implement them. \n任意選択した3人の管理者のうち1人が、チームに対してベストプラクティスを模索する動機付けの方法、および導入するためのリソースを割り当てる方法を説明できる。",
        "responders": [
-        "production_manager"
+        "production_gm",
+        "production_manager",
+        "maintenance_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Leadership motivate teams to find the best safety practices and provide the resources to implement them.",
        "interview_content": "How do teams find the relevant best practices when it comes to safety?\n各部署は、どのように安全衛生に関するベストプラクティスを収集していますか？",
@@ -443,7 +461,11 @@
        "standard": null,
        "judgement_criteria": "A sample of 2 managers could both explain why teammate involvement in safety management is important and can provide examples of actions taken (e.g., assigned safety-related tasks/activities, participation in safety committee, etc.) to promote this and the results of those actions.\n任意選択した2人の管理者が、安全管理への従業員の参加対応が重要である理由を説明し、その促進活動の例（例：安全活動への参加促進、業務指示、労働安全衛生委員会への出席等）および結果を示すことができる。",
        "responders": [
-        "production_manager"
+        "plant_manager",
+        "production_gm",
+        "production_manager",
+        "maintenance_manager",
+        "safety_manager"
        ],
        "level_criteria": "Leadership understand the importance of teammate involvement in safety management and can demonstrate clear actions regularly incorporated to help the site realize the positive results of those actions.",
        "interview_content": "What are your expectations of teammates when it comes to the teammates' involvement in H&S management? \nあなたは、従業員に対し、安全衛生に関し、どのような期待を持っていますか？",
@@ -465,6 +487,8 @@
        "standard": null,
        "judgement_criteria": "During the attended meeting, the H&S team discussed the improvement of safety on site, and the meeting was well attended (>75% of members at every meeting). \n出席した会議では、安全担当課が現場の安全性の向上について議論し、多数の参加者がいた（すべての会議で全メンバーの75%を超えるメンバーが参加）。",
        "responders": [
+        "plant_manager",
+        "production_gm",
         "production_manager"
        ],
        "level_criteria": "The H&S team, teammates and leadership meet at planned intervals to provide inputs to improve safety on site.",
@@ -550,7 +574,11 @@
        "standard": null,
        "judgement_criteria": "In a sample of 3 managers, >1 stated that they do have an impact on teammate safety and they involve themselves with safety processes. \n任意選択した3人の管理者のうち1人以上が、自身が従業員の安全に影響を及ぼし、安全プロセスに参加対応していると述べた。（例：巡回による安全状況確認、安全対策の優先順位付け、予算割り当て等）",
        "responders": [
-        "production_manager"
+        "plant_manager",
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Management is aware of their responsibility in keeping teammates safe and enforcing safety rules and procedures.",
        "interview_content": "How can/do you contribute to a safer execution (implementation) of safety procedures, projects, requirements? \n安全な作業、要求事項を実行するために、あなたはどのような貢献ができますか。",
@@ -639,7 +667,7 @@
        "standard": null,
        "judgement_criteria": "Materials indicate that teammates propose improvements of H&S risks and risk mitigation measures at the creations or revisions of work standards, training materials, etc.\n作業標準や教育資料等を作成、改訂する際、技能員が、安全リスクや低減策の改善提案をしていることが示される。",
        "responders": [
-        "supervisor"
+        "foreperson"
        ],
        "level_criteria": "Teammates propose improvements of H&S risks and risk mitigation measures at the creations or revisions of work standard, training material, etc.",
        "document_check": "Review work standards and training materials to see if revision history and content show inclusion of teammate's recommendations/suggestions.\n作業標準や教育訓練資料を検証し、改訂履歴とその内容に技能員の意見が含まれているかを確認する。"
@@ -678,7 +706,10 @@
        "standard": null,
        "judgement_criteria": "In a sample of 3 managers, 2 could explain how teams (departments/areas) share safety knowledge about H&S risks and risk mitigation with other teams and different sites. \n任意選択した3人の管理者のうち2人が、安全衛生関連のリスクとリスク低減に関する安全関連情報を他のチームや別の現場とどのように共有するかを説明できた。",
        "responders": [
-        "production_manager"
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Teammates are encouraged to talk with other teams and speak about H&S risks regularly to share best-practices and lessons-learned.",
        "interview_content": "How is safety knowledge shared between teams and plants? \n部署間と工場間で安全関連の知識をどのように共有していますか。",
@@ -763,7 +794,10 @@
        "standard": null,
        "judgement_criteria": "Teammates proposed improvements on incidents (injury, occupational disease/illness, near-miss/hidden danger) prevention, and received feedback from managements.\n技能員は、インシデント（災害、疾病、ヒヤリ・不具合に関する改善提案を行い、管理者からFBを受けていることが確認できる。",
        "responders": [
-        "production_manager"
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Teammates proposed improvements to prevent incidents (injure, occupational disease/illness, near-miss/hidden danger) and received feedback from managements.",
        "interview_content": "How have you respond to proposals for improvement  to prevent incidents (injury, occupational disease/illness, near-miss/hidden danger) from teammates?\n技能員からのインシデント（労働災害、疾病、ヒヤリ、潜在的危険源）の改善提案に対して、どのように対応していますか？"
@@ -780,7 +814,9 @@
        "standard": null,
        "judgement_criteria": "A  review of the safety action plans from the most recent safety projects show  teammates were involved and consulted. \n直近の安全プロジェクト（安全に関する取り組み）における安全関連の活動計画を検証すると、技能員の参加対応と協議があったことが示された。",
        "responders": [
-        "production_manager"
+        "production_gm",
+        "production_manager",
+        "safety_manager"
        ],
        "level_criteria": "Review of action plans show that teammates have been involved in the design, implementation and evaluation of safety action plans.",
        "document_check": "Review  action plans or project planning to determine if these involve consultation steps with workers \n活動計画またはプロジェクト計画を検証し、技能員との協議が行われているかを判断する。"
@@ -825,7 +861,7 @@
        "standard": null,
        "judgement_criteria": "In a sample of 3 managers,  > 1 stated that they explain safety requirements based on site-specific regulation to teammates.\n任意選択した3人の管理者のうち1人以上が、安全に関する法的要求事項を技能員へ説明している　と述べた。",
        "responders": [
-        "supervisor"
+        "foreperson"
        ],
        "level_criteria": "Managers explain safety requirements based on regulation to teammate.",
        "interview_content": "What requirement do you explain to operators on safety requirements based on regulation?\n安全に関する法的要求に関して、あなたはどういった内容を技能員に説明していますか？",
@@ -1034,7 +1070,7 @@
        "standard": null,
        "judgement_criteria": "Safety instructions and safety training were included in the work specific training materials. \n特定作業の教育訓練において、教育資料には、安全関連の指示事項と安全教育訓練が含まれていた。",
        "responders": [
-        "supervisor"
+        "foreperson"
        ],
        "level_criteria": "Safety instructions and trainings have been integrated into regular job-related training which is provided to teammates before they start the associated work.",
        "document_check": "Review work/job specific training materials\n作業訓練資料を確認する"
@@ -1051,7 +1087,11 @@
        "standard": null,
        "judgement_criteria": "With a sample of 3 managers, at least 2 said that Risk assessment is always done in the early planning stages for upcoming projects/work sessions.\n任意選択した3人の管理者の2人以上が、新しいプロジェクトや作業の初期計画段階でリスク評価を常に実施していると述べた。",
        "responders": [
-        "production_manager"
+        "plant_manager",
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Risks are assessed at the earliest possible planning stages of every team in the organization to avoid risks where they might materialize.",
        "interview_content": "What aspects do you consider when planning new/modified projects? \n新規もしくは変更を伴うプロセスの計画作成時に、どのような点を考慮していますか。",
@@ -1079,7 +1119,10 @@
        "standard": null,
        "judgement_criteria": "A sample of 3 managers can all show items recently reported to them and the examples of follow-ups associated with the reports. \n任意選択した3人の管理者の全員が、最近報告された内容とそのフォローアップ活動の例を示すことができる。",
        "responders": [
-        "production_manager"
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Incidents (injury, occupational disease/illness, near-miss, hidden danger) defects are communicated to management and they are encouraged to follow-up.",
        "interview_content": "How are you informed of incidents (injuries, near-misses, hidden dangers, etc.,) and what sort of follow-up process do you follow?\n自身のプロセスに重要な安全衛生管理リスク（労働災害、ヒヤリ、潜在的危険源）について、どのように情報を得ていますか。",
@@ -1118,7 +1161,11 @@
        "standard": null,
        "judgement_criteria": "A sample of 3 managers could all describe the most recent H&S initiatives to improve H&S management on site, and knew if the results were positive or negative. \n任意選択した3人の管理者の全員が、現場の安全衛生管理改善を目的とした直近の安全衛生の取り組みを説明でき、結果の良し悪しを知っていた。",
        "responders": [
-        "production_manager"
+        "plant_manager",
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "H and S activities are observed/reviewed by management for results and activities have the opportunity for continuous improvement about the lagging performance indication (e.g. # of injury, frequency rate, etc.) .",
        "interview_content": "What current safety initiatives are active, and have they resulted in improving lagging indicator performance?\n直近の安全衛生管理の取り組みは、どのような成果がありましたか。 また、進捗が遅れている取り組みに対してどのような対応を行いましたか。",
@@ -1162,6 +1209,7 @@
        "standard": null,
        "judgement_criteria": "A sample of 3 supervisors all explained system and scope of management of change(4M changes).\n任意選択した3人の監督者の全員が、４M変更管理の仕組み・対象について説明できた。",
        "responders": [
+        "foreperson",
         "supervisor"
        ],
        "level_criteria": "Forepersons/supervisors understand the system and scope of management of changes(4M changes) 4M",
@@ -1184,6 +1232,7 @@
        "standard": null,
        "judgement_criteria": "A sample of 3 supervisors all confirmed that they discuss with the H&S team the risks associated with upcoming changes to work processes.\n任意選択した3人の監督者の全員が、作業工程の変更時、新規の作業が発生する際には、安全担当課とリスクと対応方法について討議したことを示した。",
        "responders": [
+        "foreperson",
         "supervisor"
        ],
        "level_criteria": "Prior to a change in process or equipment, are the risks associated with the change reviewed, evaluated and communicated with H&S team.",
@@ -1251,7 +1300,11 @@
        "standard": null,
        "judgement_criteria": "A sample of 3 managers could all explain their roles and responsibilities on safety activity in their department/section/area.\n任意選択した3人の管理者の全員が、自部署の安全活動担当者について役割・活動内容を説明できる。",
        "responders": [
-        "production_manager"
+        "plant_manager",
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Roles and responsibilities of safety activities set out, and they are understood by those required to fulfil them",
        "interview_content": "How do you ensure H&S roles and responsibilities are effectively allocated? \n安全衛生管理の役割と責任が効果的に割り当てられていることをどのように確認していますか。",
@@ -1273,7 +1326,11 @@
        "standard": null,
        "judgement_criteria": "A review of the incident(injury, occupational disease/illness, near-miss, hidden danger)records from the last month show evidence that the H&S team and management collaborate, and identify the causes and address the countermeasures to prevent the recurrence of incidents.\n前月のインシデント（労働災害、疾病、ヒヤリ、潜在的危険源）記録を検証すると、安全担当課と管理者が協力してインシデント（労働災害、疾病、ヒヤリ、潜在的危険源）の再発防止に向け、原因を特定し、対応が実施されていることが示される。",
        "responders": [
-        "production_manager"
+        "plant_manager",
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Management and the H&S team collaborate to prevent reoccurrence of accidents by addressing the causation of these accidents",
        "document_check": "Review incident records to determine how management and H&S collaborate, and how well causes are identified and mitigated.\nリスク記録とインシデント記録を検証して、管理職と安全管理部門がどのように協力して原因へ対応しているかを確認する。"
@@ -1360,7 +1417,11 @@
        "standard": null,
        "judgement_criteria": "With a sample of 3 managers, at least 1 said they voluntarily discussed safety with managers from other sites or *external parties to improve safety knowledge.\n*External includes other company, SBU, other plants in BS \n任意選択した3人の管理者の1人以上が、安全関連の知識を向上するため、自発的に他の現場や*外部の管理者と安全について討議したと述べた。  *外部には他社、SBU、他工場を含む",
        "responders": [
-        "production_manager"
+        "plant_manager",
+        "production_gm",
+        "production_manager",
+        "safety_manager",
+        "dp_manager"
        ],
        "level_criteria": "Line managers are actively engaging with *external parties to obtain knowledge on how they have controlled their risks and exchange knowledge on safety processes regularly. *External includes other company, SBU, other plants in BS * *SBU",
        "interview_content": "How do you keep yourself informed on safety relevant developments? Do you engage in exchange of safety information and best practices/benchmarking with others outside your site (e.g., other BS sites, other companies, etc.)?\n安全関連の当該最新情報をどのように得ていますか。 安全に関するベストプラクティスやベンチマークを社外や他のBSの拠点と交換していますか。",
@@ -1432,6 +1493,7 @@
        "judgement_criteria": "The flammable material list is updated on the basis of defined frequency and methods.\n火災の原因となる危険物を含めたリストが決められた頻度・方法によって更新されている",
        "dp": true,
        "responders": [
+        "foreperson",
         "supervisor"
        ],
        "level_criteria": "The flammable materials are listed and these list are frequently and properly maintained.",
@@ -1492,7 +1554,8 @@
        "judgement_criteria": "Everyone can explain the check/maintenance works associated with MUST11.\n全員がMUST11に関連する確認・点検作業について説明できる",
        "dp": true,
        "responders": [
-        "teammate"
+        "teammate",
+        "maintenance_staff"
        ],
        "level_criteria": "Mixing MUST 11 is deployed and educated in sites. MUST11",
        "interview_content": "What tasks and inspection items related to MUST 11 have you been educated?\nMUST11に関連した教育ではどのような作業、点検項目があることを教育されましたか？",
@@ -1614,6 +1677,7 @@
        "judgement_criteria": "There is a record of training on the electrical system.\n電気配線の管理方法について適切に教育された記録がある",
        "dp": true,
        "responders": [
+        "maintenance_manager",
         "dp_manager"
        ],
        "level_criteria": "Electric system inspection method are trained to person in charge. /",
@@ -1734,7 +1798,9 @@
        "judgement_criteria": "Everyone can carry out/explain details the operation standards that they are in charge of MUST11.\n全員が担当分のMUST11に関連する作業標準の詳細を実演/説明できる。",
        "dp": true,
        "responders": [
-        "supervisor"
+        "foreperson",
+        "supervisor",
+        "teammate"
        ],
        "level_criteria": "Teammates can work based on Mixing MUST 11. MUST11",
        "interview_content": "- Please tell me how to dispose of the discharged rubber when rubber is jammed.\n- Could you explain how you clean the inside of the ducts? Also, could you show me a record of the last time you cleaned the ducts?\n- ゴム滞留時の処置方法を教えてください（滞留した際の禁止事項等）\n- ダクト内の清掃方法について説明してください。また最後に清掃を行った際の記録を提示してください。",
@@ -1754,6 +1820,7 @@
        "judgement_criteria": "There are records of reporting and sharing maintenance results with management and others.\n点検結果を報告・共有した議事録を示すことが出来る。",
        "dp": true,
        "responders": [
+        "maintenance_manager",
         "dp_manager"
        ],
        "level_criteria": "Electric systems (wiring/equipment) status are inspected and corrective actions are taken. /",
@@ -1964,7 +2031,8 @@
        "judgement_criteria": "The respondent explains that feedback is used to make tangible changes to the way LOTO is performed and can give at least 1 recent example. (Examples of FB: Not able to perform LOTO with ECP accordingly, Lack of contents in work standard, Require LOTO to pneumatic valves in addition to electrical LOTO, etc.)\n回答者は、フィードバックがLOTOの実行方法の具体的な変更に活用され、少なくとも1つの最近の事例を提示することができる。 (フィードバック例：ECP通りLOTOできない、作業標準に不足がある、電気施錠に加えバルブ施錠も必要　等）",
        "dp": false,
        "responders": [
-        "teammate"
+        "teammate",
+        "maintenance_staff"
        ],
        "level_criteria": "The LOTO standard is kept up-to-date with industry and internal best-practices as well as the feedback from those working with the standard. LOTOLOTO",
        "interview_content": "How do you gather and use best-practices and feedback from teammates on the LOTO standard? \nLOTO標準に関して、好事例や技能員からのフィードバックをどのように収集し、活用していますか？",
@@ -2140,11 +2208,12 @@
        "judgement_criteria": "The best practices and/or risks found in other plants during KY have been gathered, and it has been incorporated into the site procedure. or There is a evidence of the comparison with other plants.\n他事業所のKYで見つかったリスクの内容、改善の好事例を入手し、自拠点へ落とし込みしていることを確認できる。または、他事業所と情報交換や比較した結果がある。",
        "dp": false,
        "responders": [
-        "supervisor"
+        "others"
        ],
        "level_criteria": "KY is benchmarked with other sites, and the most common appearing and dangerous risks are shared as well as the meditative actions. KY",
        "interview_content": "Have you compared KY program with other plants? Does this review takes place periodically?\n他事業所のKY活動と比較しておりますか？このようなレビューは、定期的に実施されていますか？",
-       "onsite_observation": "Request to attend such a review to assess the methods used \nレビューへの参加を依頼し、採用されている方法を確認する。"
+       "onsite_observation": "Request to attend such a review to assess the methods used \nレビューへの参加を依頼し、採用されている方法を確認する。",
+       "others_label": "KY leader  / KYリーダー（実行責任者）"
       },
       {
        "id": "MFG-SY-154",
@@ -2392,6 +2461,7 @@
        "judgement_criteria": "They can answer one or more cases in which best practices are incorporated.\nベストプラクティスを取り込んでいる事例を１つ以上回答できる",
        "dp": true,
        "responders": [
+        "maintenance_manager",
         "dp_manager"
        ],
        "level_criteria": "The best practices on management of electrical wirings have been gathered from other plants, and it has been deployed to the site.",
@@ -2494,6 +2564,7 @@
        "judgement_criteria": "The LOTO standard has been shared with all relevant teammates and they have been trained on this at the appropriate time and frequency.\nLOTO標準は、全ての必要な技能員に周知され、教育が適切なタイミング・頻度で実施されている。",
        "dp": false,
        "responders": [
+        "supervisor",
         "maintenance_foreman"
        ],
        "level_criteria": "People performing service and/or maintenance activities are aware of the LOTO standard and have been provided with locks and tags as required. LOTOLOTO",
@@ -2590,6 +2661,7 @@
        "judgement_criteria": "The respondent can give at least one method used to implement 3S on site. \n回答者は、現場の3S実施方法を少なくとも１つ答えることができる。",
        "dp": false,
        "responders": [
+        "supervisor",
         "maintenance_foreman"
        ],
        "level_criteria": "The need for housekeeping and removal of unnecessary items in the workplace has been communicated. Visual standard postings are visible in work areas, and the site is utilizing the 3S checklist. 3S",
@@ -2609,7 +2681,10 @@
        "judgement_criteria": "3S Documents (3S standard/3S visual standard) are displayed in work areas, and 3S checklist is prepared/standardized\n3S文書は現場に掲示されており（3S標準/3Sビジュアル標準）、また3Sチェックリストが準備/標準化されている。",
        "dp": false,
        "responders": [
-        "maintenance_foreman"
+        "supervisor",
+        "teammate",
+        "maintenance_foreman",
+        "maintenance_staff"
        ],
        "level_criteria": "The need for housekeeping and removal of unnecessary items in the workplace has been communicated. Visual standard postings are visible in work areas, and the site is utilizing the 3S checklist. 3S",
        "onsite_observation": "Conduct a site tour to review 3S visual standards at >3 work areas\n現場巡回時、3つ以上の作業場で、3S標準を確認する。",
@@ -2936,6 +3011,7 @@
        "judgement_criteria": "They can show documented rules on how to manage and inspect electrical system.\n電気配線の管理や点検方法に関する文書化されたルールを示すことが出来る",
        "dp": true,
        "responders": [
+        "maintenance_manager",
         "dp_manager"
        ],
        "level_criteria": "Electric systems (wiring/equipment) that have to be checked are listed and updated properly. /",
@@ -2956,6 +3032,7 @@
        "judgement_criteria": "The respondent indicates that the causes of incidents are communicated to him/her. \nCommunication records contains evidence that incidents are communicated properly across site.\n回答者は、災害の原因を周知されており、周知記録には、事業全体に周知されたことが確認できる。",
        "dp": false,
        "responders": [
+        "teammate",
         "safety_manager"
        ],
        "level_criteria": "The site has a process to communicate the cause of accidents timely as indicated by communication records.",
@@ -3107,7 +3184,7 @@
        "judgement_criteria": "KYT records show that all teammates and temporary staff have submitted a KYT within the last 3 months.\nKYT記録により、過去3か月間、全従業員と派遣社員はKYTを提出している（参加している）。",
        "dp": false,
        "responders": [
-        "foreperson"
+        "safety_manager"
        ],
        "level_criteria": "KY is conducted by everyone on site. KY",
        "interview_content": "Who are involved in KYT? \n誰がKYTに参加しますか？",
@@ -3145,11 +3222,12 @@
        "judgement_criteria": "There are evaluation criteria for contractors, and there are records that demonstrate that contractor evaluation criteria is being followed.\n協力会社の選定基準があり、またそれに従った評価記録がある。",
        "dp": false,
        "responders": [
-        "production_manager"
+        "others"
        ],
        "level_criteria": "The contractor selection criteria are established based on regulatory, Bridgestone, and/or site safety requirements. And contractor is reviewed based on these criteria and judged to determine if the contractor may be selected for work.",
        "interview_content": "What selection criteria do you use to evaluate contractors? Are evaluations conducted on a regular basis?\n協力会社をどのような選定基準で評価していますか？ 評価は定期的に行われていますか？",
-       "document_check": "Confirm the evaluation criteria and the records of the evaluated contractors.\n協力会社の選定基準と評価した記録を確認する。"
+       "document_check": "Confirm the evaluation criteria and the records of the evaluated contractors.\n協力会社の選定基準と評価した記録を確認する。",
+       "others_label": "procurement Manager / 調達担当課長"
       },
       {
        "id": "MFG-SY-055",
@@ -3356,7 +3434,9 @@
        "judgement_criteria": "Everyone understands the operation standards of MUST11.\n全員がMUST11の作業標準を理解している",
        "dp": true,
        "responders": [
-        "supervisor"
+        "foreperson",
+        "supervisor",
+        "teammate"
        ],
        "level_criteria": "Teammates understand requirements defined in Mixing MUST 11. MUST11",
        "interview_content": "Do you understand the operation standards of MUST11?\nPlease tell me the contents.\nMUST11の作業標準を理解していますか？\nどのような内容かを教えてください",
@@ -3434,7 +3514,8 @@
        "judgement_criteria": "The respondent can explain LOTO procedure.\n技能員がLOTO手順を説明できることを確認",
        "dp": false,
        "responders": [
-        "teammate"
+        "teammate",
+        "maintenance_staff"
        ],
        "level_criteria": "LOTO procedures are understood and being followed. LOTO",
        "interview_content": "How do you perform LOTO in your process/works?\n自工程/業務で、どのようにLOTOを実施しますか？",
@@ -3469,7 +3550,8 @@
        "judgement_criteria": "There are performed patrol/monitoring to LOTO activity including maintenance.\nLOTO作業(保全を含む)に対して巡回やモニタリングが行われている。",
        "dp": false,
        "responders": [
-        "supervisor"
+        "supervisor",
+        "maintenance_foreman"
        ],
        "level_criteria": "LOTO procedures are understood and being followed. LOTO",
        "interview_content": "How do you monitor that LOTO is being implemented correctly?\nLOTOの実施についてどのようにモニタリングをしていますか？",
@@ -3489,7 +3571,8 @@
        "judgement_criteria": "ECP includes all applicable energy source(electrical, mechanical, pneumatic, etc.) has been prepared for all applicable machinery. \nLOTO対象の全ての設備に対し、対象となるエネルギー源（電気、機械（惰性運転・自重落下等）、空圧等）に対するECP（動力車断手順書）が作成されている。",
        "dp": false,
        "responders": [
-        "supervisor"
+        "supervisor",
+        "maintenance_foreman"
        ],
        "level_criteria": "ECP(Energy control procedures) includes all applicable energy source(electrical, mechanical, pneumatic, etc.) has been prepared for all applicable machinery. LOTOECP()",
        "interview_content": "Do ECPs include LOTO procedures on all applicable energy sources(electrical, mechanical, pneumatic, etc.)?\nECP（動力車断手順書）には対象となるエネルギー源（電気、機械、空圧等）の手順が含まれていますか？",
@@ -3800,6 +3883,7 @@
        "judgement_criteria": "They can performs periodical inspections.\n全員が定期的に点検している。",
        "dp": true,
        "responders": [
+        "foreperson",
         "supervisor"
        ],
        "level_criteria": "Fire risks in the site are periodically inspected.",
@@ -3820,6 +3904,7 @@
        "judgement_criteria": "They recognize the latest storage condition of flammable materials. Or, they recognize a place where the inspection results are stored.\n危険物保管の最新状況を把握している。または、点検結果の保管場所を把握している。",
        "dp": true,
        "responders": [
+        "foreperson",
         "supervisor"
        ],
        "level_criteria": "The flammable material’s storage status are checked and maintained.",
@@ -3860,12 +3945,13 @@
        "judgement_criteria": "There are have patrol record at the hot work.\n火気使用時のパトロールが適切に実施されていることが示される。",
        "dp": true,
        "responders": [
-        "safety_manager"
+        "others"
        ],
        "level_criteria": "When conducting hot work, person in charge correctly conduct patrol.",
        "interview_content": "Have you identified any unsafe conditions/behavior during patrol/inspection on hot work?\n火気使用時にパトロールを行っていますか？",
        "onsite_observation": "If construction is underway with hot work, check on-site.\n火気工事があれば、現場を確認する",
-       "document_check": "Confirm patrol record  at hot work.\n火気使用時のパトロールの記録を確認する"
+       "document_check": "Confirm patrol record  at hot work.\n火気使用時のパトロールの記録を確認する",
+       "others_label": "Others (in charge of patrol) / その他（パトロール実施者）"
       },
       {
        "id": "MFG-SY-107",
@@ -3880,6 +3966,7 @@
        "judgement_criteria": "Safety confirmation are done for all persons on site (including contractor).\n全員の避難時の安否確認が実施できる。(実施できた実績がある)\n協力会社を含め、全員の安否確認を実施している。",
        "dp": true,
        "responders": [
+        "foreperson",
         "supervisor"
        ],
        "level_criteria": "Personnel safety confirmation on all employee safety are ensured in a prescribed methods (e.g., roll call) at evacuation drill.",
@@ -3900,7 +3987,8 @@
        "judgement_criteria": "LOTO violations are investigated, and countermeasures and working standards/rules are revised as necessary.\nモニタリングで検出された違反について分析が行われ、必要に応じて対策やルールの改訂を行っている。",
        "dp": false,
        "responders": [
-        "supervisor"
+        "supervisor",
+        "maintenance_foreman"
        ],
        "level_criteria": "When a LOTO safety rule violation is identified, investigate root causes, and take corrective action for the causes. LOTO",
        "interview_content": "How do you analyze the cause and take action for identified violation in LOTO monitoring?\nLOTOに対するモニタリングで検出された違反について、どのような原因分析と対策を行っていますか？"
@@ -3918,7 +4006,8 @@
        "judgement_criteria": "Ineffective verification methods, such as monitoring methods for which no violations have been detected in previous records, are being reviewed.\nこれまでの記録で違反が一切検出されていないモニタリング方法等、効果の見込めない検証方法が見直されている。",
        "dp": false,
        "responders": [
-        "supervisor"
+        "supervisor",
+        "maintenance_foreman"
        ],
        "level_criteria": "Compliance monitoring/audits are performed on LOTO activity at a defined timing and frequency. LOTO",
        "interview_content": "Have you reviewed your monitoring/patrol methods for LOTO activity?\nLOTO作業に対するモニタリングや巡回の方法を見直したことはありますか？",
@@ -4034,7 +4123,11 @@
        "dp": false,
        "level_criteria": "Counter measures based on RA are validated and if need, are considered revised/updated. RA",
        "interview_content": "Are there any cases where the effectiveness of risk measures has been verified?\nリスク低減対策の有効性を検証した事例がありますか。",
-       "document_check": "Confirm these validated cases.\nリスク低減対策の有効性検証事例を確認。"
+       "document_check": "Confirm these validated cases.\nリスク低減対策の有効性検証事例を確認。",
+       "responders": [
+        "maintenance_manager",
+        "safety_manager"
+       ]
       },
       {
        "id": "MFG-SY-126",
@@ -4125,11 +4218,13 @@
        "judgement_criteria": "The respondent is able to provide evidence that risk mitigation controls above legal requirements and/or local regulations are performed for chemical. \n(e.g. Regarding chemical which requires only PPE, engineering controls have been added for risk mitigation.)\n回答者は、法令・地区基準等で求められている以上のリスク低減対策・管理を行っている事例を提示できる。\n（例：法令で保護具のみが求められる化学物質に対し、設備によるリスク低減対策まで行っている、より厳しい管理基準を適用している　等）",
        "dp": false,
        "responders": [
-        "safety_manager"
+        "safety_manager",
+        "others"
        ],
        "level_criteria": "Risk mitigation controls above legal requirements and/or local regulations are implemented for chemicals. (e.g. Regarding chemical which requires no engineering controls, they have been added for risk mitigation as site rules.",
        "interview_content": "Is there any risk mitigation control taken above legal requirements and/or local regulations?\n法令・地区基準等でで求められる基準以上の化学物質管理を行っている事例はありますか？",
-       "document_check": "Review if evidence shows risk mitigation controls that are above legal requirements and/or local regulations\n法令・地区基準で求められている以上のリスク低減対策が取られていることを確認する。"
+       "document_check": "Review if evidence shows risk mitigation controls that are above legal requirements and/or local regulations\n法令・地区基準で求められている以上のリスク低減対策が取られていることを確認する。",
+       "others_label": "Safety Manager / 安全または衛生担当課長、または担当部署"
       },
       {
        "id": "MFG-SY-132",
@@ -4169,11 +4264,12 @@
        "judgement_criteria": "An MOC Coordinator, an MOC reviewer and final approver been appointed.\nClear roles and responsibilities are defined for each.\n変更の起案者、審議者、承認者が任命されている。また、それぞれの役割・責任が定義されている。",
        "dp": false,
        "responders": [
-        "safety_manager"
+        "others"
        ],
        "level_criteria": "Changes are managed by an appointed MOC coordinator, a reviewer and change approver who evaluate the legal compliance of a proposed change structurally.",
        "interview_content": "What are in your view are the responsibilities of MOC coordinator, MOC reviewer and final approver in the change management process? \n変更管理において、変更の起案者、審議者、承認者の責任は、何だと認識していますか？",
-       "document_check": "Review Roles and Responsibility documentation for MOC\n変更管理に関する役割と責任の文書を確認する。"
+       "document_check": "Review Roles and Responsibility documentation for MOC\n変更管理に関する役割と責任の文書を確認する。",
+       "others_label": "MOC coordinator  / 変更管理起案者"
       },
       {
        "id": "MFG-SY-006",
@@ -4188,11 +4284,12 @@
        "judgement_criteria": "There is a defined process for MOC, that includes a section for legal compliance, and the process is being followed.\n変更管理が規定された手順があり、法令確認のステップが含まれ、それらが順守されている。",
        "dp": false,
        "responders": [
-        "safety_manager"
+        "others"
        ],
        "level_criteria": "Changes are managed by an appointed MOC coordinator, a reviewer and change approver who evaluate the legal compliance of a proposed change structurally.",
        "interview_content": "What is the process that should be followed when a change occurs?\n変更発生時、順守されるべき手順は何ですか？",
-       "document_check": "Review process for MOC and examples of situations where MOC should have occurred.\n変更管理の手順と変更の履歴を確認する。"
+       "document_check": "Review process for MOC and examples of situations where MOC should have occurred.\n変更管理の手順と変更の履歴を確認する。",
+       "others_label": "MOC coordinator  / 変更管理起案者"
       },
       {
        "id": "MFG-SY-037",
@@ -4245,11 +4342,12 @@
        "judgement_criteria": "Change initiators and approvers have received MOC training and this is indicated by the records. \n変更の起案者・審議者・承認者は、変更管理(4M変更）の教育を受けている。また、その記録がある。",
        "dp": false,
        "responders": [
-        "safety_manager"
+        "others"
        ],
        "level_criteria": "Change initiators and approvers have been trained to fulfil their duties based on a local process in preparation to change on safety, IH and DP.",
        "interview_content": "What are the training required for change initiators and approvers?\n変更管理の対応者・承認者に求められる教育は、何ですか？",
-       "document_check": "Review training records to see if the required training was completed \n要求される教育が完了しているか、教育記録を確認する。"
+       "document_check": "Review training records to see if the required training was completed \n要求される教育が完了しているか、教育記録を確認する。",
+       "others_label": "MOC coordinator  / 変更管理起案者"
       },
       {
        "id": "MFG-SY-072",
@@ -4477,12 +4575,13 @@
        "judgement_criteria": "They can answer one or more cases and its responding pointed out at the most recent patrols.\n直近のパトロール時の指摘事例とその対応内容を１つ以上回答できる",
        "dp": true,
        "responders": [
-        "safety_manager"
+        "others"
        ],
        "level_criteria": "Corrective actions are properly taken when any failures on hot work rules are identified.",
        "interview_content": "Do you instruct the hot work to be stopped immediately when the failures are detected by through patrols?\nAlso, did the management confirm that the failures had been corrected before issuing instructions to restart hot work?\n火気使用中にパトロール等で不具合が検出された場合は即座に作業を中止していますか？\nまた管理監督者は不具合が是正されたことを確認してから火気使用の再開を指示していましたか？",
        "onsite_observation": "－",
-       "document_check": "Confirm records of the indicated items, if any.\n指摘項目実績があれば、確認する"
+       "document_check": "Confirm records of the indicated items, if any.\n指摘項目実績があれば、確認する",
+       "others_label": "Others (in charge of patrol) / その他（パトロール実施者）"
       },
       {
        "id": "MFG-SY-136",
@@ -4497,6 +4596,7 @@
        "judgement_criteria": "Improvement is made to use the fire extinguishing equipment appropriately.\n消火設備を適切に使用できるように改善されている",
        "dp": true,
        "responders": [
+        "foreperson",
         "supervisor"
        ],
        "level_criteria": "Based on the inspections results, the methods of fire extinguishing equipment, standards, and training methods have been reviewed.",
@@ -4517,6 +4617,7 @@
        "judgement_criteria": "They can answer at least one recent improvement case.\n直近の改善事例を１つ以上回答できる",
        "dp": true,
        "responders": [
+        "foreperson",
         "supervisor"
        ],
        "level_criteria": "Results of Mixing MUST11 inspection are reviewed by site top management. MUST11",
@@ -4537,12 +4638,15 @@
        "judgement_criteria": "Problems/concerns in the training are identified and improved.\n訓練での不具合/懸念を洗出し､改善している",
        "dp": true,
        "responders": [
-        "supervisor"
+        "foreperson",
+        "supervisor",
+        "others"
        ],
        "level_criteria": "Evacuation (training) method is reviewed/revised based on failures that have been detected during evacuation drills.",
        "interview_content": "- Were there any problems identified during the past evacuation drills?\n- If yes, has such a problem been corrected? (Please tell me how to devise it.)\n- 過去に発生した避難訓練時の不具合はありましたか？\n- 不具合があれば、その不具合は改善されていますか？(工夫点を教えてください)",
        "onsite_observation": "－",
-       "document_check": "Confirm malfunction records or improvement records.\n不具合に関する記録または改善記録を確認する"
+       "document_check": "Confirm malfunction records or improvement records.\n不具合に関する記録または改善記録を確認する",
+       "others_label": "Production Supervisor, D. P. Staff / 製造職長/主任、防災担当"
       },
       {
        "id": "MFG-SY-139",
@@ -4557,6 +4661,7 @@
        "judgement_criteria": "Based on the maintenance results, the maintenance schedule, points, and methods are reviewed.\n点検結果を基にした次年度の計画策定や点検箇所や方法の改善が検討されていることが示される",
        "dp": true,
        "responders": [
+        "maintenance_manager",
         "dp_manager"
        ],
        "level_criteria": "Electric system(wiring/equipment) inspection points/items are reviewed based on feedbacks from in charge of inspectors. /",
@@ -4577,11 +4682,12 @@
        "judgement_criteria": "A 50% sample of all MOC change requests from the last 6 months show that changes contain reference to hazards and risks identified on other sites implementing a similar change and best practices used on other sites. \n過去6か月の変更管理要求の50%のサンプルチェックにおいて、類似の変更時に他事業所で顕在化した危険源・リスク、他事業所の好事例が含まれている。",
        "dp": false,
        "responders": [
-        "safety_manager"
+        "others"
        ],
        "level_criteria": "Changes are designed, planned, executed and evaluated based on pre-defined safety criteria which include hazards, risks and industry *best-practices *",
        "interview_content": "Is the change management procedure calibrated against industry best practices?\n変更管理手順は、業界の好事例と比較し、改訂されていますか？",
-       "document_check": "Review change records to find such criteria \n基準を確認するため、変更記録を確認する。"
+       "document_check": "Review change records to find such criteria \n基準を確認するため、変更記録を確認する。",
+       "others_label": "MOC coordinator  / 変更管理起案者"
       }
      ]
     }
@@ -4644,6 +4750,12 @@
    "label": "DP Manager",
    "mode": "single",
    "default_expected": 1
+  },
+  "others": {
+   "label": "Others",
+   "mode": "named",
+   "default_expected": 1,
+   "note": "Role named on the check sheet that has no standing app role (MOC coordinator, KY leader, procurement manager, patrol officer). The assessor types who was actually interviewed."
   }
  },
  "department_options": [

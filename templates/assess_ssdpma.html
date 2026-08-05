@@ -15,7 +15,20 @@
       {% set rd = rdet.get(role, {}) %}
       <div class="resp-role d-flex flex-wrap align-items-center gap-2 mb-1" data-role="{{ role }}" data-mode="{{ cfg.get('mode','count') }}">
         <span class="badge bg-secondary" style="min-width:135px;text-align:left">{{ cfg.get('label', role) }}</span>
-        {% if cfg.get('mode') == 'single' %}
+        {% if cfg.get('mode') == 'named' %}
+          {# The check sheet names a role the app doesn't model (MOC coordinator, KY leader…).
+             q.others_label is that wording, straight from column H, so the assessor knows who
+             to ask; the box records who actually answered. #}
+          <input type="text" class="form-control form-control-sm rsp-named-name" style="max-width:230px"
+                 placeholder="{{ q.others_label or 'Who was interviewed?' }}" value="{{ rd.get('name','') }}">
+          <div class="btn-group btn-group-sm">
+            <input type="radio" class="btn-check rsp-named-ans" name="{{q.id}}_{{role}}" id="{{q.id}}_{{role}}_y" value="yes" {% if rd.get('yes') %}checked{% endif %}>
+            <label class="btn btn-outline-success" for="{{q.id}}_{{role}}_y">Yes</label>
+            <input type="radio" class="btn-check rsp-named-ans" name="{{q.id}}_{{role}}" id="{{q.id}}_{{role}}_n" value="no" {% if rd.get('no') %}checked{% endif %}>
+            <label class="btn btn-outline-danger" for="{{q.id}}_{{role}}_n">No</label>
+          </div>
+          {% if q.others_label %}<span class="small text-muted">per check sheet: {{ q.others_label }}</span>{% endif %}
+        {% elif cfg.get('mode') == 'single' %}
           <div class="btn-group btn-group-sm">
             <input type="radio" class="btn-check rsp-single" name="{{q.id}}_{{role}}" id="{{q.id}}_{{role}}_y" value="yes" {% if rd.get('yes') %}checked{% endif %}>
             <label class="btn btn-outline-success" for="{{q.id}}_{{role}}_y">Yes</label>
@@ -1118,7 +1131,8 @@ function collectDetail(panel){
   const roles={};
   panel.querySelectorAll('.resp-role').forEach(rr=>{
     const role=rr.dataset.role, mode=rr.dataset.mode;
-    if(mode==='single'){ const v=rr.querySelector('.rsp-single:checked')?.value; roles[role]={yes:v==='yes'?1:0,no:v==='no'?1:0}; }
+    if(mode==='named'){ const v=rr.querySelector('.rsp-named-ans:checked')?.value; roles[role]={name:rr.querySelector('.rsp-named-name').value.trim(), yes:v==='yes'?1:0, no:v==='no'?1:0}; }
+    else if(mode==='single'){ const v=rr.querySelector('.rsp-single:checked')?.value; roles[role]={yes:v==='yes'?1:0,no:v==='no'?1:0}; }
     else if(mode==='departments'){ const depts=[]; rr.querySelectorAll('.dept-row').forEach(dr=>{ const name=dr.querySelector('.rsp-dept-name').value.trim(); const ans=dr.querySelector('.rsp-dept:checked')?.value||null; if(name||ans) depts.push({name,answer:ans}); }); roles[role]={departments:depts}; }
     else if(mode==='sections'){ const sections=[]; rr.querySelectorAll('.rsp-section').forEach(sec=>{ const sname=sec.querySelector('.rsp-sec-name').value.trim(); const people=[]; sec.querySelectorAll('.person-row').forEach(pr=>{ const pname=pr.querySelector('.rsp-person-name').value.trim(); const ans=pr.querySelector('.rsp-person-ans:checked')?.value||null; if(pname||ans) people.push({name:pname,answer:ans}); }); if(sname||people.length) sections.push({name:sname,people}); }); roles[role]={sections}; }
     else { roles[role]={expected:parseInt(rr.querySelector('.rsp-expected').value)||1, yes:parseInt(rr.querySelector('.rsp-yes').value)||0, no:parseInt(rr.querySelector('.rsp-no').value)||0}; }
@@ -1150,10 +1164,10 @@ document.querySelectorAll('.sections-wrap').forEach(wrap=>{ let secs=[]; try{sec
 document.querySelectorAll('.depts-wrap').forEach(wrap=>{ let depts=[]; try{depts=JSON.parse(wrap.dataset.depts||'[]');}catch(e){} wrap.innerHTML=(depts&&depts.length?depts.map(d=>deptRowHTML(d.name,d.answer)).join(''):deptRowHTML())+`<button type="button" class="btn btn-sm btn-outline-primary py-0 add-dept">+ add department</button>`; });
 document.querySelectorAll('.responder-panel').forEach(panel=>{
   panel.addEventListener('change',()=>saveResponder(panel));
-  panel.addEventListener('input',e=>{ if(e.target.matches('.rsp-yes,.rsp-no,.rsp-expected,.rsp-dept-name,.rsp-sec-name,.rsp-person-name')) saveResponder(panel); });
-  panel.addEventListener('pointerdown',e=>{ const lbl=e.target.closest('label.btn'); if(!lbl) return; const inp=document.getElementById(lbl.htmlFor); if(inp&&inp.matches('.rsp-single,.rsp-dept,.rsp-person-ans')) inp._wasChecked=inp.checked; });
+  panel.addEventListener('input',e=>{ if(e.target.matches('.rsp-yes,.rsp-no,.rsp-expected,.rsp-dept-name,.rsp-sec-name,.rsp-person-name,.rsp-named-name')) saveResponder(panel); });
+  panel.addEventListener('pointerdown',e=>{ const lbl=e.target.closest('label.btn'); if(!lbl) return; const inp=document.getElementById(lbl.htmlFor); if(inp&&inp.matches('.rsp-single,.rsp-dept,.rsp-person-ans,.rsp-named-ans')) inp._wasChecked=inp.checked; });
   panel.addEventListener('click',e=>{
-    const rin=e.target.closest('.rsp-single,.rsp-dept,.rsp-person-ans');
+    const rin=e.target.closest('.rsp-single,.rsp-dept,.rsp-person-ans,.rsp-named-ans');
     if(rin&&rin.tagName==='INPUT'){ if(rin._wasChecked){ rin.checked=false; rin._wasChecked=false; saveResponder(panel); return; } rin._wasChecked=false; }
     if(e.target.closest('.add-person')){ e.preventDefault(); e.target.closest('.section-body').querySelector('.people-list').insertAdjacentHTML('beforeend',personRowHTML()); }
     else if(e.target.closest('.del-person')){ e.preventDefault(); e.target.closest('.person-row').remove(); saveResponder(panel); }
