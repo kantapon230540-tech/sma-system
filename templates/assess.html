@@ -533,7 +533,7 @@
                 <th class="text-center">Now</th>
                 {% if show_delta %}<th class="text-center" style="width:11%">Δ</th>{% endif %}
                 {% else %}
-                <th class="text-center">Score</th>
+                <th class="text-center">Score<span class="d-block text-muted fw-normal" style="font-size:.6rem">judged</span></th>
                 {% endif %}
               </tr>
             </thead>
@@ -548,7 +548,9 @@
                     {% set cps = c.scores.pillars.get(pillar.id, {}).get('score') %}
                     <td class="text-center"><span class="badge level-badge-{{ cps or 0 }}" style="font-size:.7rem">{{ cps if cps is not none else '—' }}</span></td>
                   {% endfor %}
-                  <td class="text-center"><span class="badge level-badge-{{ ps or 0 }}" id="pillar-badge-{{ pillar.id }}" style="font-size:.7rem">{{ ps if ps is not none else '—' }}</span></td>
+                  {% set pc = scores.pillars.get(pillar.id, {}) %}
+                  <td class="text-center text-nowrap"><span class="badge level-badge-{{ ps or 0 }}" id="pillar-badge-{{ pillar.id }}" style="font-size:.7rem">{{ ps if ps is not none else '—' }}</span>
+                    <span class="text-muted d-block" style="font-size:.6rem" id="pillar-n-{{ pillar.id }}">{{ pc.answered or 0 }}/{{ pc.total or 0 }}</span></td>
                   {% if show_delta %}
                     {% set sp = compares[0].scores.pillars.get(pillar.id, {}).get('score') %}
                     <td class="text-center">
@@ -558,7 +560,9 @@
                     </td>
                   {% endif %}
                 {% else %}
-                  <td class="text-center"><span class="badge level-badge-{{ ps or 0 }}" id="pillar-badge-{{ pillar.id }}">{{ ps if ps is not none else '—' }}</span></td>
+                  {% set pc = scores.pillars.get(pillar.id, {}) %}
+                  <td class="text-center text-nowrap"><span class="badge level-badge-{{ ps or 0 }}" id="pillar-badge-{{ pillar.id }}">{{ ps if ps is not none else '—' }}</span>
+                    <span class="text-muted d-block" style="font-size:.6rem" id="pillar-n-{{ pillar.id }}">{{ pc.answered or 0 }}/{{ pc.total or 0 }}</span></td>
                 {% endif %}
               </tr>
               <!-- Element rows -->
@@ -571,7 +575,9 @@
                       {% set ces = c.scores.pillars.get(pillar.id, {}).get('elements', {}).get(element.id) %}
                       <td class="text-center"><span class="badge level-badge-{{ ces or 0 }}" style="font-size:.65rem;padding:2px 5px">{{ ces if ces is not none else '—' }}</span></td>
                     {% endfor %}
-                    <td class="text-center"><span class="badge level-badge-{{ es or 0 }}" id="el-badge-{{ element.id }}" style="font-size:.65rem;padding:2px 5px">{{ es if es is not none else '—' }}</span></td>
+                    {% set ec = scores.pillars.get(pillar.id, {}).get('counts', {}).get(element.id, {}) %}
+                    <td class="text-center text-nowrap"><span class="badge level-badge-{{ es or 0 }}" id="el-badge-{{ element.id }}" style="font-size:.65rem;padding:2px 5px">{{ es if es is not none else '—' }}</span>
+                      <span class="text-muted d-block" style="font-size:.6rem" id="el-n-{{ element.id }}">{{ ec.answered or 0 }}/{{ ec.total or 0 }}</span></td>
                     {% if show_delta %}
                       {% set ses = compares[0].scores.pillars.get(pillar.id, {}).get('elements', {}).get(element.id) %}
                       <td class="text-center">
@@ -581,30 +587,39 @@
                       </td>
                     {% endif %}
                   {% else %}
-                    <td class="text-center"><span class="badge level-badge-{{ es or 0 }}" id="el-badge-{{ element.id }}">{{ es if es is not none else '—' }}</span></td>
+                    {% set ec = scores.pillars.get(pillar.id, {}).get('counts', {}).get(element.id, {}) %}
+                    <td class="text-center text-nowrap"><span class="badge level-badge-{{ es or 0 }}" id="el-badge-{{ element.id }}">{{ es if es is not none else '—' }}</span>
+                      <span class="text-muted d-block" style="font-size:.6rem" id="el-n-{{ element.id }}">{{ ec.answered or 0 }}/{{ ec.total or 0 }}</span></td>
                   {% endif %}
                 </tr>
               {% endfor %}
               {% if pillar.id == 'system' and scores.system_items %}
-                <!-- System DP vs Safety aggregate -->
+                <!-- System DP vs Safety aggregate. Only manufacturing carries DP questions;
+                     on warehouse/retail/retread the Safety row would just repeat the System
+                     pillar and the DP row would always be empty, so the split is hidden. -->
+                {% if scores.system_counts and scores.system_counts.dp.total %}
                 <tr>
                   <td class="text-muted ps-3" style="font-size:.7rem">🛡️ System · Safety</td>
                   {% for c in compares %}<td></td>{% endfor %}
-                  <td class="text-center"><span class="badge level-badge-{{ scores.system_safety or 0 }}" id="sys-safety-badge" style="font-size:.62rem;padding:2px 5px">{{ scores.system_safety if scores.system_safety is not none else '—' }}</span></td>
+                  <td class="text-center text-nowrap"><span class="badge level-badge-{{ scores.system_safety or 0 }}" id="sys-safety-badge" style="font-size:.62rem;padding:2px 5px">{{ scores.system_safety if scores.system_safety is not none else '—' }}</span>
+                    <span class="text-muted d-block" style="font-size:.6rem" id="sys-safety-n">{{ scores.system_counts.safety.answered }}/{{ scores.system_counts.safety.total }}</span></td>
                   {% if show_delta %}<td></td>{% endif %}
                 </tr>
                 <tr>
                   <td class="text-muted ps-3" style="font-size:.7rem">🔥 System · DP</td>
                   {% for c in compares %}<td></td>{% endfor %}
-                  <td class="text-center"><span class="badge level-badge-{{ scores.system_dp or 0 }}" id="sys-dp-badge" style="font-size:.62rem;padding:2px 5px">{{ scores.system_dp if scores.system_dp is not none else '—' }}</span></td>
+                  <td class="text-center text-nowrap"><span class="badge level-badge-{{ scores.system_dp or 0 }}" id="sys-dp-badge" style="font-size:.62rem;padding:2px 5px">{{ scores.system_dp if scores.system_dp is not none else '—' }}</span>
+                    <span class="text-muted d-block" style="font-size:.6rem" id="sys-dp-n">{{ scores.system_counts.dp.answered }}/{{ scores.system_counts.dp.total }}</span></td>
                   {% if show_delta %}<td></td>{% endif %}
                 </tr>
-                <tr><td class="text-muted ps-3 fst-italic" colspan="{{ ncols }}" style="font-size:.66rem;background:#eef2f7">System items (per standard)</td></tr>
+                {% endif %}
+                <tr><td class="text-muted ps-3 fst-italic" colspan="{{ ncols }}" style="font-size:.66rem;background:#eef2f7">Each system ({{ scores.system_items|length }}) · score · judged</td></tr>
                 {% for item in scores.system_items %}
                 <tr>
                   <td class="text-muted ps-4" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0;font-size:.7rem" title="{{ item.name }}"><span class="badge {{ 'bg-info' if item.track=='dp' else 'bg-secondary' }}" style="font-size:.5rem;padding:1px 3px;vertical-align:middle">{{ 'DP' if item.track=='dp' else 'S' }}</span> {{ item.name }}</td>
                   {% for c in compares %}<td></td>{% endfor %}
-                  <td class="text-center"><span class="badge level-badge-{{ item.score or 0 }}" id="sysitem-badge-{{ item.id }}" style="font-size:.62rem;padding:2px 5px">{{ item.score if item.score is not none else '—' }}</span></td>
+                  <td class="text-center text-nowrap"><span class="badge level-badge-{{ item.score or 0 }}" id="sysitem-badge-{{ item.id }}" style="font-size:.62rem;padding:2px 5px">{{ item.score if item.score is not none else '—' }}</span>
+                    <span class="text-muted d-block" style="font-size:.6rem" id="sysitem-n-{{ item.id }}">{{ item.answered }}/{{ item.total }}</span></td>
                   {% if show_delta %}<td></td>{% endif %}
                 </tr>
                 {% endfor %}
@@ -988,9 +1003,22 @@ function updateScorePanel(data) {
       b.style.cssText = 'font-size:.62rem;padding:2px 5px';
     }
   };
+  const setCount = (id, c) => {
+    const el = document.getElementById(id);
+    if (el && c) el.textContent = ((c.answered != null ? c.answered : c.n) || 0) + '/' + (c.total || 0);
+  };
   setBadge('sys-safety-badge', scores.system_safety);
   setBadge('sys-dp-badge', scores.system_dp);
-  (scores.system_items || []).forEach(it => setBadge('sysitem-badge-' + it.id, it.score));
+  setCount('sys-safety-n', (scores.system_counts || {}).safety);
+  setCount('sys-dp-n',     (scores.system_counts || {}).dp);
+  (scores.system_items || []).forEach(it => {
+    setBadge('sysitem-badge-' + it.id, it.score);
+    setCount('sysitem-n-' + it.id, it);
+  });
+  Object.entries(scores.pillars || {}).forEach(([pid, p]) => {
+    setCount('pillar-n-' + pid, p);
+    Object.entries(p.counts || {}).forEach(([eid, c]) => setCount('el-n-' + eid, c));
+  });
 
   // Progress
   const pct = total ? Math.round(answered / total * 100) : 0;
