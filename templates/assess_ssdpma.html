@@ -648,6 +648,29 @@
                       <td class="text-muted ps-3" style="font-size:.7rem">🔥 System · DP</td>
                       <td class="text-center"><span class="badge level-badge-{{ S.system_dp or 0 }}" id="sma_sys_dp">{{ S.system_dp if S.system_dp is not none else '—' }}</span></td>
                     </tr>
+                    {% if S.system_items %}
+                      {# Per-standard scores, same rule as an element: the first level judged 'no'
+                         caps the score at level-1. The n/total beside each is deliberate — an
+                         un-started system scores nothing, and a barely-started one scores 5. #}
+                      <tr><td colspan="2" class="text-muted fst-italic ps-3"
+                              style="font-size:.66rem;background:#eef2f7">
+                        Each system ({{ S.system_items|length }}) · score · judged</td></tr>
+                      {% for item in S.system_items %}
+                      <tr class="sysitem-row" data-sysid="{{ item.id }}">
+                        <td class="ps-4" style="font-size:.7rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0"
+                            title="{{ item.name }} — {{ item.answered }} of {{ item.total }} questions judged">
+                          <span class="badge {{ 'bg-info' if item.track == 'dp' else 'bg-secondary' }}"
+                                style="font-size:.5rem;padding:1px 3px;vertical-align:middle">{{ 'DP' if item.track == 'dp' else 'S' }}</span>
+                          <a href="#" onclick="filterSystem('{{ item.name|e }}');return false"
+                             class="text-decoration-none text-muted">{{ item.name }}</a>
+                        </td>
+                        <td class="text-center text-nowrap">
+                          <span class="badge level-badge-{{ item.score or 0 }}" id="sysitem-{{ item.id }}">{{ item.score if item.score is not none else '—' }}</span>
+                          <span class="text-muted d-block" style="font-size:.6rem" id="sysprog-{{ item.id }}">{{ item.answered }}/{{ item.total }}</span>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    {% endif %}
                   {% endif %}
                 {% endfor %}
               </tbody>
@@ -957,6 +980,19 @@ function renderSMA(t){
     setBadge('smapil-' + pid, p.score);
     Object.entries(p.elements || {}).forEach(([eid, es]) => setBadge('smael-' + pid + '-' + eid, es));
   });
+  (t.system_items || []).forEach(it => {
+    setBadge('sysitem-' + it.id, it.score);
+    const pg = document.getElementById('sysprog-' + it.id);
+    if (pg) pg.textContent = it.answered + '/' + it.total;
+  });
+}
+
+// Click a system in the rail to filter the questionnaire down to it.
+function filterSystem(name){
+  clearFilters();
+  const cb = document.querySelector(`#dd-system .ms-menu input[value="${CSS.escape(name)}"]`);
+  if (cb) { cb.checked = true; applyFilters(); }
+  document.querySelector('.sticky-filter')?.scrollIntoView({block:'start'});
 }
 const SOLID_GRADE_BG = {1:'bg-danger',2:'bg-warning text-dark',3:'bg-info',4:'bg-primary',5:'bg-success'};
 function renderSolid(key,t){

@@ -527,8 +527,13 @@ def calculate_scores(pillars, responses):
         for std in order:
             qs = groups[std]
             track = "dp" if all(q.get("dp") for q in qs) else "safety"
+            # answered/total travel with the score: a system judged on 1 of 11 questions
+            # scores 5 the same as one judged on all 11, and the rail must not hide that.
             system_items.append({"id": _std_slug(std), "name": _std_name(std),
-                                  "track": track, "score": _element_score(qs, responses)})
+                                  "track": track, "score": _element_score(qs, responses),
+                                  "answered": sum(1 for q in qs
+                                                  if responses.get(q["id"]) not in (None, "")),
+                                  "total": len(qs)})
         # DP-vs-Safety aggregate: min over element scores within each subset (mirrors pillar score)
         def _subset_min(pred):
             es = [s for element in sysp["elements"]
