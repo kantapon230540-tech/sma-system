@@ -624,29 +624,35 @@
           <div class="collapse d-lg-block" id="tbl-sma">
           <div class="card-body p-0">
             <table class="table table-sm mb-0" style="font-size:.78rem">
-              <thead class="table-light"><tr><th style="width:62%">Pillar / Element</th><th class="text-center">Score</th></tr></thead>
+              <thead class="table-light"><tr><th style="width:62%">Pillar / Element</th><th class="text-center">Score<span class="d-block text-muted fw-normal" style="font-size:.6rem">judged</span></th></tr></thead>
               <tbody>
                 {% for pillar in sma_pillars %}
                   {% set ps = S.pillars.get(pillar.id, {}).get('score') %}
                   <tr class="table-secondary">
                     <td class="fw-semibold" style="font-size:.75rem">{{ pillar.name }}</td>
-                    <td class="text-center"><span class="badge level-badge-{{ ps or 0 }}" id="smapil-{{ pillar.id }}">{{ ps if ps is not none else '—' }}</span></td>
+                    <td class="text-center text-nowrap"><span class="badge level-badge-{{ ps or 0 }}" id="smapil-{{ pillar.id }}">{{ ps if ps is not none else '—' }}</span>
+                      {% set pc = S.pillars.get(pillar.id, {}) %}
+                      <span class="text-muted d-block" style="font-size:.6rem" id="smapiln-{{ pillar.id }}">{{ pc.answered or 0 }}/{{ pc.total or 0 }}</span></td>
                   </tr>
                   {% for element in pillar.elements %}
                     {% set es = S.pillars.get(pillar.id, {}).get('elements', {}).get(element.id) %}
                     <tr>
                       <td class="text-muted ps-3" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0" title="{{ element.name }}">{{ element.name }}</td>
-                      <td class="text-center"><span class="badge level-badge-{{ es or 0 }}" id="smael-{{ pillar.id }}-{{ element.id }}">{{ es if es is not none else '—' }}</span></td>
+                      {% set ec = S.pillars.get(pillar.id, {}).get('counts', {}).get(element.id, {}) %}
+                      <td class="text-center text-nowrap"><span class="badge level-badge-{{ es or 0 }}" id="smael-{{ pillar.id }}-{{ element.id }}">{{ es if es is not none else '—' }}</span>
+                        <span class="text-muted d-block" style="font-size:.6rem" id="smaeln-{{ pillar.id }}-{{ element.id }}">{{ ec.answered or 0 }}/{{ ec.total or 0 }}</span></td>
                     </tr>
                   {% endfor %}
                   {% if pillar.id == 'system' %}
                     <tr>
                       <td class="text-muted ps-3" style="font-size:.7rem">🛡️ System · Safety</td>
-                      <td class="text-center"><span class="badge level-badge-{{ S.system_safety or 0 }}" id="sma_sys_safety">{{ S.system_safety if S.system_safety is not none else '—' }}</span></td>
+                      <td class="text-center text-nowrap"><span class="badge level-badge-{{ S.system_safety or 0 }}" id="sma_sys_safety">{{ S.system_safety if S.system_safety is not none else '—' }}</span>
+                        <span class="text-muted d-block" style="font-size:.6rem" id="sma_sys_safety_n">{{ S.system_counts.safety.answered }}/{{ S.system_counts.safety.total }}</span></td>
                     </tr>
                     <tr>
                       <td class="text-muted ps-3" style="font-size:.7rem">🔥 System · DP</td>
-                      <td class="text-center"><span class="badge level-badge-{{ S.system_dp or 0 }}" id="sma_sys_dp">{{ S.system_dp if S.system_dp is not none else '—' }}</span></td>
+                      <td class="text-center text-nowrap"><span class="badge level-badge-{{ S.system_dp or 0 }}" id="sma_sys_dp">{{ S.system_dp if S.system_dp is not none else '—' }}</span>
+                        <span class="text-muted d-block" style="font-size:.6rem" id="sma_sys_dp_n">{{ S.system_counts.dp.answered }}/{{ S.system_counts.dp.total }}</span></td>
                     </tr>
                     {% if S.system_items %}
                       {# Per-standard scores, same rule as an element: the first level judged 'no'
@@ -719,7 +725,8 @@
                     {% set ps = T.pillars.get(pil.id, {}) %}
                     <tr class="table-secondary">
                       <td class="fw-semibold" style="font-size:.75rem">{{ pil.name }} <span class="text-muted fw-normal">({{ secs|length }})</span></td>
-                      <td class="text-center"><span class="badge level-badge-{{ ps.score or 0 }}" id="solpil-{{ key }}-{{ pil.id }}">{{ (ps.grade ~ ' ' ~ ps.score) if ps.score is not none else '—' }}</span></td>
+                      <td class="text-center text-nowrap"><span class="badge level-badge-{{ ps.score or 0 }}" id="solpil-{{ key }}-{{ pil.id }}">{{ (ps.grade ~ ' ' ~ ps.score) if ps.score is not none else '—' }}</span>
+                        <span class="text-muted d-block" style="font-size:.6rem" id="solpiln-{{ key }}-{{ pil.id }}">{{ ps.n or 0 }}/{{ ps.total or 0 }}</span></td>
                     </tr>
                     {% for s in secs %}
                       {% set it = solid_item_scores.get(s.id, {}) %}
@@ -738,7 +745,8 @@
                   {% set axs = T.axes.get(ax, {}) %}
                   <tr>
                     <td class="text-muted ps-3" style="font-size:.72rem">{{ ax }}</td>
-                    <td class="text-center"><span class="badge level-badge-{{ axs.score or 0 }}" id="solax-{{ key }}-{{ ax }}">{{ (axs.grade ~ ' ' ~ axs.score) if axs.score is not none else '—' }}</span></td>
+                    <td class="text-center text-nowrap"><span class="badge level-badge-{{ axs.score or 0 }}" id="solax-{{ key }}-{{ ax }}">{{ (axs.grade ~ ' ' ~ axs.score) if axs.score is not none else '—' }}</span>
+                      <span class="text-muted d-block" style="font-size:.6rem" id="solaxn-{{ key }}-{{ ax }}">{{ axs.n or 0 }}/{{ axs.total or 0 }}</span></td>
                   </tr>
                 {% endfor %}
               </tbody>
@@ -962,6 +970,13 @@ function setBadge(id, score, text){
   el.className = 'badge level-badge-' + (score || 0);
   el.textContent = (score == null) ? '—' : (text != null ? text : score);
 }
+// "judged" counter under a score badge. Accepts {answered,total} or {n,total}.
+function setCount(id, c){
+  const el = document.getElementById(id);
+  if(!el || !c) return;
+  const a = (c.answered != null ? c.answered : c.n) || 0;
+  el.textContent = a + '/' + (c.total || 0);
+}
 function setCircle(id, val){
   const el = document.getElementById(id);
   if(!el) return;
@@ -976,9 +991,13 @@ function renderSMA(t){
   document.getElementById('sma_si').textContent = num(t.system_implementation);
   setBadge('sma_sys_safety', t.system_safety);
   setBadge('sma_sys_dp', t.system_dp);
+  setCount('sma_sys_safety_n', (t.system_counts || {}).safety);
+  setCount('sma_sys_dp_n',     (t.system_counts || {}).dp);
   Object.entries(t.pillars || {}).forEach(([pid, p]) => {
     setBadge('smapil-' + pid, p.score);
+    setCount('smapiln-' + pid, p);
     Object.entries(p.elements || {}).forEach(([eid, es]) => setBadge('smael-' + pid + '-' + eid, es));
+    Object.entries(p.counts || {}).forEach(([eid, c]) => setCount('smaeln-' + pid + '-' + eid, c));
   });
   (t.system_items || []).forEach(it => {
     setBadge('sysitem-' + it.id, it.score);
@@ -1001,9 +1020,11 @@ function renderSolid(key,t){
   document.getElementById(key+'_grade').textContent = t.overall_grade ? ('Grade '+t.overall_grade) : '—';
   // pillar + GRC rows. '*' marks a thin pillar (too few judged items to trust the grade yet).
   Object.entries(t.pillars || {}).forEach(([pid,p]) =>
-    setBadge('solpil-'+key+'-'+pid, p.score, p.score==null?null:(p.grade+(p.thin?'*':'')+' '+p.score)));
+    { setBadge('solpil-'+key+'-'+pid, p.score, p.score==null?null:(p.grade+(p.thin?'*':'')+' '+p.score));
+      setCount('solpiln-'+key+'-'+pid, {answered:p.n, total:p.total}); });
   Object.entries(t.axes || {}).forEach(([ax,a]) =>
-    setBadge('solax-'+key+'-'+ax, a.score, a.score==null?null:(a.grade+(a.thin?'*':'')+' '+a.score)));
+    { setBadge('solax-'+key+'-'+ax, a.score, a.score==null?null:(a.grade+(a.thin?'*':'')+' '+a.score));
+      setCount('solaxn-'+key+'-'+ax, {answered:a.n, total:a.total}); });
   const gap=document.getElementById(key+'_gap');
   if(t.axis_untagged>0){ gap.style.display=''; gap.textContent='⚠ '+t.axis_untagged+' answered item(s) have no GRC tag'; }
   else { gap.style.display='none'; }
