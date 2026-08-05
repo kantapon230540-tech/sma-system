@@ -88,7 +88,7 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "Interview statements from workers indicate that safety is considered a priority by leadership. \"",
+        "level_criteria": "Interview statements from workers indicate that safety is considered a priority by leadership.",
         "interview_content": "How important is H&S at work? \nDoes site leadership address safety at the morning assembly, roll-call, etc.?\n職場において安全衛生は、どのように重要ですか？\n朝礼や点呼の際に、管理者は安全に関する話をしていますか？",
         "onsite_observation": "Sample >3 work areas and talk with teammates about the importance of H&S on site.\n3か所以上の作業地区を任意選択し、現場における安全衛生管理の重要性について技能員の話を聞く。"
        },
@@ -157,7 +157,7 @@
        {
         "id": "MFG-LD-020",
         "no": 20,
-        "text": "Do teammates report hazards (e.g., near misses, hidden dangers) regularly? (:",
+        "text": "Do teammates report hazards (e.g., near misses, hidden dangers) regularly?",
         "level": 4,
         "answered_by": "Managers",
         "audit_methods": [
@@ -177,7 +177,7 @@
        {
         "id": "MFG-LD-021",
         "no": 21,
-        "text": "Are good safety behaviors of teammates rewarded and recognized by managements??",
+        "text": "Are good safety behaviors of teammates rewarded and recognized by managements?",
         "level": 4,
         "answered_by": "Management",
         "audit_methods": [
@@ -283,7 +283,7 @@
        {
         "id": "MFG-LD-003",
         "no": 3,
-        "text": "Have applicable site-specific OH&S regulations been identified, and site-specific safety procedures been implemented that they are compliant with local regulation and SBU standards?\n安全衛生法令が特定されているか？また、安全手順が法令に準拠しているか確認するため、評価が実施されているか？",
+        "text": "Have applicable site-specific OH&S regulations been identified, and site-specific safety procedures been implemented that they are compliant with local regulation and SBU standards?",
         "level": 1,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -295,7 +295,8 @@
          "safety_manager"
         ],
         "level_criteria": "Applicable site-specific OH&S regulations have been identified and current safety procedures and processes have been evaluated to ensure they are compliant with local regulation. SBU requirements.",
-        "continues": "MFG-LD-002"
+        "continues": "MFG-LD-002",
+        "interview_content": "How have you ensured that all procedures applicable to your site have been developed & implemented, and meet local regulations & SBU standards? \n安全手順・実施事項の法令順守を評価するため、どのような方法をとっていますか？"
        },
        {
         "id": "MFG-LD-007",
@@ -311,14 +312,14 @@
         "responders": [
          "plant_manager"
         ],
-        "level_criteria": "Safety performance (Safety KPIs) based on OH&S policy is monitored and tracked by site leadership. KPI",
+        "level_criteria": "Safety performance (Safety KPIs) based on OH&S policy is monitored and tracked by site leadership.",
         "onsite_observation": "Review Line/Cell Boards (e.g. PDCA, Daily Meeting boards) for updated Safety KPI's\nラインや作業地区のボード（PDCA、日次会議ボードなど）で、安全関連のKPIが更新されているかを検証する。",
         "document_check": "Review safety performance KPI's.\n安全関連KPIの検証"
        },
        {
         "id": "MFG-LD-008",
         "no": 8,
-        "text": "Are safety results (KPIs) being monitored by leadership?\n管理者は、安全結果をモニタリングしているか？",
+        "text": "Are safety results (KPIs) being monitored by leadership?",
         "level": 2,
         "answered_by": "Plant manager Production general manager",
         "audit_methods": [
@@ -330,8 +331,10 @@
          "plant_manager",
          "production_gm"
         ],
-        "level_criteria": "Safety performance (Safety KPIs) based on OH&S policy is monitored and tracked by site leadership. KPI",
-        "continues": "MFG-LD-007"
+        "level_criteria": "Safety performance (Safety KPIs) based on OH&S policy is monitored and tracked by site leadership.",
+        "continues": "MFG-LD-007",
+        "onsite_observation": "Review Line/Cell Boards (e.g. PDCA, Daily Meeting boards) for updated Safety KPI's\nラインや作業地区のボード（PDCA、日次会議ボードなど）で、安全関連のKPIが更新されているかを検証する。",
+        "document_check": "Review safety performance KPI's.\n安全関連KPIの検証"
        },
        {
         "id": "MFG-LD-009",
@@ -347,13 +350,13 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Incident investigation records identify the root causes of incidents, categorizes them, and tracks the number of incidents by each category. (Human error, system error, Natural causes) *()",
+        "level_criteria": "Incident investigation records identify the root causes of incidents, categorizes them, and tracks the number of incidents by each category. (Human error, system error, Natural causes)",
         "document_check": "Review incident investigation records and determine over a sample what common causes were.\nインシデント調査記録を検証し、任意選択したものの中から共通原因を判定する。"
        },
        {
         "id": "MFG-LD-015",
         "no": 15,
-        "text": "Are there repercussions/consequences for not following the Safety Rules and procedures? /",
+        "text": "Are there repercussions/consequences for not following the Safety Rules and procedures?",
         "level": 3,
         "answered_by": "Managers",
         "audit_methods": [
@@ -379,7 +382,7 @@
        {
         "id": "MFG-LD-016",
         "no": 16,
-        "text": "Does Leadership use \"Leading indicators\" in their safety result tracking? KPI",
+        "text": "Does Leadership use \"Leading indicators\" in their safety result tracking?",
         "level": 4,
         "answered_by": "Plant manager",
         "audit_methods": [
@@ -397,7 +400,7 @@
        {
         "id": "MFG-LD-017",
         "no": 17,
-        "text": "Does Leadership use \"Leading indicators\" in their safety result tracking?\n安全関連の指標について、先行指標（プロセスKPI）を使っているか？",
+        "text": "Does Leadership use \"Leading indicators\" in their safety result tracking?",
         "level": 4,
         "answered_by": "Plant manager",
         "audit_methods": [
@@ -409,7 +412,9 @@
          "plant_manager"
         ],
         "level_criteria": "Leadership keeps track of leading indicators to determine the results of investments made to improve health and safety at the facility",
-        "continues": "MFG-LD-016"
+        "continues": "MFG-LD-016",
+        "onsite_observation": "Review site system for updating and communicated safety KPI's\n安全関連のKPIが更新されコミュニケーションされていることを現場の仕組みで検証する",
+        "document_check": "Review safety performance KPI's to see if these are leading or lagging.\nReview Plant PDCA Board or other means of communicating safety results (KPI's) & updated status.\n安全関連のKPIの項目が先行値か遅延値かを検証する。\n工場のPDCAボードまたはその他の安全KPIや改善履歴について確認する。"
        },
        {
         "id": "MFG-LD-019",
@@ -425,7 +430,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Managers and/or the safety department are conduct pre- and post- assessments to determine the effectiveness of OH&S initiatives /()",
+        "level_criteria": "Managers and/or the safety department are conduct pre- and post- assessments to determine the effectiveness of OH&S initiatives",
         "document_check": "Sample 3 H&S projects and review the pre- and post assessment results \n3件以上の安全衛生プロジェクトを任意選択し、事前評価と事後評価を検証する。",
         "decision_rule": {
          "min_yes": 3,
@@ -565,7 +570,7 @@
        {
         "id": "MFG-LD-022",
         "no": 22,
-        "text": "Have you gathered best practices on safety activity from GBS/SBU or external companies, and implement them in the plant? GBS/SBU",
+        "text": "Have you gathered best practices on safety activity from GBS/SBU or external companies, and implement them in the plant?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -576,7 +581,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "The safety team can demonstrate how industry(tire industry, rubber industry, manufacturing industry, etc.) *best-practice and scientifically proven best-practices are incorporated in their H&S program ( *",
+        "level_criteria": "The safety team can demonstrate how industry(tire industry, rubber industry, manufacturing industry, etc.) *best-practice and scientifically proven best-practices are incorporated in their H&S program",
         "interview_content": "How do you source best-practices and use these to benefit your H&S program? \nあなたは、どうやってベストプラクティスを収集していますか？\nまた、それらを事業所の安全衛生プログラムにどのように生かしていますか？"
        }
       ]
@@ -653,7 +658,7 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "Teammates know how to report when incident(injury, occupational disease/illness, near-miss, hidden danger, fire) occurs, and incident reporting records and interview statements indicate that teammates report incidents. ()",
+        "level_criteria": "Teammates know how to report when incident(injury, occupational disease/illness, near-miss, hidden danger, fire) occurs, and incident reporting records and interview statements indicate that teammates report incidents.",
         "interview_content": "How do you report an incident (injury, occupational disease/illness, near-miss/hidden danger)?\nHave you reported any recently, or are aware of any recently reported incidents?\nあなたが最近報告したインシデント（労働災害、疾病、ヒヤリ、潜在的危険源）は何ですか？\nもしくは、最近他の技能員によって報告された事例は何かありますか？",
         "document_check": "Review incident records and cross-reference these with interview statements \nインシデント記録を検証し、面談調査と比較検討する。",
         "decision_rule": {
@@ -665,7 +670,7 @@
        {
         "id": "MFG-TM-008",
         "no": 8,
-        "text": "Do teammates know the department/job safety rules applicable to them? /",
+        "text": "Do teammates know the department/job safety rules applicable to them?",
         "level": 3,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -748,7 +753,7 @@
        {
         "id": "MFG-TM-018",
         "no": 18,
-        "text": "Do teammates know safety related information (H&S risk, recurrence prevention measures issued by GBS/SBU, etc.) shared among teams (department/areas) and plants? /GBS/SBU",
+        "text": "Do teammates know safety related information (H&S risk, recurrence prevention measures issued by GBS/SBU, etc.) shared among teams (department/areas) and plants?",
         "level": 5,
         "answered_by": "Management",
         "audit_methods": [
@@ -808,7 +813,7 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "Teammates are involved in the actions implemented to prevent the reoccurrence of an incident (injury, occupational disease/illness, near-miss, hidden danger, fire) relevant to their daily job to ensure the appropriateness of such actions ()",
+        "level_criteria": "Teammates are involved in the actions implemented to prevent the reoccurrence of an incident (injury, occupational disease/illness, near-miss, hidden danger, fire) relevant to their daily job to ensure the appropriateness of such actions",
         "interview_content": "If you are involved in preventing incidents (injury, occupational disease/illness, near-miss/hidden danger), what do you do for recurrence prevention?\nもし、インシデント（労働災害、疾病、ヒヤリ、潜在的危険源）の発生にあなたが関与していた場合、あなたは再発防止のために何をしますか",
         "decision_rule": {
          "min_yes": 2,
@@ -819,7 +824,7 @@
        {
         "id": "MFG-TM-010",
         "no": 10,
-        "text": "Are the Department/Job Safety rules being followed strictly? /",
+        "text": "Are the Department/Job Safety rules being followed strictly?",
         "level": 3,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -949,7 +954,7 @@
        {
         "id": "MFG-TM-009",
         "no": 9,
-        "text": "Are teammates regularly trained about the departmental/job safety rules applicable to them? /",
+        "text": "Are teammates regularly trained about the departmental/job safety rules applicable to them?",
         "level": 3,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -971,7 +976,7 @@
        {
         "id": "MFG-TM-011",
         "no": 11,
-        "text": "Have teammates taken training on residual risks based on the work standard",
+        "text": "Have teammates taken training on residual risks based on the work standard？",
         "level": 4,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -993,7 +998,7 @@
        {
         "id": "MFG-TM-017",
         "no": 17,
-        "text": "Are there opportunities to share H&S risks/measures of other departments at the safety meeting in your department? /()",
+        "text": "Are there opportunities to share H&S risks/measures of other departments at the safety meeting in your department?",
         "level": 5,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -1004,13 +1009,13 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "H&S risks/measures of other departments have been shared at the safety meeting in your department. /",
+        "level_criteria": "H&S risks/measures of other departments have been shared at the safety meeting in your department.",
         "document_check": "Review the safety meeting material and minutes\n会議資料や議事録を確認する。"
        },
        {
         "id": "MFG-TM-019",
         "no": 19,
-        "text": "Do you have opportunities to get *best practices from internal/external sources, and do you implement them in the plant? *",
+        "text": "Do you have opportunities to get *best practices from internal/external sources, and do you implement them in the plant?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -1072,7 +1077,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Incident(injury, fire occupational disease/illness, near-miss, hidden danger)investigations are conducted by qualified people and the identified causes are included in the risk tracking as to-be-controlled risks (SE",
+        "level_criteria": "Incident(injury, fire occupational disease/illness, near-miss, hidden danger)investigations are conducted by qualified people and the identified causes are included in the risk tracking as to-be-controlled risks",
         "document_check": "Review the risk and incident records to identify their correspondence \nリスク記録とインシデント記録を検証して、相互に対応しているかを確認する。"
        },
        {
@@ -1129,7 +1134,7 @@
        {
         "id": "MFG-OR-020",
         "no": 20,
-        "text": "Is risk assessment one of the first actions taken when planning new projects/work sessions? /1RA",
+        "text": "Is risk assessment one of the first actions taken when planning new projects/work sessions?",
         "level": 5,
         "answered_by": "Management",
         "audit_methods": [
@@ -1161,7 +1166,7 @@
        {
         "id": "MFG-OR-002",
         "no": 2,
-        "text": "Do teammates communicate injuries/near-misses/defects to managers, and does management follow-up on them? //",
+        "text": "Do teammates communicate injuries/near-misses/defects to managers, and does management follow-up on them?",
         "level": 1,
         "answered_by": "Management",
         "audit_methods": [
@@ -1263,7 +1268,7 @@
          "foreperson",
          "supervisor"
         ],
-        "level_criteria": "Forepersons/supervisors understand the system and scope of management of changes(4M changes) 4M",
+        "level_criteria": "Forepersons/supervisors understand the system and scope of management of changes(4M changes)",
         "interview_content": "What is a contents of system and scope for management of change?\n4M変更時のシステムとスコープは何ですか？",
         "decision_rule": {
          "min_yes": 3,
@@ -1297,7 +1302,7 @@
        {
         "id": "MFG-OR-017",
         "no": 17,
-        "text": "Does management take action when a hazard/injury/near-miss/defects is reported, and communicate these action to the reporter? ///",
+        "text": "Does management take action when a hazard/injury/near-miss/defects is reported, and communicate these action to the reporter?",
         "level": 4,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -1308,7 +1313,7 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "Risk records indicate that hazards/injury/near-miss/defects reported are used by management to take actions and the result of these actions are communicated with the reporter. ///",
+        "level_criteria": "Risk records indicate that hazards/injury/near-miss/defects reported are used by management to take actions and the result of these actions are communicated with the reporter.",
         "interview_content": "What measures did the management take in response to the information you or your colleague reported? And what means was this feedback provided to you?\nあなたもしくは同僚が報告した不具合情報に対して、管理者はどのような対応を実施しましたか。またそれをどのような手段であなたにフィードバックされましたか。",
         "decision_rule": {
          "min_yes": 5,
@@ -1406,7 +1411,7 @@
        {
         "id": "MFG-OR-012",
         "no": 12,
-        "text": "Are all safety programs reviewed periodically? 1",
+        "text": "Are all safety programs reviewed periodically?",
         "level": 3,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -1417,7 +1422,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Safety procedures are periodically reviewed to identify opportunities for improvement. This is often done by the H&S team and the line-managers involved in the specific safety processes. ()()",
+        "level_criteria": "Safety procedures are periodically reviewed to identify opportunities for improvement. This is often done by the H&S team and the line-managers involved in the specific safety processes.",
         "onsite_observation": "Request to attend such a review to determine if the involved parties reach good results.\nIf unable to attend (e.g., such meeting doesn't occur while conducting the SMA (validation), then review any meeting notes or other documents that resulted from such meeting. \n関係者が良好な結果を得ているかどうかを確認するため、検討会議への出席許可を要請する。 調査中にそれらの会議が開催されないなどして参加が困難な場合は、会議の議事録や出席表などを参照することで評価することとする。"
        },
        {
@@ -1441,7 +1446,7 @@
        {
         "id": "MFG-OR-018",
         "no": 18,
-        "text": "Do teammates and managers have a genuine concern for themselves and one another? When there are safety relates issues, is a CFT approach taken to resolving them? CFT",
+        "text": "Do teammates and managers have a genuine concern for themselves and one another? When there are safety relates issues, is a CFT approach taken to resolving them?",
         "level": 5,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -1452,7 +1457,7 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "Teammates and managers are mindful of the need for safety, not only for themselves but also for others. Teammates and managers have a genuine concern for one another; a CFT approach is used to review and address safety issues. CFT",
+        "level_criteria": "Teammates and managers are mindful of the need for safety, not only for themselves but also for others. Teammates and managers have a genuine concern for one another; a CFT approach is used to review and address safety issues.",
         "onsite_observation": "Assess 3 work areas to see if workers show consideration towards their safety and others\n3か所以上の作業区域を評価し、技能員が自身および他者の安全に配慮しているか確認する。",
         "document_check": "Near Miss Reports\nBehavior Observation System (BOS) execution by leaders.\nIncident Reports and Investigation\nニアミス報告書。\n指導者（課長・主任・職長）による安全行動観察(モニタリング）の実施状況。\nインシデントレポート（報告書）と調査状況。"
        },
@@ -1474,7 +1479,7 @@
          "safety_manager",
          "dp_manager"
         ],
-        "level_criteria": "Line managers are actively engaging with *external parties to obtain knowledge on how they have controlled their risks and exchange knowledge on safety processes regularly. *External includes other company, SBU, other plants in BS * *SBU",
+        "level_criteria": "Line managers are actively engaging with *external parties to obtain knowledge on how they have controlled their risks and exchange knowledge on safety processes regularly. *External includes other company, SBU, other plants in BS",
         "interview_content": "How do you keep yourself informed on safety relevant developments? Do you engage in exchange of safety information and best practices/benchmarking with others outside your site (e.g., other BS sites, other companies, etc.)?\n安全関連の当該最新情報をどのように得ていますか。 安全に関するベストプラクティスやベンチマークを社外や他のBSの拠点と交換していますか。",
         "decision_rule": {
          "min_yes": 1,
@@ -1509,13 +1514,13 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "All teammates receive training on the safety mission statement, *high-risk activities and the regulation for training are known. *High-risk activity: Activity which are risk category III&IV. E.g. Work at height, heavy object handling, mobile equipment, caught by machine, tire inflation, etc. *III&IV",
+        "level_criteria": "All teammates receive training on the safety mission statement, *high-risk activities and the regulation for training are known. *High-risk activity: Activity which are risk category III&IV. E.g. Work at height, heavy object handling, mobile equipment, caught by machine, tire inflation, etc.",
         "interview_content": "Are safety training programs established, planned, and implemented to meet legal regulations?\n教育訓練は安全に関する法令要求を満たすように定められ、計画・実施されていますか？"
        },
        {
         "id": "MFG-SY-027",
         "no": 27,
-        "text": "Are lists of approved chemicals, Material Use Forms and Safety Data Sheets kept according to local regulation? SDS",
+        "text": "Are lists of approved chemicals, Material Use Forms and Safety Data Sheets kept according to local regulation?",
         "level": 1,
         "answered_by": "Production SV",
         "audit_methods": [
@@ -1527,7 +1532,7 @@
         "responders": [
          "supervisor"
         ],
-        "level_criteria": "Is there a list of all approved chemicals for the site, along with a corresponding Material Use Form (MUF) and Safety Data Sheet (SDS), and these records are kept according to local regulation.Required employees are aware of Chemical hazards. SDS",
+        "level_criteria": "Is there a list of all approved chemicals for the site, along with a corresponding Material Use Form (MUF) and Safety Data Sheet (SDS), and these records are kept according to local regulation. Required employees are aware of Chemical hazards.",
         "interview_content": "Request proof of local regulation compliance.\n法規への準拠の証明を確認する",
         "document_check": "Check that Chemical Material documents (MUF, SDS) are stored within the required local regulation timeframe\n化学物質に関する書類（原材料取扱基準表、SDS）を確認し、法規で規定された期間、保管されていることを確認する。"
        },
@@ -1536,7 +1541,7 @@
         "no": 31,
         "text": "Are you aware of laws and regulations regarding flammable materials?",
         "level": 1,
-        "answered_by": "Production Supervisor /",
+        "answered_by": "Production Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -1557,7 +1562,7 @@
         "no": 32,
         "text": "When conducting hot work, do you review a fire watcher assignment?",
         "level": 1,
-        "answered_by": "Maintenance Supervisor /",
+        "answered_by": "Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -1595,20 +1600,20 @@
        {
         "id": "MFG-SY-034",
         "no": 34,
-        "text": "Is Mixing MUST11 deployed to mixing department and maintenance department? MUST11",
+        "text": "Is Mixing MUST11 deployed to mixing department and maintenance department?",
         "level": 1,
         "answered_by": "Teammate (Mixing), Maintenance Staff",
         "audit_methods": [
          "interview"
         ],
-        "standard": "Mixing MUST-11 MUST11",
+        "standard": "Mixing MUST-11",
         "judgement_criteria": "Everyone can explain the check/maintenance works associated with MUST11.\n全員がMUST11に関連する確認・点検作業について説明できる",
         "dp": true,
         "responders": [
          "teammate",
          "maintenance_staff"
         ],
-        "level_criteria": "Mixing MUST 11 is deployed and educated in sites. MUST11",
+        "level_criteria": "Mixing MUST 11 is deployed and educated in sites.",
         "interview_content": "What tasks and inspection items related to MUST 11 have you been educated?\nMUST11に関連した教育ではどのような作業、点検項目があることを教育されましたか？",
         "onsite_observation": "Talk  to >3 Teammates to verify.\n少なくとも3人上の技能員と話して確認する",
         "document_check": "Confirm  training records.\n教育記録を確認する。"
@@ -1616,19 +1621,19 @@
        {
         "id": "MFG-SY-042",
         "no": 42,
-        "text": "Is the LOTO standard reviewed after incidents, audits or when opportunity areas have been identified? LOTO",
+        "text": "Is the LOTO standard reviewed after incidents, audits or when opportunity areas have been identified?",
         "level": 2,
         "answered_by": "Safety Manager",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "The LOTO standard(site standard, ECP, work standard, etc.) was revised based on incident causes, audit findings, authority guidance and concerns raised by teammates, if necessary．\n災害要因や監査、技能員からの困りごとで、LOTO手順書（事業所の標準・ECP*・作業標準等）の改善が必要な場合、手順書が見直しされている\n*動力源遮断手順書",
         "dp": false,
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "The LOTO standard(site standard, ECP, work standard, etc.) is reviewed in response to incidents, audit findings, authority guidance and concerns raised by teammates LOTOECP* *",
+        "level_criteria": "The LOTO standard(site standard, ECP, work standard, etc.) is reviewed in response to incidents, audit findings, authority guidance and concerns raised by teammates．",
         "interview_content": "When was the last review of LOTO standard/training materials? Was it done based on feedback/action plans from an incident/audit?\n直近で、いつLOTO標準やLOTOの教育内容は見直されましたか？また、災害または監査の結果・実施計画に基づき、（LOTO標準の）見直しが実施されていますか？",
         "document_check": "Cross check the revision history against such events to verify if updates have been made \n災害や監査等により更新されているか確認するため、改訂履歴でクロスチェックする。"
        },
@@ -1731,7 +1736,7 @@
          "maintenance_manager",
          "dp_manager"
         ],
-        "level_criteria": "Electric system inspection method are trained to person in charge. /",
+        "level_criteria": "Electric system inspection method are trained to person in charge.",
         "interview_content": "Do you establish the corrective measures when defects are identified by electric system inspections?\nAnd are you training maintenance staffs on these?\n電気配線の点検において不具合が確認された場合の是正方法について定められ、適切に教育されているか？",
         "onsite_observation": "－",
         "document_check": "Confirm the electric system's training program/ training records.\n点検に関する教育資料とその教育記録を確認する"
@@ -1763,7 +1768,7 @@
        {
         "id": "MFG-SY-090",
         "no": 90,
-        "text": "Are all risks in the risk register covered by administrative or technical controls? Besides, are the remaining risks written in the work standard? III&IV",
+        "text": "Are all risks in the risk register covered by administrative or technical controls? Besides, are the remaining risks written in the work standard?",
         "level": 3,
         "answered_by": "Production SV",
         "audit_methods": [
@@ -1839,13 +1844,13 @@
        {
         "id": "MFG-SY-106",
         "no": 106,
-        "text": "Do you comply with safety working standards related to Mixing MUST 11? MUST11",
+        "text": "Do you comply with safety working standards related to Mixing MUST 11?",
         "level": 3,
-        "answered_by": "Mixing Supervisor, Teammate (Mixing) /",
+        "answered_by": "Mixing Supervisor, Teammate (Mixing)",
         "audit_methods": [
          "interview"
         ],
-        "standard": "Mixing MUST-11 MUST11",
+        "standard": "Mixing MUST-11",
         "judgement_criteria": "Everyone can carry out/explain details the operation standards that they are in charge of MUST11.\n全員が担当分のMUST11に関連する作業標準の詳細を実演/説明できる。",
         "dp": true,
         "responders": [
@@ -1853,7 +1858,7 @@
          "supervisor",
          "teammate"
         ],
-        "level_criteria": "Teammates can work based on Mixing MUST 11. MUST11",
+        "level_criteria": "Teammates can work based on Mixing MUST 11.",
         "interview_content": "- Please tell me how to dispose of the discharged rubber when rubber is jammed.\n- Could you explain how you clean the inside of the ducts? Also, could you show me a record of the last time you cleaned the ducts?\n- ゴム滞留時の処置方法を教えてください（滞留した際の禁止事項等）\n- ダクト内の清掃方法について説明してください。また最後に清掃を行った際の記録を提示してください。",
         "onsite_observation": "Talk to person in charge of check to verify that every person in charge can explain and perform these methods.\n点検を担当する技能員3人以上と話し、ゴム滞留時の作業手順を実演/説明できるか確認する\n点検を担当する技能員3人以上と話し、ダクト内の清掃の作業手順を実演/説明できるか確認する",
         "document_check": "Confirm work standards at the discharged rubber and cleaning work standards in the duct.\nゴム滞留時/ダクト内清掃の作業標準を確認する"
@@ -1874,7 +1879,7 @@
          "maintenance_manager",
          "dp_manager"
         ],
-        "level_criteria": "Electric systems (wiring/equipment) status are inspected and corrective actions are taken. /",
+        "level_criteria": "Electric systems (wiring/equipment) status are inspected and corrective actions are taken.",
         "interview_content": "Are the electric system maintenance result/progress reported to top management at the disaster prevention committee and are received review?\n電気配線の点検結果・進捗は報告され、その結果についてレビューする機会が設けられているか？",
         "onsite_observation": "－",
         "document_check": "Check electric system's maintenance progress .\nConfirm minutes of meeting that the progress are shared.\n現状の点検進捗について確認する\n共有された会議の議事録を確認する"
@@ -1901,7 +1906,7 @@
        {
         "id": "MFG-SY-117",
         "no": 117,
-        "text": "Are safety rules developed/adjusted after these evaluations take place? */",
+        "text": "Are safety rules developed/adjusted after these evaluations take place?",
         "level": 4,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -1913,7 +1918,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "teammates contribute to the development of the safety rules applicable to them by evaluating these together with management to consolidate their knowledge of risks involved in work. *",
+        "level_criteria": "teammates contribute to the development of the safety rules applicable to them by evaluating these together with management to consolidate their knowledge of risks involved in work.",
         "interview_content": "When was the last update on safety rules, based on teammates input?\n直近で、技能員からの報告に基づき、いつ*安全ルールは更新されましたか？"
        },
        {
@@ -1957,7 +1962,7 @@
        {
         "id": "MFG-SY-125",
         "no": 125,
-        "text": "Are the results from KY used to develop new safety rules or adjust old rules or improvement of safety measures for hazards((risk mitigation/administrative measures)? KY(/)",
+        "text": "Are the results from KY used to develop new safety rules or adjust old rules or improvement of safety measures for hazards((risk mitigation/administrative measures)?",
         "level": 4,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -1969,7 +1974,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "KYT results are efforts have resulted in the development/adjustment of safety rules or improvement of measures for hazards(risk mitigation/administrative measures). KYT(/",
+        "level_criteria": "KYT results are efforts have resulted in the development/adjustment of safety rules or improvement of measures for hazards(risk mitigation/administrative measures).",
         "interview_content": "To what extend does KY benefits the effectiveness of safety rules implementation and execution? \nKYは、どの程度、有効な安全ルールの実施/実行に役立っていますか？",
         "document_check": "Cross check KY results with updates in safety rules or safety measures\nKYの結果が安全ルールや安全対策に反映されたかクロスチェックする。"
        },
@@ -1988,7 +1993,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Ergonomic risks assessments are performed when new tasks are included or new risks are identified. There is a plan to periodically increase employee's awareness on Ergonomics RA",
+        "level_criteria": "Ergonomic risks assessments are performed when new tasks are included or new risks are identified. There is a plan to periodically increase employee's awareness on Ergonomics",
         "interview_content": "How do you increase employee's awareness on Ergonomics?\nエルゴノミクス（腰痛等の疾病リスク）に関して、どのように従業員の意識を向上させているか？",
         "document_check": "Review in records for evidence that teammates are communicated periodically on Ergonomic hazards\n従業員はエルゴノミクス（腰痛等の疾病リスク）上のリスク（危険源）を定期的にコミュニケーションした記録を確認する。"
        },
@@ -2001,7 +2006,7 @@
         "audit_methods": [
          "interview"
         ],
-        "standard": "Fire Risk Assessment RA",
+        "standard": "Fire Risk Assessment",
         "judgement_criteria": "The site manage a improvement plan and progress.\n改善計画と進捗状況を適切に管理している",
         "dp": true,
         "responders": [
@@ -2027,7 +2032,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Training curricula are kept up-to-date to industry *best-practices and latest authority guidance's. *",
+        "level_criteria": "Training curricula are kept up-to-date to industry *best-practices and latest authority guidance's.",
         "interview_content": "Have you updated trainings (materials/methods) with industry best practices or feedback?\nあなたは、業界の好事例を基にして教育（内容・方法）を更新していますか？",
         "document_check": "Review the facility's training plan and training material\n事業所の教育計画、および教育資料を確認する。"
        },
@@ -2053,39 +2058,39 @@
        {
         "id": "MFG-SY-143",
         "no": 143,
-        "text": "Have you gathered best practices on LOTO from other plants/industry, and considered to incorporate them into the site procedure? /LOTO",
+        "text": "Have you gathered best practices on LOTO from other plants/industry, and considered to incorporate them into the site procedure?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "The best practices on LOTO have been gathered from other plants, and it has been incorporated into the site procedure. or There is a evidence of information exchange and the comparison with other plants.　(E.g. Good practices on how to apply LOTO to contractors)\n他事業所のLOTOに関する好事例を入手し、自拠点へ落とし込みしていることを確認できる。または、他事業所と情報交換や比較した結果がある。(例：協力会社へのLOTOの適用方法等）",
         "dp": false,
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "The LOTO standard is kept up-to-date with industry and internal best-practices as well as the feedback from those working with the standard. LOTOLOTO",
+        "level_criteria": "The LOTO standard is kept up-to-date with industry and internal best-practices as well as the feedback from those working with the standard.",
         "interview_content": "How do you gather and use　other plant's/ industry best practices on LOTO?\nLOTOに関して、他工場または業界の好事例をどのように収集し、活用していますか？",
         "document_check": "Review LOTO procedure against best practices gathered from other plants/industry\n他工場または業界の好事例とLOTO手順を比較する。"
        },
        {
         "id": "MFG-SY-144",
         "no": 144,
-        "text": "Is feedback from the LOTO standard (ECP, work standard) users considered when adapting the LOTO standard? LOTO(ECP*, )LOTO *",
+        "text": "Is feedback from the LOTO standard (ECP, work standard) users considered when adapting the LOTO standard?",
         "level": 5,
         "answered_by": "Teammate, Maintenance Staff",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "The respondent explains that feedback is used to make tangible changes to the way LOTO is performed and can give at least 1 recent example. (Examples of FB: Not able to perform LOTO with ECP accordingly, Lack of contents in work standard, Require LOTO to pneumatic valves in addition to electrical LOTO, etc.)\n回答者は、フィードバックがLOTOの実行方法の具体的な変更に活用され、少なくとも1つの最近の事例を提示することができる。 (フィードバック例：ECP通りLOTOできない、作業標準に不足がある、電気施錠に加えバルブ施錠も必要　等）",
         "dp": false,
         "responders": [
          "teammate",
          "maintenance_staff"
         ],
-        "level_criteria": "The LOTO standard is kept up-to-date with industry and internal best-practices as well as the feedback from those working with the standard. LOTOLOTO",
+        "level_criteria": "The LOTO standard is kept up-to-date with industry and internal best-practices as well as the feedback from those working with the standard.",
         "interview_content": "How do you gather and use best-practices and feedback from teammates on the LOTO standard? \nLOTO標準に関して、好事例や技能員からのフィードバックをどのように収集し、活用していますか？",
         "onsite_observation": "Talk with >3 teammates to see if they recognize tangible improvements based on shop floor feedback on LOTO procedure\n3人以上の技能員にヒアリングし、LOTO手順に関する職場のフィードバックに基づき、具体的な改善が実施されているか、確認する。",
         "document_check": "Cross-check if the feedback provided by teammates has been used to improve the standard \n技能員からのフィードバックが標準の改善に活用されているかクロスチェックする。"
@@ -2093,7 +2098,7 @@
        {
         "id": "MFG-SY-145",
         "no": 145,
-        "text": "Have you gathered best practices on safety rules(e.g. work standards) from other plants/industry, and considered to incorporate them into the site procedure? /(",
+        "text": "Have you gathered best practices on safety rules(e.g. work standards) from other plants/industry, and considered to incorporate them into the site procedure?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2105,7 +2110,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "The effectiveness of safety rules is improved by incorporating other plant's/industry best-practice and feedback from teammates on a periodic basis. /",
+        "level_criteria": "The effectiveness of safety rules is improved by incorporating other plant's/industry best-practice and feedback from teammates on a periodic basis.",
         "interview_content": "What is the recent　other plant's/industry best-practice incorporated into the safety rules? \n安全ルールに関して、最近取り入れた他工場または業界の好事例は、何ですか？",
         "document_check": "Review safety rules against other plant's/industry best practices\n他工場または業界の好事例と安全ルールを比較する。"
        },
@@ -2124,7 +2129,7 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "The effectiveness of safety rules is improved by incorporating other plant's/industry best-practice and feedback from teammates on a periodic basis. /",
+        "level_criteria": "The effectiveness of safety rules is improved by incorporating other plant's/industry best-practice and feedback from teammates on a periodic basis.",
         "interview_content": "How do you gather and use best-practices and feedback from teammates into the safety rules? \n安全ルールに関して、好事例や技能員からのフィードバックをどのように収集し、活用していますか？",
         "onsite_observation": "Talk with >3 teammates to see if they recognize tangible improvements based on shop floor feedback on safety rules\n3人以上の技能員にヒアリングし、安全ルールに関する職場のフィードバックに基づき、具体的な改善が実施されているか、確認する。",
         "document_check": "Cross-check if the feedback provided by teammates has been used to improve the standard \n技能員からのフィードバックが標準の改善に活用されているかクロスチェックする。"
@@ -2132,7 +2137,7 @@
        {
         "id": "MFG-SY-147",
         "no": 147,
-        "text": "Have you gathered best practices on safety rules(e.g. work standards) from other plants/industry, and considered to incorporate them into the site procedure? /",
+        "text": "Have you gathered best practices on safety rules(e.g. work standards) from other plants/industry, and considered to incorporate them into the site procedure?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2171,7 +2176,7 @@
        {
         "id": "MFG-SY-149",
         "no": 149,
-        "text": "Have you gathered best practices on mobile equipment from other plants/industry, and considered to incorporate them into the site procedure? /",
+        "text": "Have you gathered best practices on mobile equipment from other plants/industry, and considered to incorporate them into the site procedure?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2210,7 +2215,7 @@
        {
         "id": "MFG-SY-151",
         "no": 151,
-        "text": "Have you gathered best practices on 3S from other plants/industry, and considered to incorporate them into the site procedure? /3S",
+        "text": "Have you gathered best practices on 3S from other plants/industry, and considered to incorporate them into the site procedure?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2222,7 +2227,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "The site is benchmarking its 3S results and systems with other sites, and looking for more solutions to improve 3S even further. 3S3S",
+        "level_criteria": "The site is benchmarking its 3S results and systems with other sites, and looking for more solutions to improve 3S even further.",
         "interview_content": "How well does the facility's 3S program perform compared to other locations? \nDoes this review takes place periodically?\n事業所の3S活動は、他事業と比較して、どの程度、うまく機能していますか？\nこのようなレビューは、定期的に実施されていますか？",
         "onsite_observation": "Request to attend such a review to assess the methods used \nレビューへの参加を依頼し、採用されている方法を確認する。",
         "document_check": "Review the benchmarking results \n比較した結果を確認する。"
@@ -2230,7 +2235,7 @@
        {
         "id": "MFG-SY-152",
         "no": 152,
-        "text": "Have you gathered best practices oncrane and hoist from other plants/external companies, and considered to incorporate them into the site procedure? /",
+        "text": "Have you gathered best practices on crane and hoist from other plants/external companies, and considered to incorporate them into the site procedure?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2242,16 +2247,16 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "The best practices on crane and hoist have been gathered from other plants/industry, and it has been incorporated into the site procedure. /",
+        "level_criteria": "The best practices on crane and hoist have been gathered from other plants/industry, and it has been incorporated into the site procedure.",
         "interview_content": "What are the best practices gathered from other sites for crane and hoist operation?\nDoes this review takes place periodically?\nクレーン・ホイスト作業のために、どのような好事例が他事業所から収集されていますか？\nこのようなレビューは、定期的に実施されていますか？",
         "onsite_observation": "Request to attend such a review to assess the methods used \nレビューへの参加を依頼し、採用されている方法を確認する。"
        },
        {
         "id": "MFG-SY-153",
         "no": 153,
-        "text": "Have you gathered best practices and/or risks found in other plants during KY, and considered to incorporate them into site procedure? KY",
+        "text": "Have you gathered best practices and/or risks found in other plants during KY, and considered to incorporate them into site procedure?",
         "level": 5,
-        "answered_by": "KY leader KY",
+        "answered_by": "KY leader",
         "audit_methods": [
          "interview"
         ],
@@ -2261,7 +2266,7 @@
         "responders": [
          "others"
         ],
-        "level_criteria": "KY is benchmarked with other sites, and the most common appearing and dangerous risks are shared as well as the meditative actions. KY",
+        "level_criteria": "KY is benchmarked with other sites, and the most common appearing and dangerous risks are shared as well as the meditative actions.",
         "interview_content": "Have you compared KY program with other plants? Does this review takes place periodically?\n他事業所のKY活動と比較しておりますか？このようなレビューは、定期的に実施されていますか？",
         "onsite_observation": "Request to attend such a review to assess the methods used \nレビューへの参加を依頼し、採用されている方法を確認する。",
         "others_label": "KY leader  / KYリーダー（実行責任者）"
@@ -2269,7 +2274,7 @@
        {
         "id": "MFG-SY-154",
         "no": 154,
-        "text": "Does the site benchmark the Risk Assessment results with other sites and SBUs, and consider *best practice methods? RASBU*",
+        "text": "Does the site benchmark the Risk Assessment results with other sites and SBUs, and consider *best practice methods?",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2281,14 +2286,14 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Risk assessment results are compared to other SBU's and external best-practices such as guidelines and scientific publications. RASBU",
+        "level_criteria": "Risk assessment results are compared to other SBU's and external best-practices such as guidelines and scientific publications.",
         "interview_content": "How is the risk assessment process kept up-to-date to relevant guidelines and experiences of other SBU's? \nRA手順は、他SBUのガイドラインや経験を参考に、どのように更新されていますか？",
         "document_check": "Review Risk Assessment Records\nRA記録を確認する。"
        },
        {
         "id": "MFG-SY-155",
         "no": 155,
-        "text": "Have you gathered best practices on contractor management from other plants/external companies, and considered to incorporate them into the site procedure? (E.g. Daily JSA, using the external consultant for selecting contractors, etc.) /(:RA",
+        "text": "Have you gathered best practices on contractor management from other plants/external companies, and considered to incorporate them into the site procedure? (E.g. Daily JSA, using the external consultant for selecting contractors, etc.)",
         "level": 5,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2300,7 +2305,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "The contractor management is benchmarked with other sites/external companies to determine best practice methods. /",
+        "level_criteria": "The contractor management is benchmarked with other sites/external companies to determine best practice methods.",
         "interview_content": "What is the recent industry/other plant's best-practice incorporated into the  site contractor management procedure? \n協力会社の安全管理に関して、最近取り入れた他事業所または業界の好事例は、何ですか？",
         "document_check": "Review documents of best practices on contractor management and/or comparison results with other plants\n協力会社の安全管理に関する好事例または他事業所と比較した結果を確認する"
        },
@@ -2338,7 +2343,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "The effectiveness of ergonomic procedure is improved by incorporating best practices shared by authorities, experts, effective standards (e.g. ISO) and feedback from teammates on a periodic basis. ISO",
+        "level_criteria": "The effectiveness of ergonomic procedure is improved by incorporating best practices shared by authorities, experts, effective standards (e.g. ISO) and feedback from teammates on a periodic basis.",
         "interview_content": "How do you gather best practices to modify or improve Ergonomics procedure?\nエルゴノミクス標準の改善のため、好事例をどのように収集しているか？",
         "document_check": "Review evidence that the current procedure was reviewed against best practices gathered from authorities, experts or effective standards (e.g. ISO) to reduce Ergonomic hazards\n現在のエルゴノミクス（腰痛等の疾病リスク）標準を当局、専門家、効果的な標準（例：ISO）から収集された好事例に対してレビューした記録を確認する。"
        },
@@ -2364,7 +2369,7 @@
        {
         "id": "MFG-SY-159",
         "no": 159,
-        "text": "Have you gathered best practices on safety maintenance management from other plants/external companies, and considered to incorporate them into the site procedure? /(:RA",
+        "text": "Have you gathered best practices on safety maintenance management from other plants/external companies, and considered to incorporate them into the site procedure?",
         "level": 5,
         "answered_by": "Maintenance manager",
         "audit_methods": [
@@ -2376,7 +2381,7 @@
         "responders": [
          "maintenance_manager"
         ],
-        "level_criteria": "The maintenance safety standard is periodically developed by the incorporation of internal and industry best-practices. /",
+        "level_criteria": "The maintenance safety standard is periodically developed by the incorporation of internal and industry best-practices.",
         "interview_content": "保全作業の安全管理に関して、最近取り入れた他事業所または業界の好事例は、何ですか？\nRegarding safety management of maintenance work, what are some good examples from other facilities or industries that you have recently adopted?"
        },
        {
@@ -2388,13 +2393,13 @@
         "audit_methods": [
          "interview"
         ],
-        "standard": "Fire Risk Assessment RA",
+        "standard": "Fire Risk Assessment",
         "judgement_criteria": "They can answer one or more cases in which best practices are incorporated.\nベストプラクティスを取り込んでいる事例を１つ以上回答できる",
         "dp": true,
         "responders": [
          "dp_manager"
         ],
-        "level_criteria": "The best practices on fire RA have been gathered from other plants/industry, and it has been deployed to the site. /RA",
+        "level_criteria": "The best practices on fire RA have been gathered from other plants/industry, and it has been deployed to the site.",
         "interview_content": "What best practices were incorporated by obtaining information from other plants or industry?\n業界や他工場の情報を入手し､ベストプラクティスを取り込んだことは何がありますか？",
         "onsite_observation": "If hardware measures (e.g., equipment, tools) has been implemented, conduct on-site confirmation.\n反映した対策がハード対策（設備、工具等）であれば、その現場を確認する",
         "document_check": "If software measures (e.g., working standards, rules, systems) has been implemented, conduct document confirmation.\n反映した対策がソフト対策（作業標準、管理システム等）であれば、その文書を確認する"
@@ -2414,7 +2419,7 @@
         "responders": [
          "dp_manager"
         ],
-        "level_criteria": "The best practices on flammable material controls have been gathered from other plants/industry, and it has been deployed to the site. /",
+        "level_criteria": "The best practices on flammable material controls have been gathered from other plants/industry, and it has been deployed to the site.",
         "interview_content": "What best practices were incorporated by obtaining information from other plants?\n他工場の情報を入手し､ベストプラクティスを取り込んだことは何がありますか？",
         "onsite_observation": "If hardware measures (e.g., equipment, tools) has been implemented, conduct on-site confirmation.\n反映した対策がハード対策（設備、工具等）であれば、その現場を確認する",
         "document_check": "If software measures (e.g., working standards, rules, systems) has been implemented, conduct document confirmation.\n反映した対策がソフト対策（作業標準、管理システム等）であれば、その文書を確認する"
@@ -2434,7 +2439,7 @@
         "responders": [
          "dp_manager"
         ],
-        "level_criteria": "The best practices on hot work controls have been gathered from other plants/industry, and it has been deployed to the site. /",
+        "level_criteria": "The best practices on hot work controls have been gathered from other plants/industry, and it has been deployed to the site.",
         "interview_content": "What best practices about hot work management were incorporated by obtaining information from other plants?\n火気使用時の管理に関して、他工場の情報を入手し､ベストプラクティスを取り込んだことは何がありますか？",
         "onsite_observation": "If hardware measures (e.g., equipment, tools) has been implemented, conduct on-site confirmation.\n反映した対策がハード対策（設備、工具等）であれば、その現場を確認する",
         "document_check": "If software measures (e.g., working standards, rules, systems) has been implemented, conduct document confirmation.\n反映した対策がソフト対策（作業標準、管理システム等）であれば、その文書を確認する"
@@ -2454,7 +2459,7 @@
         "responders": [
          "dp_manager"
         ],
-        "level_criteria": "The best practices on the fire extinguishing equipment controls have been gathered from other plants/industry, and it has been deployed to the site. /",
+        "level_criteria": "The best practices on the fire extinguishing equipment controls have been gathered from other plants/industry, and it has been deployed to the site.",
         "interview_content": "What best practices about fire extinguishing equipment and fire fighting drill were incorporated by obtaining information from other plants or industry?\n消火設備や消火訓練に関して、他工場や業界の好事例を取り込み改善したことはありますか？",
         "onsite_observation": "If hardware measures (e.g., equipment, tools) has been implemented, conduct on-site confirmation.\n反映した対策がハード対策（設備、工具等）であれば、その現場を確認する",
         "document_check": "If software measures (e.g., working standards, rules, systems) has been implemented, conduct document confirmation.\n反映した対策がソフト対策（作業標準、管理システム等）であれば、その文書を確認する"
@@ -2468,13 +2473,13 @@
         "audit_methods": [
          "interview"
         ],
-        "standard": "Mixing MUST-11 MUST11",
+        "standard": "Mixing MUST-11",
         "judgement_criteria": "They can answer one or more cases in which best practices are incorporated.\nベストプラクティスを取り込んでいる事例を１つ以上回答できる",
         "dp": true,
         "responders": [
          "dp_manager"
         ],
-        "level_criteria": "The best practices on Mixing MUST11 have been gathered from other plants, and it has been deployed to the site. MUST11",
+        "level_criteria": "The best practices on Mixing MUST11 have been gathered from other plants, and it has been deployed to the site.",
         "interview_content": "What best practices were incorporated by obtaining information through cross-training with other plants or industry?\n他工場と相互訓練するなどして情報を入手し､ベストプラクティスを取り込んだことは何があるか？",
         "onsite_observation": "If hardware measures (e.g., equipment, tools) has been implemented, conduct on-site confirmation.\n反映した対策がハード対策（設備、工具等）であれば、その現場を確認する",
         "document_check": "Confirm records  of correspondence regarding best practices.\n情報がわかる書類などを確認する"
@@ -2529,7 +2534,7 @@
        {
         "id": "MFG-SY-002",
         "no": 2,
-        "text": "Does the safety manager send out the OH&S communications required by regulations to relevant departments as per the communication procedure and appropriate methods/language? /",
+        "text": "Does the safety manager send out the OH&S communications required by regulations to relevant departments as per the communication procedure and appropriate methods/language?",
         "level": 1,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2586,39 +2591,39 @@
        {
         "id": "MFG-SY-007",
         "no": 7,
-        "text": "Have the required people been given locks and tags? LOTO",
+        "text": "Have the required people been given locks and tags?",
         "level": 1,
         "answered_by": "Safety Manager",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "Locks have been allocated to all relevant factory floor teammates and management. (at minimum for those  performing service and maintenance tasks where an exposure to unexpected energization could result in injury)\nキーは、全ての必要な技能員と管理者に配布されている。（最低限、LOTOせずに設備が稼働した場合に被災するリスクに曝される現場作業および保全作業の従事者）",
         "dp": false,
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "People performing service and/or maintenance activities are aware of the LOTO standard and have been provided with locks and tags as required. LOTOLOTO",
+        "level_criteria": "People performing service and/or maintenance activities are aware of the LOTO standard and have been provided with locks and tags as required.",
         "interview_content": "To whom have you distributed locks and tags for LOTO?\nどなたにLOTOキーとタグを渡していますか？",
         "onsite_observation": "Identify on the shop floor if required service providers and maintenance resources have locks and tags\n現場モニタリングにおいて、作業や保全で必要な技能員がキーとタグを持っているか。"
        },
        {
         "id": "MFG-SY-008",
         "no": 8,
-        "text": "Are the required people educated in the LOTO standard? LOTOLOTO",
+        "text": "Are the required people educated in the LOTO standard?",
         "level": 1,
         "answered_by": "Production and Maintenance SV",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "The LOTO standard has been shared with all relevant teammates and they have been trained on this at the appropriate time and frequency.\nLOTO標準は、全ての必要な技能員に周知され、教育が適切なタイミング・頻度で実施されている。",
         "dp": false,
         "responders": [
          "supervisor",
          "maintenance_foreman"
         ],
-        "level_criteria": "People performing service and/or maintenance activities are aware of the LOTO standard and have been provided with locks and tags as required. LOTOLOTO",
+        "level_criteria": "People performing service and/or maintenance activities are aware of the LOTO standard and have been provided with locks and tags as required.",
         "interview_content": "Who received LOTO training? And is the frequency of LOTO re-training established and followed?\n誰がLOTO教育を受けていますか？ また再教育の頻度が定められ、それに基づいた教育を行っていますか？",
         "document_check": "Review if training materials and attendance indicate a transfer of required competence.\n求められる能力が反映されているか、教育資料と出席状況を確認する。"
        },
@@ -2663,7 +2668,7 @@
        {
         "id": "MFG-SY-011",
         "no": 11,
-        "text": "Can teammates say Work at height requirements(What must not be done & What must be done) of All Bridgestone safety rules? BS””",
+        "text": "Can teammates say Work at height requirements(What must not be done & What must be done) of All Bridgestone safety rules?",
         "level": 1,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -2702,9 +2707,9 @@
        {
         "id": "MFG-SY-013",
         "no": 13,
-        "text": "Has the need for 3S(Select & remove, Sort, Keep clean) in the work place been properly communicated? 3S(",
+        "text": "Has the need for 3S(Select & remove, Sort, Keep clean) in the work place been properly communicated?",
         "level": 1,
-        "answered_by": "Production and Maintenance Supervisor /",
+        "answered_by": "Production and Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -2715,16 +2720,16 @@
          "supervisor",
          "maintenance_foreman"
         ],
-        "level_criteria": "The need for housekeeping and removal of unnecessary items in the workplace has been communicated. Visual standard postings are visible in work areas, and the site is utilizing the 3S checklist. 3S",
+        "level_criteria": "The need for housekeeping and removal of unnecessary items in the workplace has been communicated. Visual standard postings are visible in work areas, and the site is utilizing the 3S checklist.",
         "interview_content": "How do you ensure that people are aware of the need to remove unnecessary items? \nあなたは、どのように、技能員が不要物を廃棄する必要性を理解させていますか？",
         "document_check": "Review communication records to see if 3S is communicated across site\nCheck line boards for 3S standards\nコミュニケーション記録を確認し、3Sが事業所全体に周知されているか、確認する。\n工程掲示板の3S標準を確認する。"
        },
        {
         "id": "MFG-SY-014",
         "no": 14,
-        "text": "Is basic 3S being carried out and prepared 3S (visual) standard posted throughout the site? And 3S (visual) standard are reviewed/revised appropriately? 3S3S 3S3S",
+        "text": "Is basic 3S being carried out and prepared 3S (visual) standard posted throughout the site? And 3S (visual) standard are reviewed/revised appropriately?",
         "level": 1,
-        "answered_by": "Production and Maintenance Supervisor / Teammate and Maint Staff /",
+        "answered_by": "Production and Maintenance Supervisor Teammate and Maint Staff",
         "audit_methods": [
          "interview"
         ],
@@ -2737,14 +2742,14 @@
          "maintenance_foreman",
          "maintenance_staff"
         ],
-        "level_criteria": "The need for housekeeping and removal of unnecessary items in the workplace has been communicated. Visual standard postings are visible in work areas, and the site is utilizing the 3S checklist. 3S",
+        "level_criteria": "The need for housekeeping and removal of unnecessary items in the workplace has been communicated. Visual standard postings are visible in work areas, and the site is utilizing the 3S checklist.",
         "onsite_observation": "Conduct a site tour to review 3S visual standards at >3 work areas\n現場巡回時、3つ以上の作業場で、3S標準を確認する。",
         "document_check": "3S checklist (3S standard, 3S visual standard, self checklist etc.)\n3Sチェックリスト（3S標準、3Sビジュアル標準、セルフチェックシート）"
        },
        {
         "id": "MFG-SY-015",
         "no": 15,
-        "text": "Have you created an annual 3S activity plan? 3S",
+        "text": "Have you created an annual 3S activity plan?",
         "level": 1,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2756,7 +2761,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Management team prepares an annual 3S plan. 3S",
+        "level_criteria": "Management team prepares an annual 3S plan.",
         "interview_content": "Have you created an annual 3S activity plan？\n年間の3S活動の計画を作成しているか？",
         "document_check": "Confirm the annual 3S plan.\n3Sの年間計画を確認する。"
        },
@@ -2824,7 +2829,7 @@
        {
         "id": "MFG-SY-019",
         "no": 19,
-        "text": "Has the importance of the KY process been communicated to the teammates by management? KY4",
+        "text": "Has the importance of the KY process been communicated to the teammates by management?",
         "level": 1,
         "answered_by": "Production Manager",
         "audit_methods": [
@@ -2836,14 +2841,14 @@
         "responders": [
          "production_manager"
         ],
-        "level_criteria": "The need for compliance towards the KY standard has been communicated by management. KY",
+        "level_criteria": "The need for compliance towards the KY standard has been communicated by management.",
         "interview_content": "How was the communication about KY done across site?\n事業所で実施されるKY（の手順）について、どのように周知されていますか？",
         "document_check": "Review communication records to see if the need to comply with the KY standard was communicated. \nコミュニケーション記録を確認し、KY標準順守の必要性の周知を確認する。"
        },
        {
         "id": "MFG-SY-020",
         "no": 20,
-        "text": "Have the regulations and/or expectations concerning risk assessments been identified? RA",
+        "text": "Have the regulations and/or expectations concerning risk assessments been identified?",
         "level": 1,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2855,13 +2860,13 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Managements identified what risk assessment it is required to undertake by regulation and knows to what extent these have been performed. RA",
+        "level_criteria": "Managements identified what risk assessment it is required to undertake by regulation and knows to what extent these have been performed.",
         "interview_content": "What are the regulations and/or expectations regarding Risk Assessments? How does the site ensure compliance? \n実施されたRAは、対応されるべき法的要件をどの程度カバーしていますか？"
        },
        {
         "id": "MFG-SY-021",
         "no": 21,
-        "text": "Have therisk assessments been performed or is there a plan to complete? RA",
+        "text": "Have the risk assessments been performed or is there a plan to complete?",
         "level": 1,
         "answered_by": "Production Foreman",
         "audit_methods": [
@@ -2873,14 +2878,14 @@
         "responders": [
          "foreperson"
         ],
-        "level_criteria": "Managements identified what risk assessment it is required to undertake by regulation and knows to what extent these have been performed. RA",
+        "level_criteria": "Managements identified what risk assessment it is required to undertake by regulation and knows to what extent these have been performed.",
         "interview_content": "When was the last risk assessment performed at the site?\n事業所において、いつ直近のRAが実施されましたか？",
         "document_check": "Review the last risk assessment report\n直近のRA実施記録を確認する。"
        },
        {
         "id": "MFG-SY-022",
         "no": 22,
-        "text": "Do contractor employees who perform construction/works in BS have required skills and certification(E.g. crane and hoist)? //(",
+        "text": "Do contractor employees who perform construction/works in BS have required skills and certification(E.g. crane and hoist)?",
         "level": 1,
         "answered_by": "Maintenance Supervisor",
         "audit_methods": [
@@ -2892,14 +2897,14 @@
         "responders": [
          "maintenance_foreman"
         ],
-        "level_criteria": "Contractor employees who perform construction/works in BS have required skills and certification(E.g. crane and hoist). //(",
+        "level_criteria": "Contractor employees who perform construction/works in BS have required skills and certification(E.g. crane and hoist).",
         "interview_content": "How to you confirm that contractor employees who perform construction/works in BS have required skills and certification(E.g. crane and hoist)?\n工事/作業を行う協力会社の従業員は、工事/作業に必要な能力・法的資格(例：クレーン・ホイスト）を有していることをどのように確認しているか？",
         "document_check": "Review certifications of contractors.\n協力会社の資格を確認する。"
        },
        {
         "id": "MFG-SY-023",
         "no": 23,
-        "text": "Are large tire manual handling operations identified? Is there a procedure for each of these operations? Has an assessment been completed in each case to determine that manual handling is necessary. RA",
+        "text": "Are large tire manual handling operations identified? Is there a procedure for each of these operations? Has an assessment been completed in each case to determine that manual handling is necessary.",
         "level": 1,
         "answered_by": "Production SV",
         "audit_methods": [
@@ -2956,7 +2961,7 @@
        {
         "id": "MFG-SY-026",
         "no": 26,
-        "text": "Are all chemicals used on site (production and non-production chemicals) listed in a list of approved chemicals, and each has a corresponding Material Use Form (MUF) and current and compliant Safety Data Sheet (SDS)? SDS",
+        "text": "Are all chemicals used on site (production and non-production chemicals) listed in a list of approved chemicals, and each has a corresponding Material Use Form (MUF) and current and compliant Safety Data Sheet (SDS)?",
         "level": 1,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -2968,7 +2973,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Is there a list of all approved chemicals for the site, along with a corresponding Material Use Form (MUF) and Safety Data Sheet (SDS), and these records are kept according to local regulation.Required employees are aware of Chemical hazards. SDS",
+        "level_criteria": "Is there a list of all approved chemicals for the site, along with a corresponding Material Use Form (MUF) and Safety Data Sheet (SDS), and these records are kept according to local regulation. Required employees are aware of Chemical hazards.",
         "interview_content": "Is there a record of all chemicals used on site (production and non-production chemicals)? Is there a Material Use Form (MUF) and Safety Data Sheet (SDS) for each of the Chemicals listed?\n事業所で使用される全ての化学物質の記録はあるか＞記載されている各化学物質の原材料取扱基準表及びSDSはあるか？",
         "document_check": "Review evidence that there is a list of approved chemicals, and all relevant documents (MUF, SDS) are available for each material\n承認された化学物質のリストがあり、関連する全ての文書（原材料取扱基準表、SDS）が各材料に対して存在することを確認する。"
        },
@@ -2987,13 +2992,13 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "Is there a list of all approved chemicals for the site, along with a corresponding Material Use Form (MUF) and Safety Data Sheet (SDS), and these records are kept according to local regulation.Required employees are aware of Chemical hazards. SDS",
+        "level_criteria": "Is there a list of all approved chemicals for the site, along with a corresponding Material Use Form (MUF) and Safety Data Sheet (SDS), and these records are kept according to local regulation. Required employees are aware of Chemical hazards.",
         "interview_content": "Are you aware of the Chemical hazards of your job?\nあなたは業務で取り扱う化学物資の危険性を知っているか？"
        },
        {
         "id": "MFG-SY-029",
         "no": 29,
-        "text": "Is SBU/site local maintenance safety management procedure trained to maintenance staff? SBU/",
+        "text": "Is SBU/site local maintenance safety management procedure trained to maintenance staff?",
         "level": 1,
         "answered_by": "Maintenance Supervisor",
         "audit_methods": [
@@ -3018,7 +3023,7 @@
         "audit_methods": [
          "interview"
         ],
-        "standard": "Fire Risk Assessment RA",
+        "standard": "Fire Risk Assessment",
         "judgement_criteria": "All respondents can answer 2 more than fire risks.\n2つ以上の火災リスクを全員が回答できる",
         "dp": true,
         "responders": [
@@ -3065,7 +3070,7 @@
          "maintenance_manager",
          "dp_manager"
         ],
-        "level_criteria": "Electric systems (wiring/equipment) that have to be checked are listed and updated properly. /",
+        "level_criteria": "Electric systems (wiring/equipment) that have to be checked are listed and updated properly.",
         "interview_content": "Do you standardize what and how electrical wirings* are inspected based on global standards? (*cables, switch board, individual area's wiring etc.)\n事業所内の電気配線（電線、配電盤、および見えない配線等）について、GSで確認すべきポイントを基にそれらのリスト・年間点検計画を作成していますか？",
         "onsite_observation": "－",
         "document_check": "Confirm the working standard that established electric system's maintenance methods/points.\n電気配線の点検方法・点検場所に関する作業標準を確認する。"
@@ -3075,7 +3080,7 @@
         "no": 38,
         "text": "Are the causes of accidents/incidents that have occurred at this site communicated to teammates and is this shown by communication records?",
         "level": 2,
-        "answered_by": "Safety Manager/Teammate /",
+        "answered_by": "Safety Manager/Teammate",
         "audit_methods": [
          "interview"
         ],
@@ -3112,7 +3117,7 @@
        {
         "id": "MFG-SY-046",
         "no": 46,
-        "text": "Has a 3S leader been appointed in each area? 3S",
+        "text": "Has a 3S leader been appointed in each area?",
         "level": 2,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -3124,13 +3129,13 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "3S leaders have been appointed and regularly inspect work areas and teams follow-up on the findings/advice from the 3S leader. 3S3S",
+        "level_criteria": "3S leaders have been appointed and regularly inspect work areas and teams follow-up on the findings/advice from the 3S leader.",
         "onsite_observation": "Observe >3 work areas to see if there are 3S leaders and if teams take them seriously \n3つ以上の作業場でのモニタリングにおいて、３Sリーダー（実行責任者）がいるか、チーム（各工程）は真剣に取り組んでいるか、確認する。"
        },
        {
         "id": "MFG-SY-047",
         "no": 47,
-        "text": "Does the 3S leader inspect work areas and follow up on his/her recommended actions are complete? 3S",
+        "text": "Does the 3S leader inspect work areas and follow up on his/her recommended actions are complete?",
         "level": 2,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -3142,7 +3147,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "3S leaders have been appointed and regularly inspect work areas and teams follow-up on the findings/advice from the 3S leader. 3S3S",
+        "level_criteria": "3S leaders have been appointed and regularly inspect work areas and teams follow-up on the findings/advice from the 3S leader.",
         "interview_content": "Can you share examples of actions defined during 3S inspections done by 3S leader? Were the actions completed?\nHow often does 3S tours occur on the site (lead by 3S leader)?\n3S実行責任者によって3S点検時に特定された指示事例を教えてください。その指示は対応済ですか？\n事業所において、3S実行責任者主導による3S巡回の頻度を教えてください。",
         "onsite_observation": "Observe >3 work areas to see if action from 3S inspections by leaders were completed\n3つ以上の作業場でのモニタリングにおいて、3S実行責任者による３S点検に基づく対応は、完了しているか、確認する。"
        },
@@ -3225,7 +3230,7 @@
        {
         "id": "MFG-SY-052",
         "no": 52,
-        "text": "Is KYT are conducted by all employee on site? KYT",
+        "text": "Is KYT are conducted by all employee on site?",
         "level": 2,
         "answered_by": "Production Foreman",
         "audit_methods": [
@@ -3237,14 +3242,14 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "KY is conducted by everyone on site. KY",
+        "level_criteria": "KY is conducted by everyone on site.",
         "interview_content": "Who are involved in KYT? \n誰がKYTに参加しますか？",
         "document_check": "Review KYT execution records\nKYT実施記録を確認する。"
        },
        {
         "id": "MFG-SY-053",
         "no": 53,
-        "text": "Are pre-work meetings conducted prior to the start of work, are risks identified and risk mitigation measures/administrative controls defined. /",
+        "text": "Are pre-work meetings conducted prior to the start of work, are risks identified and risk mitigation measures/administrative controls defined.",
         "level": 2,
         "answered_by": "Maintenance Supervisor",
         "audit_methods": [
@@ -3256,7 +3261,7 @@
         "responders": [
          "maintenance_foreman"
         ],
-        "level_criteria": "Pre-work meetings are conducted prior to the start of work, risks are identified and risk mitigation measures/administrative controls are defined. /",
+        "level_criteria": "Pre-work meetings are conducted prior to the start of work, risks are identified and risk mitigation measures/administrative controls are defined.",
         "interview_content": "Are pre-work meetings conducted with contractors? What points are discussed at the meeting? \n作業開始前に打ち合わせを実施しているか？どういった内容が打ち合わせで議論されているか？",
         "document_check": "Review records of pre-work meetings with contractors.\n協力会社作業開始前の打ち合わせ記録を確認する。"
        },
@@ -3295,7 +3300,7 @@
         "responders": [
          "foreperson"
         ],
-        "level_criteria": "The large tire manual handling procedure is reviewed in response to incidents",
+        "level_criteria": "The large tire manual handling procedure is reviewed in response to incidents．",
         "interview_content": "When was the last review of the Large Tire Manual Handling Operations procedure? Was this done based on a reported incident?\n大型タイヤ手動ハンドリング標準を最後にレビューしたのはいつか？報告された災害に基づき実施されているか？",
         "document_check": "Check the revision history against the time of the last incident reported on a Large Tire Manual Handling Operation to verify if corresponding updates have been made\n大型タイヤ手動ハンドリングに関しての災害・ヒヤリが報告された際、標準が更新されていることを改訂履歴から確認する。"
        },
@@ -3333,16 +3338,16 @@
         "responders": [
          "production_manager"
         ],
-        "level_criteria": "There are countermeasures in place to reduce exposure to Chemical Hazards (e.g., gloves, local exhaust, etc.) according to the information on Material Use Form (MUF), Safety Data Sheet (SDS), and PPE hazard assessment. MUF)SDS",
+        "level_criteria": "There are countermeasures in place to reduce exposure to Chemical Hazards (e.g., gloves, local exhaust, etc.) according to the information on Material Use Form (MUF), Safety Data Sheet (SDS), and PPE hazard assessment.",
         "interview_content": "Is there a record of countermeasures(PPE, engineering controls) implemented for identified Chemical hazards?\n特定された化学物質の危険源に対して、実施されている対策(設備対策や保護具）の記録があるか？",
         "document_check": "Review the chemical materials list, PPE hazard assessment, and action plans to check if the countermeasures were implemented to reduce chemical hazards exposure.\n化学物質リストおよび対応計画を確認し、化学物質の危険源の暴露を低減するための対策が実施されていることを確認する。"
        },
        {
         "id": "MFG-SY-058",
         "no": 58,
-        "text": "Do you hold the premeeting before maintenance work? And during this meeting do you identify the risks and determine risk mitigation & control? /",
+        "text": "Do you hold the premeeting before maintenance work? And during this meeting do you identify the risks and determine risk mitigation & control?",
         "level": 2,
-        "answered_by": "Maintenance Supervisor /",
+        "answered_by": "Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -3360,7 +3365,7 @@
         "no": 59,
         "text": "Are the identified risks and determined risks mitigation & control shared to maintenance staff.",
         "level": 2,
-        "answered_by": "Maintenance Supervisor /",
+        "answered_by": "Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -3370,7 +3375,7 @@
         "responders": [
          "maintenance_foreman"
         ],
-        "level_criteria": "Before maintenance, maintenance technicians join KY activity/tool box meeting and able to understand the shared information/cautions in work. KY",
+        "level_criteria": "Before maintenance, maintenance technicians join KY activity/tool box meeting and able to understand the shared information/cautions in work.",
         "interview_content": "作業開始前の打ち合わせに作業を行うすべての保全員が参加していますか？\nDo all maintenance staffs who perform task/maintenance service participate in the discussion before starting work?",
         "onsite_observation": "Confirm the record of sharing information and these clue (sign, attend list etc.).\n共有された情報とその確認（サイン・参加者一覧等）の記録を確認する。"
        },
@@ -3389,19 +3394,19 @@
         "responders": [
          "maintenance_staff"
         ],
-        "level_criteria": "Before maintenance, maintenance technicians join KY activity/tool box meeting and able to understand the shared information/cautions in work. KY",
+        "level_criteria": "Before maintenance, maintenance technicians join KY activity/tool box meeting and able to understand the shared information/cautions in work.",
         "interview_content": "保全作業中に異常や共有されていないリスクを発見した際、どのように対応しますか？\nHow do you respond when you discover anomalies or unshared risks during maintenance work?"
        },
        {
         "id": "MFG-SY-061",
         "no": 61,
-        "text": "Are you aware of the fire prevention measures (rules) in your own processes/services? ()",
+        "text": "Are you aware of the fire prevention measures (rules) in your own processes/services?",
         "level": 2,
         "answered_by": "Teammate",
         "audit_methods": [
          "interview"
         ],
-        "standard": "Fire Risk Assessment RA",
+        "standard": "Fire Risk Assessment",
         "judgement_criteria": "All respondents can answer 2 more than fire prevention rules.\n2つ以上の防火ルールを全員が回答できる",
         "dp": true,
         "responders": [
@@ -3437,7 +3442,7 @@
         "no": 63,
         "text": "When hot work has to be performed do you prepare the existence of necessary fire fighting tools?",
         "level": 2,
-        "answered_by": "Maintenance Supervisor /",
+        "answered_by": "Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -3457,7 +3462,7 @@
         "no": 64,
         "text": "Do you prepare the proper curing to prevent spreading sparks during hot work?",
         "level": 2,
-        "answered_by": "Maintenance Supervisor /",
+        "answered_by": "Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -3475,13 +3480,13 @@
        {
         "id": "MFG-SY-066",
         "no": 66,
-        "text": "Do you understand the operation standards related to MUST11? MUST11",
+        "text": "Do you understand the operation standards related to MUST11?",
         "level": 2,
-        "answered_by": "Mixing Supervisor, Teammate (Mixing) /",
+        "answered_by": "Mixing Supervisor, Teammate (Mixing)",
         "audit_methods": [
          "interview"
         ],
-        "standard": "Mixing MUST-11 MUST11",
+        "standard": "Mixing MUST-11",
         "judgement_criteria": "Everyone understands the operation standards of MUST11.\n全員がMUST11の作業標準を理解している",
         "dp": true,
         "responders": [
@@ -3489,7 +3494,7 @@
          "supervisor",
          "teammate"
         ],
-        "level_criteria": "Teammates understand requirements defined in Mixing MUST 11. MUST11",
+        "level_criteria": "Teammates understand requirements defined in Mixing MUST 11.",
         "interview_content": "Do you understand the operation standards of MUST11?\nPlease tell me the contents.\nMUST11の作業標準を理解していますか？\nどのような内容かを教えてください",
         "onsite_observation": "－",
         "document_check": "－"
@@ -3555,56 +3560,56 @@
        {
         "id": "MFG-SY-075",
         "no": 75,
-        "text": "Do you know LOTO operation procedure in your process/work? /LOTO?",
+        "text": "Do you know LOTO operation procedure in your process/work?",
         "level": 3,
         "answered_by": "Operators Maintenance Staff",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "The respondent can explain LOTO procedure.\n技能員がLOTO手順を説明できることを確認",
         "dp": false,
         "responders": [
          "teammate",
          "maintenance_staff"
         ],
-        "level_criteria": "LOTO procedures are understood and being followed. LOTO",
+        "level_criteria": "LOTO procedures are understood and being followed.",
         "interview_content": "How do you perform LOTO in your process/works?\n自工程/業務で、どのようにLOTOを実施しますか？",
         "document_check": "Review ECP and/or work standards \nECP（動力車断手順書）または作業標準書を確認する。"
        },
        {
         "id": "MFG-SY-076",
         "no": 76,
-        "text": "Is LOTO being performed correctly on site? LOTO",
+        "text": "Is LOTO being performed correctly on site?",
         "level": 3,
         "answered_by": "Tour",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "LOTO was correctly followed by all teammates and maintenance staffs observed performing maintenance/operation tasks that required LOTO. In case that LOTO operation cannot be observed on site, confirm site tour records, etc.\nLOTOが必要な作業・保全において、確認した全ての技能員・保全員が正しくLOTOを実施している。 該当作業確認できない場合は、巡回記録等により確認する。",
         "dp": false,
-        "level_criteria": "LOTO procedures are understood and being followed. LOTO",
+        "level_criteria": "LOTO procedures are understood and being followed.",
         "interview_content": "Is LOTO being performed correctly on site?\nLOTOは現場において正しく実施されていますか？",
         "onsite_observation": "Conduct a site tour to review LOTO application and use in >3 work areas.\n現場巡回時、3つ以上の作業場で、LOTOの適用と運用を確認する。"
        },
        {
         "id": "MFG-SY-077",
         "no": 77,
-        "text": "Is the LOTO system being used with periodical monitoring? LOTO",
+        "text": "Is the LOTO system being used with periodical monitoring?",
         "level": 3,
         "answered_by": "Production SV and Maintenance SV",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "There are performed patrol/monitoring to LOTO activity including maintenance.\nLOTO作業(保全を含む)に対して巡回やモニタリングが行われている。",
         "dp": false,
         "responders": [
          "supervisor",
          "maintenance_foreman"
         ],
-        "level_criteria": "LOTO procedures are understood and being followed. LOTO",
+        "level_criteria": "LOTO procedures are understood and being followed.",
         "interview_content": "How do you monitor that LOTO is being implemented correctly?\nLOTOの実施についてどのようにモニタリングをしていますか？",
         "onsite_observation": "Conduct record of patrol/monitoring on site.\n管理者による現場巡回・モニタリングの記録を確認する。",
         "document_check": "W81V81:W81W82V81:W81U81:W81"
@@ -3612,20 +3617,20 @@
        {
         "id": "MFG-SY-078",
         "no": 78,
-        "text": "Are ECPs prepared for all applicable machinery? LOTOECP",
+        "text": "Are ECPs prepared for all applicable machinery?",
         "level": 3,
         "answered_by": "Production SV Maintenance SV",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "ECP includes all applicable energy source(electrical, mechanical, pneumatic, etc.) has been prepared for all applicable machinery. \nLOTO対象の全ての設備に対し、対象となるエネルギー源（電気、機械（惰性運転・自重落下等）、空圧等）に対するECP（動力車断手順書）が作成されている。",
         "dp": false,
         "responders": [
          "supervisor",
          "maintenance_foreman"
         ],
-        "level_criteria": "ECP(Energy control procedures) includes all applicable energy source(electrical, mechanical, pneumatic, etc.) has been prepared for all applicable machinery. LOTOECP()",
+        "level_criteria": "ECP(Energy control procedures) includes all applicable energy source(electrical, mechanical, pneumatic, etc.) has been prepared for all applicable machinery.",
         "interview_content": "Do ECPs include LOTO procedures on all applicable energy sources(electrical, mechanical, pneumatic, etc.)?\nECP（動力車断手順書）には対象となるエネルギー源（電気、機械、空圧等）の手順が含まれていますか？",
         "onsite_observation": "Talk with >3 teammates to see if they are able to identify properly risks related to LOTO\n3人以上の技能員がLOTO(未実施時)におけるリスクを正しく特定しているか、ヒアリングする。",
         "document_check": "Review ECPs\nECP（動力車断手順書）を確認する。"
@@ -3633,7 +3638,7 @@
        {
         "id": "MFG-SY-079",
         "no": 79,
-        "text": "Do all teammates have a good knowledge of the Safety Rules applicable to their work/process? /",
+        "text": "Do all teammates have a good knowledge of the Safety Rules applicable to their work/process?",
         "level": 3,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -3685,7 +3690,7 @@
        {
         "id": "MFG-SY-082",
         "no": 82,
-        "text": "Do you know mobile equipment driving rules in your plant??",
+        "text": "Do you know mobile equipment driving rules in your plant?",
         "level": 3,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -3757,7 +3762,7 @@
        {
         "id": "MFG-SY-086",
         "no": 86,
-        "text": "Do you know crane and hoist operation rules in your process??",
+        "text": "Do you know crane and hoist operation rules in your process?",
         "level": 3,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -3794,7 +3799,7 @@
        {
         "id": "MFG-SY-088",
         "no": 88,
-        "text": "Is KYT conducted periodically in accordance with SBU or/and site standard by everyone on site? KYTSBU/",
+        "text": "Is KYT conducted periodically in accordance with SBU or/and site standard by everyone on site?",
         "level": 3,
         "answered_by": "Production Foreman",
         "audit_methods": [
@@ -3806,14 +3811,14 @@
         "responders": [
          "foreperson"
         ],
-        "level_criteria": "KYT is conducted regularly and an annual KYT evaluation is conducted to improve the system. KYTKYT",
+        "level_criteria": "KYT is conducted regularly and an annual KYT evaluation is conducted to improve the system.",
         "interview_content": "How often KYT is KYT conducted?\nどれくらいの頻度でKYTを実施していますか？",
         "document_check": "Review KYT execution records\nKYT実施記録を確認する。"
        },
        {
         "id": "MFG-SY-089",
         "no": 89,
-        "text": "Is the KYT activity evaluated and opportunity for improvement discussed with the plant manager annually? KYT",
+        "text": "Is the KYT activity evaluated and opportunity for improvement discussed with the plant manager annually?",
         "level": 3,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -3825,13 +3830,13 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "KYT is conducted regularly and an annual KYT evaluation is conducted to improve the system. KYTKYT",
+        "level_criteria": "KYT is conducted regularly and an annual KYT evaluation is conducted to improve the system.",
         "interview_content": "When was the last KYT activity review and what was the outcome of it?\n直近で、いつKYT活動は見直されましたか？また、その（見直し）結果は何ですか？"
        },
        {
         "id": "MFG-SY-091",
         "no": 91,
-        "text": "Do all contractor employees receive contractor H&S orientation/training prior to the start of the work? /",
+        "text": "Do all contractor employees receive contractor H&S orientation/training prior to the start of the work?",
         "level": 3,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -3843,7 +3848,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "All contractors receive H&S orientation/training prior to the work. The material includes emergency procedures, introduction to the Safety Mission Statement and Safety fundamental Activities. //",
+        "level_criteria": "All contractors receive H&S orientation/training prior to the work. The material includes emergency procedures, introduction to the Safety Mission Statement and Safety fundamental Activities.",
         "interview_content": "How orientation/training is conducted to contractors?\nどのような教育を協力会社へ行いますか？",
         "document_check": "Review the contractor H&S orientation/training material records.\n協力会社へのオリエンテーション/安全教育記録を確認する。"
        },
@@ -3908,7 +3913,7 @@
         "no": 99,
         "text": "Before maintenance work, does the maintenance manager confirms that countermeasures established working standards/pre-working meeting have been correctly implemented?",
         "level": 3,
-        "answered_by": "Maintenance Supervisor /",
+        "answered_by": "Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -3918,7 +3923,7 @@
         "responders": [
          "maintenance_foreman"
         ],
-        "level_criteria": "Before maintenance work, the maintenance manager confirms that countermeasures established working standards and derived from KY activity are in place. KY",
+        "level_criteria": "Before maintenance work, the maintenance manager confirms that countermeasures established working standards and derived from KY activity are in place.",
         "interview_content": "管理監督者として、保全作業の開始前をする前にパトロールを行い、必要な対策が行われているか確認していますか？\nAs a management, do you conduct patrols prior to the start of maintenance work to ensure that necessary measures are being taken?"
        },
        {
@@ -3926,11 +3931,11 @@
         "no": 101,
         "text": "Do you inspect fire risks in your own process/area/department periodically?",
         "level": 3,
-        "answered_by": "Production Supervisor /",
+        "answered_by": "Production Supervisor",
         "audit_methods": [
          "interview"
         ],
-        "standard": "Fire Risk Assessment RA",
+        "standard": "Fire Risk Assessment",
         "judgement_criteria": "They can performs periodical inspections.\n全員が定期的に点検している。",
         "dp": true,
         "responders": [
@@ -3947,7 +3952,7 @@
         "no": 102,
         "text": "Do you check the storage condition of flammable materials through patrols etc.?",
         "level": 3,
-        "answered_by": "Production Supervisor /",
+        "answered_by": "Production Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -4009,7 +4014,7 @@
         "no": 107,
         "text": "Do you create the procedure to check personnel safety on employees and contractors when disaster occurs? (e.g. count the number of persons at designated evacuation point when evacuation from the buildings is needed)",
         "level": 3,
-        "answered_by": "Production Supervisor /",
+        "answered_by": "Production Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -4028,39 +4033,39 @@
        {
         "id": "MFG-SY-114",
         "no": 114,
-        "text": "Do you analyze the causes and implement countermeasures for LOTO violations? LOTO",
+        "text": "Do you analyze the causes and implement countermeasures for LOTO violations?",
         "level": 4,
         "answered_by": "Production SV Maintenance SV",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "LOTO violations are investigated, and countermeasures and working standards/rules are revised as necessary.\nモニタリングで検出された違反について分析が行われ、必要に応じて対策やルールの改訂を行っている。",
         "dp": false,
         "responders": [
          "supervisor",
          "maintenance_foreman"
         ],
-        "level_criteria": "When a LOTO safety rule violation is identified, investigate root causes, and take corrective action for the causes. LOTO",
+        "level_criteria": "When a LOTO safety rule violation is identified, investigate root causes, and take corrective action for the causes.",
         "interview_content": "How do you analyze the cause and take action for identified violation in LOTO monitoring?\nLOTOに対するモニタリングで検出された違反について、どのような原因分析と対策を行っていますか？"
        },
        {
         "id": "MFG-SY-115",
         "no": 115,
-        "text": "Are monitoring/patrol methods for LOTO activity reviewed and considered for consistency with monitoring/patrol results, occurrence injury, and multiple monitoring instruments (if do), and updated as necessary? LOTO",
+        "text": "Are monitoring/patrol methods for LOTO activity reviewed and considered for consistency with monitoring/patrol results, occurrence injury, and multiple monitoring instruments (if do), and updated as necessary?",
         "level": 4,
         "answered_by": "Production SV Maintenance SV",
         "audit_methods": [
          "interview"
         ],
-        "standard": "LOTO Standard LOTO",
+        "standard": "LOTO Standard",
         "judgement_criteria": "Ineffective verification methods, such as monitoring methods for which no violations have been detected in previous records, are being reviewed.\nこれまでの記録で違反が一切検出されていないモニタリング方法等、効果の見込めない検証方法が見直されている。",
         "dp": false,
         "responders": [
          "supervisor",
          "maintenance_foreman"
         ],
-        "level_criteria": "Compliance monitoring/audits are performed on LOTO activity at a defined timing and frequency. LOTO",
+        "level_criteria": "Compliance monitoring/audits are performed on LOTO activity at a defined timing and frequency.",
         "interview_content": "Have you reviewed your monitoring/patrol methods for LOTO activity?\nLOTO作業に対するモニタリングや巡回の方法を見直したことはありますか？",
         "document_check": "Confirm the standard of monitoring/patrol methods for LOTO activity.\nLOTO作業に対する巡回方法についての標準について確認する。"
        },
@@ -4079,13 +4084,13 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "teammates contribute to the development of the safety rules applicable to them by evaluating these together with management to consolidate their knowledge of risks involved in work. *",
+        "level_criteria": "teammates contribute to the development of the safety rules applicable to them by evaluating these together with management to consolidate their knowledge of risks involved in work.",
         "interview_content": "In what way can you or do you contribute to the development of safety rules relevant to you? \nあなたに関係する*安全ルールの改善に向け、どのような方法で貢献していますか？"
        },
        {
         "id": "MFG-SY-120",
         "no": 120,
-        "text": "Do teammates proceed with 3S activity for the improvement of 3S level? 3S3S()",
+        "text": "Do teammates proceed with 3S activity for the improvement of 3S level?",
         "level": 4,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -4097,7 +4102,7 @@
         "responders": [
          "teammate"
         ],
-        "level_criteria": "3S is carried out autonomously by everyone on shift for improvement of 3S level and is considered a base expectation. 3S3S",
+        "level_criteria": "3S is carried out autonomously by everyone on shift for improvement of 3S level and is considered a base expectation.",
         "interview_content": "What was the last gap identified during 3S inspection in your line?\n直近で、あなたの工程において、3S点検で顕在化した問題点は、何ですか？",
         "onsite_observation": "Observe in >3 work areas if 3S is autonomously done by everyone there \n3つ以上の作業場で、全員が主体的に3Sをしているか、確認する。",
         "document_check": "Review the evaluation record of 3S level, 3S checklists at the area and Defect Handling Log (when available)\n作業場の3Sレベル評価結果、3Sチェックリストと、廃棄履歴（あれば）を確認する。"
@@ -4105,7 +4110,7 @@
        {
         "id": "MFG-SY-121",
         "no": 121,
-        "text": "Are the progress of 3S activity reported for top management and reviewed? 3S",
+        "text": "Are the progress of 3S activity reported for top management and reviewed?",
         "level": 4,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4117,14 +4122,14 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Conducted 3S activities are evaluated by monitoring and the results are reviewed by top management. 3S",
+        "level_criteria": "Conducted 3S activities are evaluated by monitoring and the results are reviewed by top management.",
         "interview_content": "What were the most recent 3S-related health and safety committee (or other meeting) reports? Has the site manager reviewed those reports?\n直近の3Sに関する安全衛生委員会における報告事項は何ですか？工場長はそれらの報告に対してレビューを行いましたか？",
         "document_check": "Confirm items shared at the most recent Health and Safety Committee meeting regarding 3S.\n直近の安全衛生委員会における3Sに関する項目の共有事項を確認する。"
        },
        {
         "id": "MFG-SY-122",
         "no": 122,
-        "text": "Do crane operators provide feedback(safety perspective) to their peers inside and outside of their plants? SBU",
+        "text": "Do crane operators provide feedback(safety perspective) to their peers inside and outside of their plants?",
         "level": 4,
         "answered_by": "Teammate",
         "audit_methods": [
@@ -4156,7 +4161,7 @@
         "responders": [
          "foreperson"
         ],
-        "level_criteria": "The risk tracking shows that RA and risk mitigation have been performed to not only equipment, but also tasks. RA",
+        "level_criteria": "The risk tracking shows that RA and risk mitigation have been performed to not only equipment, but also tasks.",
         "interview_content": "Is the risk tracking include RA results on tasks?\nリスク一覧表には、作業に対するRAの実施結果が反映されていますか？",
         "document_check": "Review the risk register and Risk Assessment Records\nリスク一覧表およびRA記録を確認する。"
        },
@@ -4165,14 +4170,14 @@
         "no": 124,
         "text": "Countermeasures for risk are assessed and are it reviewed as necessary?",
         "level": 4,
-        "answered_by": "/",
+        "answered_by": "Maintenance Manager / Safety Manager",
         "audit_methods": [
          "interview"
         ],
         "standard": "Risk Assessment",
         "judgement_criteria": "Validated cases can be confirmed.\nリスク低減対策の有効性が実際に検証されている事例が確認できる。",
         "dp": false,
-        "level_criteria": "Counter measures based on RA are validated and if need, are considered revised/updated. RA",
+        "level_criteria": "Counter measures based on RA are validated and if need, are considered revised/updated.",
         "interview_content": "Are there any cases where the effectiveness of risk measures has been verified?\nリスク低減対策の有効性を検証した事例がありますか。",
         "document_check": "Confirm these validated cases.\nリスク低減対策の有効性検証事例を確認。",
         "responders": [
@@ -4183,7 +4188,7 @@
        {
         "id": "MFG-SY-126",
         "no": 126,
-        "text": "Does BS perform safety patrols of contractor's work area, and confirm that risk mitigation measures/administrative controls defined at the pre-work meeting are conducted? BS",
+        "text": "Does BS perform safety patrols of contractor's work area, and confirm that risk mitigation measures/administrative controls defined at the pre-work meeting are conducted?",
         "level": 4,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4195,7 +4200,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "BS perform safety patrols of contractor's work area, and confirm that risk mitigation measures/administrative controls defined at the pre-work meeting are conducted. BS",
+        "level_criteria": "BS perform safety patrols of contractor's work area, and confirm that risk mitigation measures/administrative controls defined at the pre-work meeting are conducted.",
         "interview_content": "How are violations of safety rules and noncompliant of judgement criteria by contractors managed?\n協力会社の安全ルール違反や選定基準への不適合は、どのように管理されていますか？",
         "document_check": "Review records of safety patrols of contractor's work area.\n協力会社の作業エリアをパトロールした記録確認する。"
        },
@@ -4240,7 +4245,7 @@
        {
         "id": "MFG-SY-129",
         "no": 129,
-        "text": "Are ergonomic risk assessment triggered when new tasks, and/or new or modified equipment are installed, in order for new risks to be identified? RA",
+        "text": "Are ergonomic risk assessment triggered when new tasks, and/or new or modified equipment are installed, in order for new risks to be identified?",
         "level": 4,
         "answered_by": "Production Manager",
         "audit_methods": [
@@ -4252,7 +4257,7 @@
         "responders": [
          "production_manager"
         ],
-        "level_criteria": "Ergonomic risks assessments are performed when new tasks are included or new risks are identified. There is a plan to periodically increase employee's awareness on Ergonomics RA",
+        "level_criteria": "Ergonomic risks assessments are performed when new tasks are included or new risks are identified. There is a plan to periodically increase employee's awareness on Ergonomics",
         "interview_content": "Did new activities introduced or new risks identified trigger an Ergonomics risk assessment?\n新規作業導入時や新たにリスクが特定されたことが起点となり、エルゴノミクス（腰痛等の疾病リスク）RAを実施したか？",
         "document_check": "Check the time of the introduction of new activities new, modified equipment installation, or when data suggest ergonomic risks (e.g., MSD injury) if corresponding risk assessments related to Ergonomics have been performed.\nエルゴノミクス（腰痛等の疾病リスク）RAが実施されていることを確認するために、新規作業の導入時または新しいリスクを特定した際の記録を確認する。"
        },
@@ -4280,7 +4285,7 @@
        {
         "id": "MFG-SY-132",
         "no": 132,
-        "text": "Do you promote the improvements on safety working standards and/or working environment based on RA outcome or safety proposals from teammate? RA",
+        "text": "Do you promote the improvements on safety working standards and/or working environment based on RA outcome or safety proposals from teammate?",
         "level": 4,
         "answered_by": "Maintenance Supervisor",
         "audit_methods": [
@@ -4292,7 +4297,7 @@
         "responders": [
          "maintenance_foreman"
         ],
-        "level_criteria": "Management review/draft the plan based on that was reported by the results of risk assessment and feedback from maintenance operator. /",
+        "level_criteria": "Management review/draft the plan based on that was reported by the results of risk assessment and feedback from maintenance operator.",
         "interview_content": "RAの結果や技能員からのフィードバックから、恒久的な改善に結びつけるような取り組みを行っていますか？もし行っているならば、その事例を教えてもらえますか？\nAre you taking steps to that lead to permanent improvements based on RA results and feedback from maintenance technicians? If so, could you please tell me an example?",
         "document_check": "Confirm the records of any cases of improvement.\n改善事例の記録があれば確認する。"
        }
@@ -4364,7 +4369,7 @@
        {
         "id": "MFG-SY-040",
         "no": 40,
-        "text": "Did you take measures to recently incidents*? *Refer to “Safety Maturity Assessment Guidelines” (Manufacturing) Appendix 4 *4",
+        "text": "Did you take measures to recently incidents*? *Refer to “Safety Maturity Assessment Guidelines” (Manufacturing) Appendix 4",
         "level": 2,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4422,7 +4427,7 @@
        {
         "id": "MFG-SY-073",
         "no": 73,
-        "text": "Are the site's safety rules analyzed in depth and are the risks regarding the change evaluated considered when a proposed change is being deliberated? 3M/4M",
+        "text": "Are the site's safety rules analyzed in depth and are the risks regarding the change evaluated considered when a proposed change is being deliberated?",
         "level": 3,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4434,13 +4439,13 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Site safety rules and work standards are analyzed to identify how the proposed change might affect these positively or negatively. /",
+        "level_criteria": "Site safety rules and work standards are analyzed to identify how the proposed change might affect these positively or negatively.",
         "interview_content": "Who reviews impact of changes on the safe system of work? \n作業の安全に関する変更において、誰がその影響を審議しますか？"
        },
        {
         "id": "MFG-SY-074",
         "no": 74,
-        "text": "Are the site's safety rules analyzed in depth and are the risks regarding the change evaluated considered when a proposed change is being deliberated? \n起案された変更（3M/4M）を審議する際、事業所の安全ルール・作業標準が十分に分析され、変更に関するリスクが評価されているか？",
+        "text": "Are the site's safety rules analyzed in depth and are the risks regarding the change evaluated considered when a proposed change is being deliberated?",
         "level": 3,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4452,7 +4457,7 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "Site safety rules and work standards are analyzed to identify how the proposed change might affect these positively or negatively. /",
+        "level_criteria": "Site safety rules and work standards are analyzed to identify how the proposed change might affect these positively or negatively.",
         "document_check": "Review change records for safety evaluation and approval\n安全に関する評価、および承認がわかる変更記録を確認する。",
         "decision_rule": {
          "min_yes": 3,
@@ -4464,7 +4469,7 @@
        {
         "id": "MFG-SY-092",
         "no": 92,
-        "text": "Does the material of contractor H&S orientation/training includes emergency procedures, introduction to the Safety Mission Statement and Safety fundamental Activities? /",
+        "text": "Does the material of contractor H&S orientation/training includes emergency procedures, introduction to the Safety Mission Statement and Safety fundamental Activities?",
         "level": 3,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4476,16 +4481,16 @@
         "responders": [
          "safety_manager"
         ],
-        "level_criteria": "All contractors receive H&S orientation/training prior to the work. The material includes emergency procedures, introduction to the Safety Mission Statement and Safety fundamental Activities. //",
+        "level_criteria": "All contractors receive H&S orientation/training prior to the work. The material includes emergency procedures, introduction to the Safety Mission Statement and Safety fundamental Activities.",
         "interview_content": "What items do contractor employees receive at the H&S orientation/training?\n協力会社への安全教育/オリエンテーションの内容は何ですか？",
         "document_check": "Review the contractor H&S orientation/training material\n協力会社へのオリエンテーション/安全教育資料を確認する。"
        },
        {
         "id": "MFG-SY-098",
         "no": 98,
-        "text": "Are JSA / JHA / KY conducted before emergency maintenance tasks? JSA*JHAKY *Job Safety Analysis",
+        "text": "Are JSA / JHA / KY conducted before emergency maintenance tasks? *Job Safety Analysis",
         "level": 3,
-        "answered_by": "Maintenance Supervisor /",
+        "answered_by": "Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -4495,7 +4500,7 @@
         "responders": [
          "maintenance_foreman"
         ],
-        "level_criteria": "Before emergency maintenance, other hazard identification method such as JSA(Job Safety Analysis), JHA(Job Hazard Analysis), KY or similar shall take place. And these information are shared and record. /JSA(Job Safety Analysis), JHA(Job Hazard Analysis), KY",
+        "level_criteria": "Before emergency maintenance, other hazard identification method such as JSA(Job Safety Analysis), JHA(Job Hazard Analysis), KY or similar shall take place. And these information are shared and record.",
         "interview_content": "緊急保全においても作業前RA等を行っていますか？時間が無い場合に必要な手続きを省略することとはありませんか？\nDo you also perform pre-work RA or JSA during emergency maintenance? Isn't it possible it acceptable to skip necessary procedures if you don't have time?",
         "document_check": "Confirm the records of any cases of emergency maintenance.\n緊急時の保全記録があれば確認する。"
        },
@@ -4504,7 +4509,7 @@
         "no": 100,
         "text": "Do you conduct GENBA observation on maintenance tasks? What do you do when insufficient safety measures or violation of rules are found?",
         "level": 3,
-        "answered_by": "Maintenance Supervisor /",
+        "answered_by": "Maintenance Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -4540,7 +4545,7 @@
        {
         "id": "MFG-SY-111",
         "no": 111,
-        "text": "Are risk assessments reviewed for similar task/service/equipment when incidents (industrial accidents, fire accidents, near misses/hidden dangers reports and recurrence preventions) were reported? RA",
+        "text": "Are risk assessments reviewed for similar task/service/equipment when incidents (industrial accidents, fire accidents, near misses/hidden dangers reports and recurrence preventions) were reported?",
         "level": 4,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4559,7 +4564,7 @@
        {
         "id": "MFG-SY-112",
         "no": 112,
-        "text": "Do risk assessments addressing the new possible risks take place before a change is implemented? RA",
+        "text": "Do risk assessments addressing the new possible risks take place before a change is implemented?",
         "level": 4,
         "answered_by": "Safety Manager",
         "audit_methods": [
@@ -4640,7 +4645,7 @@
         "no": 136,
         "text": "Are any corrective actions taken when opportunity for improvements are identified through fire fighting training/drill?",
         "level": 4,
-        "answered_by": "Production Supervisor /",
+        "answered_by": "Production Supervisor",
         "audit_methods": [
          "interview"
         ],
@@ -4659,20 +4664,20 @@
        {
         "id": "MFG-SY-137",
         "no": 137,
-        "text": "When a defect is found during the MUST11 inspection, do you improve the defect at that time? MUST11",
+        "text": "When a defect is found during the MUST11 inspection, do you improve the defect at that time?",
         "level": 4,
-        "answered_by": "Mixing Supervisor /",
+        "answered_by": "Mixing Supervisor",
         "audit_methods": [
          "interview"
         ],
-        "standard": "Mixing MUST-11 MUST11",
+        "standard": "Mixing MUST-11",
         "judgement_criteria": "They can answer at least one recent improvement case.\n直近の改善事例を１つ以上回答できる",
         "dp": true,
         "responders": [
          "foreperson",
          "supervisor"
         ],
-        "level_criteria": "Results of Mixing MUST11 inspection are reviewed by site top management. MUST11",
+        "level_criteria": "Results of Mixing MUST11 inspection are reviewed by site top management.",
         "interview_content": "Have the inspection results of mixing Must 11 been reported to site management?\nAre you involved in review on these inspection results?\n精錬工程におけるMUST11項目の点検結果について、マネジメントへ共有を行いレビューされていますか？",
         "onsite_observation": "－",
         "document_check": "Confirmation of meeting minutes and management review.\n会議議事録・マネジメントレビューの確認"
@@ -4682,7 +4687,7 @@
         "no": 138,
         "text": "Are corrective actions on emergency preparedness procedures taken when any opportunity for improvements are identified through training/drill?",
         "level": 4,
-        "answered_by": "Production Supervisor, D. P. Staff /",
+        "answered_by": "Production Supervisor, D. P. Staff",
         "audit_methods": [
          "interview"
         ],
@@ -4716,7 +4721,7 @@
          "maintenance_manager",
          "dp_manager"
         ],
-        "level_criteria": "Electric system(wiring/equipment) inspection points/items are reviewed based on feedbacks from in charge of inspectors. /",
+        "level_criteria": "Electric system(wiring/equipment) inspection points/items are reviewed based on feedbacks from in charge of inspectors.",
         "interview_content": "Have you revised the maintenance standard/plan or updated inspection points based on maintenance result or feedback from maintenance PIC. \n電気配線の点検結果や点検者からのフィードバックによって、点検の方法や箇所について見直しているか？",
         "onsite_observation": "－",
         "document_check": "Check that maintenance results are reviewed.\n点検結果に関するレビューが行われているかを確認する"
@@ -4724,7 +4729,7 @@
        {
         "id": "MFG-SY-142",
         "no": 142,
-        "text": "Are changes designed, planned, executed and evaluated based on pre-defined safety criteria which include hazards, risks and industry best-practices? PDCA",
+        "text": "Are changes designed, planned, executed and evaluated based on pre-defined safety criteria which include hazards, risks and industry best-practices?",
         "level": 5,
         "answered_by": "MOC coordinator",
         "audit_methods": [
@@ -4736,7 +4741,7 @@
         "responders": [
          "others"
         ],
-        "level_criteria": "Changes are designed, planned, executed and evaluated based on pre-defined safety criteria which include hazards, risks and industry *best-practices *",
+        "level_criteria": "Changes are designed, planned, executed and evaluated based on pre-defined safety criteria which include hazards, risks and industry *best-practices",
         "interview_content": "Is the change management procedure calibrated against industry best practices?\n変更管理手順は、業界の好事例と比較し、改訂されていますか？",
         "document_check": "Review change records to find such criteria \n基準を確認するため、変更記録を確認する。",
         "others_label": "MOC coordinator  / 変更管理起案者"
