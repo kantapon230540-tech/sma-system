@@ -724,7 +724,8 @@
                   {% if secs %}
                     {% set ps = T.pillars.get(pil.id, {}) %}
                     <tr class="table-secondary">
-                      <td class="fw-semibold" style="font-size:.75rem">{{ pil.name }} <span class="text-muted fw-normal">({{ secs|length }})</span></td>
+                      {# no "(n)" after the name any more — the n/total under the grade says it #}
+                      <td class="fw-semibold" style="font-size:.75rem">{{ pil.name }}</td>
                       <td class="text-center text-nowrap"><span class="badge level-badge-{{ ps.score or 0 }}" id="solpil-{{ key }}-{{ pil.id }}">{{ (ps.grade ~ ' ' ~ ps.score) if ps.score is not none else '—' }}</span>
                         <span class="text-muted d-block" style="font-size:.6rem" id="solpiln-{{ key }}-{{ pil.id }}">{{ ps.n or 0 }}/{{ ps.total or 0 }}</span></td>
                     </tr>
@@ -733,9 +734,11 @@
                       <tr>
                         <td class="text-muted ps-3" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0" title="{{ s.topic }}">
                           <a href="javascript:void(0)" onclick="jumpSolid('{{ s.id }}')" class="text-decoration-none text-muted">{{ s.topic }}</a>
-                          <span class="text-muted" style="font-size:.65rem" id="raillv-{{ s.id }}">{{ it.levels_answered or 0 }}/{{ it.levels_total or 0 }}</span>
                         </td>
-                        <td class="text-center"><span class="badge level-badge-{{ it.score or 0 }}" id="railitem-{{ s.id }}">{{ (it.grade ~ ' ' ~ it.score) if it.score is not none else '—' }}</span></td>
+                        {# levels judged sits under the grade, in the same column as every other
+                           count in the rail — inline after the topic it moved with the name length #}
+                        <td class="text-center text-nowrap"><span class="badge level-badge-{{ it.score or 0 }}" id="railitem-{{ s.id }}">{{ (it.grade ~ ' ' ~ it.score) if it.score is not none else '—' }}</span>
+                          <span class="text-muted d-block" style="font-size:.6rem" id="raillv-{{ s.id }}">{{ it.levels_answered or 0 }}/{{ it.levels_total or 0 }}</span></td>
                       </tr>
                     {% endfor %}
                   {% endif %}
