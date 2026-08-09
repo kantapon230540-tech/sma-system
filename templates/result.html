@@ -105,29 +105,74 @@
   </div>
 </div>
 
-<!-- Radar + Pillar Scores -->
+<!-- ── Maturity scale (Excel dashboard: "Maturity Levels") ───────────────────── -->
+<div class="card mb-3 px-3 py-2">
+  <div class="d-flex flex-wrap align-items-center gap-2 small">
+    <span class="fw-bold me-2">Maturity Levels</span>
+    {% for lvl in [1,2,3,4,5] %}
+      <span class="badge level-badge-{{ lvl }}">{{ lvl }} · {{ level_names.get(lvl,'') }}</span>
+    {% endfor %}
+    <span class="ms-auto text-muted" style="font-size:.75rem">
+      Individual Process Results are scored per standard, same rule as an element:
+      the first level judged “No” caps the score at level&nbsp;&minus;&nbsp;1.
+    </span>
+  </div>
+</div>
+
+<!-- ── Output Visualisation — two radars, mirroring the Excel dashboard ───────── -->
 <div class="card mb-4 p-3">
-  <div class="row">
-    <div class="col-md-5">
-      <canvas id="radarChart" style="max-height:280px"></canvas>
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <h6 class="fw-bold mb-1">Output Visualisation <span class="text-muted fw-normal small">成熟度の見える化</span></h6>
+      <div class="text-muted small mb-2">Pillars &amp; elements</div>
+      <canvas id="radarChart" style="max-height:330px"></canvas>
     </div>
-    <div class="col-md-7">
-      <h6 class="fw-bold mb-3">Pillar Scores</h6>
-      {% for pillar in pillars %}
-        {% set ps = scores.pillars.get(pillar.id, {}).get('score') %}
-        <div class="d-flex align-items-center mb-2 gap-2">
-          <span style="width:160px" class="small fw-semibold">{{ pillar.name }}</span>
+    <div class="col-lg-6">
+      <h6 class="fw-bold mb-1">Individual Process Results <span class="text-muted fw-normal small">規格の順守状況</span></h6>
+      <div class="text-muted small mb-2">
+        {{ scores.system_items|length }} system{{ '' if scores.system_items|length == 1 else 's' }} ·
+        judged {{ scores.system_counts.safety.answered + scores.system_counts.dp.answered }}/{{ scores.system_counts.safety.total + scores.system_counts.dp.total }}
+      </div>
+      {% if scores.system_items %}
+        <canvas id="systemRadar" style="max-height:330px"></canvas>
+      {% else %}
+        <div class="text-muted small">No system-level standards in this question set.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- ── Pillar & element scores ───────────────────────────────────────────────── -->
+<div class="card mb-4 p-3">
+  <h6 class="fw-bold mb-3">Pillar Scores</h6>
+  <div class="row g-3">
+    {% for pillar in pillars %}
+      {% set ps = scores.pillars.get(pillar.id, {}).get('score') %}
+      {% set pc = scores.pillars.get(pillar.id, {}) %}
+      <div class="col-md-6">
+        <div class="d-flex align-items-center mb-1 gap-2">
+          <span style="width:150px" class="small fw-semibold">{{ pillar.name }}</span>
           <div class="progress flex-grow-1" style="height:22px">
-            {% if ps %}
-              <div class="progress-bar level-badge-{{ ps }}" style="width:{{ (ps/5*100)|int }}%">{{ ps }}</div>
-            {% else %}
-              <div class="progress-bar bg-secondary" style="width:100%">—</div>
-            {% endif %}
+            {% if ps %}<div class="progress-bar level-badge-{{ ps }}" style="width:{{ (ps/5*100)|int }}%">{{ ps }}</div>
+            {% else %}<div class="progress-bar bg-secondary" style="width:100%">—</div>{% endif %}
           </div>
-          {% if ps %}<span class="badge level-badge-{{ ps }} ms-1">{{ level_names.get(ps,'') }}</span>{% endif %}
+          {% if ps %}<span class="badge level-badge-{{ ps }}">{{ level_names.get(ps,'') }}</span>{% endif %}
+          <span class="text-muted small text-nowrap">{{ pc.answered or 0 }}/{{ pc.total or 0 }}</span>
         </div>
-      {% endfor %}
-    </div>
+        <div class="ps-2">
+          {% for element in pillar.elements %}
+            {% set es = scores.pillars.get(pillar.id, {}).get('elements', {}).get(element.id) %}
+            {% set ec = scores.pillars.get(pillar.id, {}).get('counts', {}).get(element.id, {}) %}
+            <div class="d-flex align-items-center gap-2 small text-muted"
+                 style="line-height:1.5">
+              <span class="badge level-badge-{{ es or 0 }}" style="font-size:.6rem;min-width:1.4rem">{{ es if es is not none else '—' }}</span>
+              <span class="text-truncate" style="max-width:60%">{{ element.name }}</span>
+              <span class="ms-auto" style="font-size:.7rem">{{ ec.answered or 0 }}/{{ ec.total or 0 }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
   </div>
 </div>
 
@@ -213,6 +258,43 @@ new Chart(document.getElementById('radarChart'), {
     plugins: { legend: { display: false } }
   }
 });
+
+// Individual Process Results — one spoke per system standard, same 0-5 scale.
+// Unjudged systems plot at 0 and are listed in the tooltip as "not judged", so an
+// untouched standard can't be mistaken for a genuine zero.
+const sysLabels = {{ (scores.system_items or []) | map(attribute='name') | list | tojson }};
+const sysScores = {{ (scores.system_items or []) | map(attribute='score') | list | tojson }};
+const sysJudged = {{ (scores.system_items or []) | map(attribute='answered') | list | tojson }};
+const sysTotal  = {{ (scores.system_items or []) | map(attribute='total')  | list | tojson }};
+const sysCanvas = document.getElementById('systemRadar');
+if (sysCanvas && sysLabels.length) {
+  new Chart(sysCanvas, {
+    type: 'radar',
+    data: {
+      labels: sysLabels,
+      datasets: [{
+        label: 'Score',
+        data: sysScores.map(v => v == null ? 0 : v),
+        borderColor: '#198754',
+        backgroundColor: 'rgba(25,135,84,.15)',
+        pointBackgroundColor: sysScores.map(v => v == null ? '#adb5bd' : '#198754'),
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: { r: { min: 0, max: 5, ticks: { stepSize: 1 }, pointLabels: { font: { size: 10 } } } },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => {
+          const i = c.dataIndex;
+          return sysScores[i] == null
+            ? 'not judged (' + sysJudged[i] + '/' + sysTotal[i] + ' questions)'
+            : 'score ' + sysScores[i] + ' · judged ' + sysJudged[i] + '/' + sysTotal[i];
+        } } }
+      }
+    }
+  });
+}
 
 function submitSelf() {
   if (!confirm('Submit this self-assessment to SBU for validation? You will not be able to edit it after submitting.')) return;
