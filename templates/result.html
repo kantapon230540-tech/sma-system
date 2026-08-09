@@ -129,11 +129,31 @@
     </div>
     <div class="col-lg-6">
       <h6 class="fw-bold mb-1">Individual Process Results <span class="text-muted fw-normal small">規格の順守状況</span></h6>
-      <div class="text-muted small mb-2">
+      <div class="text-muted small mb-2" id="sysSummary">
         {{ scores.system_items|length }} system{{ '' if scores.system_items|length == 1 else 's' }} ·
         judged {{ scores.system_counts.safety.answered + scores.system_counts.dp.answered }}/{{ scores.system_counts.safety.total + scores.system_counts.dp.total }}
       </div>
       {% if scores.system_items %}
+        <div class="d-flex flex-wrap align-items-center gap-1 mb-2">
+          <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="sysPick('all')">All</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="sysPick('scored')">Scored only</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="sysPick('weak')">Below 4</button>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-primary py-0 px-2 dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" data-bs-auto-close="outside">Choose systems</button>
+            <div class="dropdown-menu p-2" style="max-height:280px;overflow-y:auto;min-width:270px">
+              {% for item in scores.system_items %}
+                <label class="d-flex align-items-center gap-2 small py-1" style="cursor:pointer">
+                  <input type="checkbox" class="sys-cb" value="{{ loop.index0 }}" checked onchange="drawSystemRadar()">
+                  <span class="badge level-badge-{{ item.score or 0 }}" style="font-size:.6rem;min-width:1.3rem">{{ item.score if item.score is not none else '—' }}</span>
+                  <span class="flex-grow-1 text-truncate" style="max-width:11rem">{{ item.name }}</span>
+                  <span class="text-muted" style="font-size:.7rem">{{ item.answered }}/{{ item.total }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+          <span class="text-muted small ms-1" id="sysShown"></span>
+        </div>
         <canvas id="systemRadar" style="max-height:330px"></canvas>
       {% else %}
         <div class="text-muted small">No system-level standards in this question set.</div>
@@ -259,42 +279,79 @@ new Chart(document.getElementById('radarChart'), {
   }
 });
 
-// Individual Process Results — one spoke per system standard, same 0-5 scale.
-// Unjudged systems plot at 0 and are listed in the tooltip as "not judged", so an
-// untouched standard can't be mistaken for a genuine zero.
+// Individual Process Results — one spoke per system standard, 0-5.
+//
+// Three distinct states, and they must not be conflated:
+//   scored          -> the number
+//   not applicable  -> every question answered N/A / not-rolled-out. It IS judged,
+//                      it just has no score. Plotting it as 0 drags the polygon in
+//                      and understates the site, so it is left as a gap.
+//   not judged      -> nothing answered yet. Also a gap, labelled differently.
 const sysLabels = {{ (scores.system_items or []) | map(attribute='name') | list | tojson }};
 const sysScores = {{ (scores.system_items or []) | map(attribute='score') | list | tojson }};
 const sysJudged = {{ (scores.system_items or []) | map(attribute='answered') | list | tojson }};
 const sysTotal  = {{ (scores.system_items or []) | map(attribute='total')  | list | tojson }};
-const sysCanvas = document.getElementById('systemRadar');
-if (sysCanvas && sysLabels.length) {
-  new Chart(sysCanvas, {
+const sysState  = sysScores.map((v, i) =>
+  v != null ? 'scored' : (sysJudged[i] > 0 ? 'not applicable' : 'not judged'));
+let systemChart = null;
+
+function sysSelected() {
+  const cbs = Array.from(document.querySelectorAll('.sys-cb'));
+  return cbs.length ? cbs.filter(c => c.checked).map(c => +c.value) : sysLabels.map((_, i) => i);
+}
+function sysPick(mode) {
+  document.querySelectorAll('.sys-cb').forEach(cb => {
+    const i = +cb.value;
+    cb.checked = mode === 'all'    ? true
+               : mode === 'scored' ? sysScores[i] != null
+               : mode === 'weak'   ? (sysScores[i] != null && sysScores[i] < 4)
+               : true;
+  });
+  drawSystemRadar();
+}
+function drawSystemRadar() {
+  const el = document.getElementById('systemRadar');
+  if (!el || !sysLabels.length) return;
+  let idx = sysSelected();
+  if (!idx.length) idx = sysLabels.map((_, i) => i);   // never render an empty radar
+  const note = document.getElementById('sysShown');
+  const nScored = idx.filter(i => sysScores[i] != null).length;
+  const nNA     = idx.filter(i => sysState[i] === 'not applicable').length;
+  const nNone   = idx.filter(i => sysState[i] === 'not judged').length;
+  if (note) note.textContent = `showing ${idx.length}/${sysLabels.length}`
+    + ` · ${nScored} scored` + (nNA ? ` · ${nNA} N/A` : '') + (nNone ? ` · ${nNone} not judged` : '');
+  const data = {
+    labels: idx.map(i => sysLabels[i]),
+    datasets: [{
+      label: 'Score',
+      data: idx.map(i => sysScores[i]),      // null stays null -> gap, never a false 0
+      borderColor: '#198754',
+      backgroundColor: 'rgba(25,135,84,.15)',
+      pointBackgroundColor: idx.map(i => sysScores[i] == null ? '#adb5bd' : '#198754'),
+      spanGaps: true,
+    }]
+  };
+  if (systemChart) { systemChart.data = data; systemChart.update(); return; }
+  systemChart = new Chart(el, {
     type: 'radar',
-    data: {
-      labels: sysLabels,
-      datasets: [{
-        label: 'Score',
-        data: sysScores.map(v => v == null ? 0 : v),
-        borderColor: '#198754',
-        backgroundColor: 'rgba(25,135,84,.15)',
-        pointBackgroundColor: sysScores.map(v => v == null ? '#adb5bd' : '#198754'),
-      }]
-    },
+    data: data,
     options: {
       responsive: true,
       scales: { r: { min: 0, max: 5, ticks: { stepSize: 1 }, pointLabels: { font: { size: 10 } } } },
       plugins: {
         legend: { display: false },
         tooltip: { callbacks: { label: (c) => {
-          const i = c.dataIndex;
-          return sysScores[i] == null
-            ? 'not judged (' + sysJudged[i] + '/' + sysTotal[i] + ' questions)'
-            : 'score ' + sysScores[i] + ' · judged ' + sysJudged[i] + '/' + sysTotal[i];
+          const i = idx[c.dataIndex];
+          const jt = ` (${sysJudged[i]}/${sysTotal[i]} questions)`;
+          return sysState[i] === 'scored'
+            ? `score ${sysScores[i]} · judged ${sysJudged[i]}/${sysTotal[i]}`
+            : sysState[i] + jt;
         } } }
       }
     }
   });
 }
+drawSystemRadar();
 
 function submitSelf() {
   if (!confirm('Submit this self-assessment to SBU for validation? You will not be able to edit it after submitting.')) return;
