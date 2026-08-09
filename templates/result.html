@@ -37,6 +37,12 @@
     {% endif %}
     <a href="{{ url_for('export_pdf', assessment_id=assessment.id) }}" class="btn btn-outline-danger btn-sm">⬇ PDF</a>
     <a href="{{ url_for('export_excel', assessment_id=assessment.id) }}" class="btn btn-outline-success btn-sm">⬇ Excel</a>
+    {% if assessment.type == 'warehouse' %}
+      {# the answers written back into the original check-sheet workbook — same layout,
+         same (Ref.)Dashboard, same radars, rather than a generated lookalike #}
+      <a href="{{ url_for('export_checksheet', assessment_id=assessment.id) }}"
+         class="btn btn-outline-success btn-sm" title="The original check sheet with your judgements filled in">⬇ Check sheet</a>
+    {% endif %}
     <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm">← Dashboard</a>
   </div>
 </div>

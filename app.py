@@ -1693,6 +1693,32 @@ def export_excel(assessment_id):
                      as_attachment=True,
                      download_name=f"SMA_{assessment['site_name']}_{assessment['assessment_date']}.xlsx")
 
+
+@app.route("/export/<int:assessment_id>/checksheet")
+@login_required
+def export_checksheet(assessment_id):
+    """The answers written back into the ORIGINAL check-sheet workbook — same layout,
+    same formulas, same dashboard radars — rather than a lookalike we generate."""
+    db = get_db()
+    assessment = db.execute("SELECT * FROM assessments WHERE id=?", (assessment_id,)).fetchone()
+    if not assessment: return redirect(url_for("dashboard"))
+    from export import checksheet
+    if not checksheet.supported(assessment["type"]):
+        flash(f"No check-sheet template for {assessment['type']} yet — use the Excel export.", "warning")
+        return redirect(url_for("result", assessment_id=assessment_id))
+    pillars = load_questions(assessment["type"], assessment["scope"])
+    resp = get_responses_dict(db, assessment_id)
+    try:
+        data, n = checksheet.build(assessment["type"], pillars, resp)
+    except FileNotFoundError:
+        flash("Check-sheet template is missing on the server.", "danger")
+        return redirect(url_for("result", assessment_id=assessment_id))
+    return send_file(io.BytesIO(data),
+                     mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                     as_attachment=True,
+                     download_name=f"SMA_checksheet_{assessment['site_name']}_{assessment['assessment_date'] or ''}.xlsx")
+
+
 @app.route("/delete/<int:assessment_id>", methods=["POST"])
 @login_required
 def delete_assessment(assessment_id):
