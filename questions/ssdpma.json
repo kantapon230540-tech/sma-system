@@ -431,12 +431,7 @@
          "safety_manager"
         ],
         "level_criteria": "Managers and/or the safety department are conduct pre- and post- assessments to determine the effectiveness of OH&S initiatives",
-        "document_check": "Sample 3 H&S projects and review the pre- and post assessment results \n3件以上の安全衛生プロジェクトを任意選択し、事前評価と事後評価を検証する。",
-        "decision_rule": {
-         "min_yes": 3,
-         "sample_n": 3,
-         "source": "sample of 3 (all)"
-        }
+        "document_check": "Sample 3 H&S projects and review the pre- and post assessment results \n3件以上の安全衛生プロジェクトを任意選択し、事前評価と事後評価を検証する。"
        },
        {
         "id": "MFG-LD-026",
@@ -1056,12 +1051,7 @@
          "safety_manager"
         ],
         "level_criteria": "Compliance evaluation and training records indicate that H&S training required by regulation (including safety/disaster emergency drills) has been provided to all teammates.",
-        "document_check": "Review local requirements and training records (including safety/disaster emergency drills)to see if a sample of teammates are properly trained. \n現地のコンプライアンス記録と教育訓練記録を検証して、任意選択した従業員に適切な教育訓練が提供されているかを確認する。",
-        "decision_rule": {
-         "min_yes": 10,
-         "sample_n": 10,
-         "source": "sample of 10 (all)"
-        }
+        "document_check": "Review local requirements and training records (including safety/disaster emergency drills)to see if a sample of teammates are properly trained. \n現地のコンプライアンス記録と教育訓練記録を検証して、任意選択した従業員に適切な教育訓練が提供されているかを確認する。"
        },
        {
         "id": "MFG-OR-005",
@@ -1758,12 +1748,7 @@
         ],
         "level_criteria": "Training curricula are reviewed when adjustments are made to safety rules and controls significant to that training.",
         "interview_content": "How is training content kept up-to-date with adjustments made to safety controls? \n安全管理に対応するため、教育内容はどのように更新されていますか？",
-        "document_check": "Review the facility's training plan and training material\n事業所の教育計画、および教育資料を確認する。",
-        "decision_rule": {
-         "min_yes": 3,
-         "sample_n": 3,
-         "source": "sample of 3 (all)"
-        }
+        "document_check": "Review the facility's training plan and training material\n事業所の教育計画、および教育資料を確認する。"
        },
        {
         "id": "MFG-SY-090",
@@ -4459,11 +4444,6 @@
         ],
         "level_criteria": "Site safety rules and work standards are analyzed to identify how the proposed change might affect these positively or negatively.",
         "document_check": "Review change records for safety evaluation and approval\n安全に関する評価、および承認がわかる変更記録を確認する。",
-        "decision_rule": {
-         "min_yes": 3,
-         "sample_n": 3,
-         "source": "sample of 3 (all)"
-        },
         "continues": "MFG-SY-073"
        },
        {
