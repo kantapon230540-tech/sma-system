@@ -32,8 +32,12 @@ from _sanitise import (blank_orphan_strings, zero_chart_cache,      # noqa: E402
 
 DL = Path("/Users/ktp/Downloads")
 OUT = Path(__file__).resolve().parent.parent / "export_templates"
+# The MFG master is the controlled blank sheet SE09-PR-01-1-G rev5, vendored under
+# export_templates/sources/ so a rebuild does not depend on ~/Downloads surviving.
+# It replaced Att-1, which was TBSCN's COMPLETED result and leaked their data eight ways.
 SRC = {
-    "mfg":    DL / "Att-1 Result of safety maturity validation assessment.xlsx",
+    "mfg":    Path(__file__).resolve().parent.parent / "export_templates" / "sources" /
+              "SE09-PR-01-1-G_Appendix B Safety Maturity Assessment Sheet_rev5.xlsx",
     "safety": DL / "Att-2 Safety Solidification Assessment Sheet (Rev.0 Dec-2025).xlsx",
     "dp":     DL / "Att-3 Disaster Prevention audit check sheet.xlsx",
 }
