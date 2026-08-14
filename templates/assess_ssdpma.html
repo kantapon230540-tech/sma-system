@@ -196,6 +196,14 @@
             <span class="badge bg-light text-dark border mt-1" style="min-width:2.6rem">L{{ lv.level }}·{{ lv.grade }}</span>
             <div class="flex-grow-1 small">
               <div style="white-space:pre-line">{{ lv.criteria }}</div>
+              {# Thai rendering where one exists. Marked draft until a native Thai safety
+                 reviewer signs it off — it is a pass/fail threshold, not a label. #}
+              {% if lv.criteria_th %}
+                <div class="text-secondary mt-1" style="white-space:pre-line">
+                  🇹🇭 {{ lv.criteria_th }}
+                  {% if lv.translated == 'draft' %}<span class="badge bg-warning-subtle text-warning-emphasis border ms-1" title="Machine translation — confirm the wording before it is used to judge a site">draft</span>{% endif %}
+                </div>
+              {% endif %}
               <div class="mt-1 d-flex flex-wrap gap-1">
                 {% if role %}<span class="badge bg-info-subtle text-info-emphasis border">👤 {{ role }}</span>{% endif %}
                 {% for qid in ref_qids %}
