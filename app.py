@@ -1724,7 +1724,10 @@ def export_checksheet(assessment_id):
                 data, n = checksheet.build(conf["layout"], bank["sma"]["pillars"], resp,
                                            dict(assessment))
             else:
-                data, n = checksheet.build_solid(track, bank["sections"][track], resp)
+                # the other track too, for the twin half this workbook carries
+                other = "dp_solid" if track == "safety_solid" else "safety_solid"
+                data, n = checksheet.build_solid(track, bank["sections"][track], resp,
+                                                 bank["sections"][other])
             fname = f"{conf['label']}_checksheet_{name}.xlsx"
         else:
             pillars = load_questions(assessment["type"], assessment["scope"])
