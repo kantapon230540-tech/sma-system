@@ -6622,7 +6622,7 @@
    },
    {
     "id": "SS-031",
-    "topic": "BSFA インストラクター",
+    "topic": "BSFA Instructor",
     "solid_pillar": "integration",
     "solid_pillar_name": "TBD",
     "primary_category": "Plant Management",
@@ -6637,38 +6637,55 @@
      {
       "level": 1,
       "grade": "C",
-      "criteria": "インストラクターがいない。",
-      "judge": null
+      "criteria": "There is no Instructor.",
+      "judge": null,
+      "criteria_ja": "インストラクターがいない。",
+      "criteria_th": "ไม่มีผู้ฝึกสอน (Instructor)",
+      "translated": "draft"
      },
      {
       "level": 2,
       "grade": "B-",
-      "criteria": "拠点にマスターインストラクターはいないが、GBSまたはSBUによるインストラクター教育を受講経験のあるものが、安全防災機能に1名以上配置されている。",
-      "judge": null
+      "criteria": "There is no Master Instructor at the site, but at least one person who has completed Instructor training run by GBS or SBU is assigned to the Safety & Disaster-Prevention function.",
+      "judge": null,
+      "criteria_ja": "拠点にマスターインストラクターはいないが、GBSまたはSBUによるインストラクター教育を受講経験のあるものが、安全防災機能に1名以上配置されている。",
+      "criteria_th": "ที่ไซต์งานยังไม่มี Master Instructor แต่มีผู้ที่ผ่านการอบรมหลักสูตร Instructor ซึ่งจัดโดย GBS หรือ SBU อย่างน้อย 1 คน ประจำอยู่ในหน่วยงานความปลอดภัยและป้องกันภัยพิบัติ (DP)",
+      "translated": "draft"
      },
      {
       "level": 3,
       "grade": "B",
-      "criteria": "マスターインストラクターが1名以上配置されている。",
-      "judge": null
+      "criteria": "At least one Master Instructor is assigned at the site.",
+      "judge": null,
+      "criteria_ja": "マスターインストラクターが1名以上配置されている。",
+      "criteria_th": "มี Master Instructor ประจำอยู่ที่ไซต์งานอย่างน้อย 1 คน",
+      "translated": "draft"
      },
      {
       "level": 4,
       "grade": "B+",
-      "criteria": "マスターインストラクターによる教育が実施されているが、全部署には教育・認定がされていない。",
-      "judge": null
+      "criteria": "Training by a Master Instructor is being carried out, but not all departments have been trained and certified.",
+      "judge": null,
+      "criteria_ja": "マスターインストラクターによる教育が実施されているが、全部署には教育・認定がされていない。",
+      "criteria_th": "มีการจัดอบรมโดย Master Instructor แล้ว แต่ยังอบรมและรับรองไม่ครบทุกแผนก",
+      "translated": "draft"
      },
      {
       "level": 5,
       "grade": "A",
-      "criteria": "各部署のマネージャー全員がマスターインストラクター教育を受講しており、認定されている。",
-      "judge": null
+      "criteria": "All managers in every department have completed Master Instructor training and are certified.",
+      "judge": null,
+      "criteria_ja": "各部署のマネージャー全員がマスターインストラクター教育を受講しており、認定されている。",
+      "criteria_th": "ผู้จัดการของทุกแผนกทุกคนได้เข้ารับการอบรม Master Instructor และได้รับการรับรองแล้ว",
+      "translated": "draft"
      }
     ],
     "sma_group_key": null,
     "sma_group_qids": [],
     "axis_source": "data-pillar-default",
-    "point_of_evaluation": "Example of SE international certification"
+    "point_of_evaluation": "Example of SE international certification",
+    "topic_ja": "BSFA インストラクター",
+    "topic_th": "ผู้ฝึกสอน BSFA"
    },
    {
     "id": "SS-032",
