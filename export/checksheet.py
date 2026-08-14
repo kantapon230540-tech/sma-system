@@ -7,7 +7,7 @@ only the Judgement/Reason <c> cells inside the one sheet XML that needs them and
 every other part through untouched. The (Ref.)Dashboard formulas and both radars keep
 working because nothing they depend on was touched.
 """
-import io, re, zipfile
+import io, json, re, zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -35,7 +35,57 @@ LAYOUTS = {
         # column holding the question No, per sheet
         "no_col": {"Leadership": "D", "TM Engagement": "D", "Organization": "D", "System": "E"},
     },
+    # Att-1 "Result of safety maturity validation assessment". Judgement/Reason are Y/Z
+    # on the first three sheets and Z/AA on System — that sheet is shifted one column
+    # right, the same offset its U/V/W criteria columns carry. Read from the header row,
+    # not assumed. Serves plain `manufacturing` assessments and the SMA track of SSDPMA.
+    "manufacturing": {
+        "template": "mfg_checksheet.xlsx",
+        "sheets": {
+            "leadership":    ("Leadership Checklist",          "Y", "Z"),
+            "tm_engagement": ("Teammate Engagement Checklist",  "Y", "Z"),
+            "organization":  ("Organization Checklist",         "Y", "Z"),
+            "system":        ("System Checklist",               "Z", "AA"),
+        },
+        "no_col": {"Leadership Checklist": "F", "Teammate Engagement Checklist": "F",
+                   "Organization Checklist": "F", "System Checklist": "G"},
+        # Cover Sheet cells filled from the assessment record; the site's own injury
+        # figures and previous-validation scores are left blank for them to complete.
+        "cover": {"sheet": "Cover Sheet", "site": "D6", "year": "H6", "date": "J6",
+                  "assessors": ["B9", "B10", "B11"]},
+    },
 }
+
+# SSDPMA exports as three separate workbooks, one per score track, because the three
+# come from three different source workbooks and the site receives them separately.
+SSDPMA_TRACKS = {
+    "sma":          {"label": "SMA-MFG",                 "kind": "questions",
+                     "layout": "manufacturing"},
+    "safety_solid": {"label": "Solidification-Safety",   "kind": "solid",
+                     "template": "safety_solid_checksheet.xlsx"},
+    "dp_solid":     {"label": "Solidification-DP",       "kind": "solid",
+                     "template": "dp_solid_checksheet.xlsx"},
+}
+
+_MAPS_CACHE = {}
+def _solid_maps():
+    """Row/cell routing for the two solidification workbooks, derived from the source
+    files themselves (see export_templates/ssdpma_solid_maps.json) rather than guessed.
+
+    The two workbooks are wired in OPPOSITE directions, which decides where a judgement
+    has to be written:
+      * Safety — 'Safety overall result' Judge cells are blank inputs, and the role
+        sheets read their criteria from it. The overall sheet is authoritative; role
+        sheets get the same value mirrored in so the interview views aren't left blank.
+      * DP — 'DP overall' Judge cells are FORMULAS pulling from the role sheets
+        (=OP!H4, =SV!H5 ...). Writing there would destroy that wiring, so the role
+        sheet is the real input. Only the 25 BSAPIC cells, which no role sheet feeds,
+        are written directly onto 'DP overall'.
+    """
+    if "maps" not in _MAPS_CACHE:
+        _MAPS_CACHE["maps"] = json.loads(
+            (TEMPLATE_DIR / "ssdpma_solid_maps.json").read_text())
+    return _MAPS_CACHE["maps"]
 
 def _col_idx(col):
     n = 0
@@ -56,49 +106,173 @@ def _sheet_paths(z):
         out[sh.get("name")] = "xl/" + t.lstrip("/").replace("xl/", "", 1)
     return out
 
-def _cell_text(row, col):
-    """Plain text of a cell, resolving nothing — the No column is numeric/inline."""
-    for c in row.findall(f"{{{NS}}}c"):
-        if _split(c.get("r"))[0] != col: continue
-        v = c.find(f"{{{NS}}}v")
-        if v is not None and v.text: return v.text.strip()
-        t = c.find(f"{{{NS}}}is/{{{NS}}}t")
-        if t is not None and t.text: return t.text.strip()
+# ── byte-level cell surgery ───────────────────────────────────────────────────
+# The sheet XML is spliced as BYTES, never parsed and re-serialised. ElementTree
+# rewrites the namespace prefixes on the way out: mc: becomes ns1:, and the
+# x14ac/xr/xr2/xr3 declarations are dropped because no element it kept still uses
+# them — while mc:Ignorable="x14ac xr xr2 xr3" goes on naming them. Referencing
+# undeclared prefixes is invalid Markup Compatibility, so Excel rejects the file
+# ("unreadable content"), even though openpyxl and a plain XML parse are both happy.
+# Splicing bytes leaves every byte we did not deliberately change exactly as it was.
+
+_ROW_START = re.compile(rb"<row\b")
+_CELL_START = re.compile(rb"<c\b")
+_ATTR_R = re.compile(rb'\sr="([^"]+)"')
+_ATTR_S = re.compile(rb'\ss="(\d+)"')
+
+def _tag_end(xml, start):
+    """Index just past the '>' of the tag starting at `start`, and whether it self-closed."""
+    i = xml.index(b">", start)
+    return i + 1, xml[i - 1:i] == b"/"
+
+def _elements(xml, pattern, close_tag, lo, hi):
+    """Yield (attrs_bytes, elem_start, elem_end) for each matching element in [lo,hi)."""
+    pos = lo
+    while True:
+        m = pattern.search(xml, pos)
+        if not m or m.start() >= hi: return
+        after, selfclose = _tag_end(xml, m.start())
+        start_tag = xml[m.start():after]
+        end = after if selfclose else xml.index(close_tag, after) + len(close_tag)
+        yield start_tag, m.start(), end
+        pos = end
+
+def _esc(s):
+    s = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", str(s))
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+def _cell_bytes(ref, style, val):
+    s = b' s="%s"' % style if style else b""
+    if val in (None, ""):
+        return b'<c r="%s"%s/>' % (ref.encode(), s)
+    space = b' xml:space="preserve"' if str(val) != str(val).strip() else b""
+    return (b'<c r="%s"%s t="inlineStr"><is><t%s>%s</t></is></c>'
+            % (ref.encode(), s, space, _esc(val).encode("utf-8")))
+
+def _patch_row_bytes(xml, row_start, row_end, rnum, edits):
+    """Rewrite the target cells inside one <row> element. Returns (new_row_bytes, written)."""
+    after, selfclose = _tag_end(xml, row_start)
+    if selfclose:                      # <row .../> — no cells to replace, build them all
+        inner_lo = inner_hi = after
+        head, tail = xml[row_start:after - 2] + b">", b"</row>"
+    else:
+        inner_lo, inner_hi = after, xml.index(b"</row>", after)
+        head, tail = xml[row_start:after], b"</row>"
+
+    cells = []
+    for start_tag, cs, ce in _elements(xml, _CELL_START, b"</c>", inner_lo, inner_hi):
+        m = _ATTR_R.search(start_tag)
+        cells.append([_split(m.group(1).decode())[0] if m else "", cs, ce, start_tag])
+
+    out, written, used = [], 0, set()
+    for col, cs, ce, start_tag in cells:
+        if col in edits:
+            used.add(col)
+            sm = _ATTR_S.search(start_tag)
+            out.append(_cell_bytes(f"{col}{rnum}", sm.group(1) if sm else None, edits[col]))
+            if edits[col] not in (None, ""): written += 1
+        else:
+            out.append(xml[cs:ce])
+    # cells the row did not have yet, inserted in column order
+    for col, val in edits.items():
+        if col in used: continue
+        new = _cell_bytes(f"{col}{rnum}", None, val)
+        if val not in (None, ""): written += 1
+        at = len(out)
+        for i, (c, *_rest) in enumerate(cells):
+            if c and _col_idx(c) > _col_idx(col):
+                at = min(at, i + sum(1 for k in edits if k not in used and
+                                     _col_idx(k) < _col_idx(col)))
+                break
+        out.insert(at, new)
+    return head + b"".join(out) + tail, written
+
+def _patch_rows(xml_bytes, edits_by_row):
+    """edits_by_row: {row_number: {col: value}} — value None clears the cell.
+    Returns (xml, written, rows_not_found) so a bad row map is caught, not silently
+    skipped: writing an audit judgement against the wrong row must never pass quietly."""
+    xml = xml_bytes
+    pieces, last, written, seen = [], 0, 0, set()
+    for start_tag, rs, re_ in _elements(xml, _ROW_START, b"</row>", 0, len(xml)):
+        m = _ATTR_R.search(start_tag)
+        if not m: continue
+        rnum = int(m.group(1))
+        edits = edits_by_row.get(rnum)
+        if not edits: continue
+        seen.add(rnum)
+        new, n = _patch_row_bytes(xml, rs, re_, rnum, edits)
+        pieces.append(xml[last:rs]); pieces.append(new)
+        last, written = re_, written + n
+    pieces.append(xml[last:])
+    return b"".join(pieces), written, sorted(set(edits_by_row) - seen)
+
+def _cell_text_bytes(xml, row_start, row_end, col):
+    """Plain text of one cell in a row — the No column is numeric/inline."""
+    after, selfclose = _tag_end(xml, row_start)
+    if selfclose: return None
+    inner_hi = xml.index(b"</row>", after)
+    for start_tag, cs, ce in _elements(xml, _CELL_START, b"</c>", after, inner_hi):
+        m = _ATTR_R.search(start_tag)
+        if not m or _split(m.group(1).decode())[0] != col: continue
+        body = xml[cs:ce]
+        v = re.search(rb"<v>([^<]*)</v>", body) or re.search(rb"<t[^>]*>([^<]*)</t>", body)
+        return v.group(1).decode().strip() if v else None
     return None
 
 def _patch_sheet(xml_bytes, no_col, edits_by_no):
-    """edits_by_no: {question_no: {col: value}} — value None clears the cell."""
-    root = ET.fromstring(xml_bytes)
-    data = root.find(f"{{{NS}}}sheetData")
-    written = 0
-    for row in data.findall(f"{{{NS}}}row"):
-        raw = _cell_text(row, no_col)
+    """edits_by_no: {question_no: {col: value}} — resolved to rows via the No column."""
+    by_row = {}
+    for start_tag, rs, re_ in _elements(xml_bytes, _ROW_START, b"</row>", 0, len(xml_bytes)):
+        m = _ATTR_R.search(start_tag)
+        if not m: continue
+        raw = _cell_text_bytes(xml_bytes, rs, re_, no_col)
         if not raw or not raw.isdigit(): continue
         edits = edits_by_no.get(int(raw))
-        if not edits: continue
-        for col, val in edits.items():
-            ref = f"{col}{row.get('r')}"
-            cell = next((c for c in row.findall(f"{{{NS}}}c") if c.get("r") == ref), None)
-            if cell is None:
-                cell = ET.Element(f"{{{NS}}}c", {"r": ref})
-                pos = 0
-                for i, c in enumerate(row.findall(f"{{{NS}}}c")):
-                    if _col_idx(_split(c.get("r"))[0]) < _col_idx(col): pos = i + 1
-                row.insert(pos, cell)
-            for ch in list(cell): cell.remove(ch)      # drop old value, keep @s (style)
-            if val in (None, ""):
-                cell.attrib.pop("t", None); continue
-            cell.set("t", "inlineStr")
-            t = ET.SubElement(ET.SubElement(cell, f"{{{NS}}}is"), f"{{{NS}}}t")
-            t.text = str(val)
-            if str(val) != str(val).strip(): t.set(XMLNS_SPACE, "preserve")
-            written += 1
-    return ET.tostring(root, xml_declaration=True, encoding="UTF-8"), written
+        if edits: by_row[int(m.group(1))] = edits
+    xml, written, _ = _patch_rows(xml_bytes, by_row)
+    return xml, written
+
+def _repack(template_path, patched_sheets, force_recalc=True):
+    """Copy the workbook through, swapping in the rewritten sheet XML. Everything else —
+    charts, styles, printer settings, custom XML — is passed byte-for-byte."""
+    with zipfile.ZipFile(template_path) as z:
+        paths = _sheet_paths(z)
+        patched = {}
+        for sheet, xml in patched_sheets.items():
+            target = paths.get(sheet)
+            if target: patched[target] = xml
+        # The template ships with cached formula results from an EMPTY sheet. Without this
+        # Excel can show those stale blanks — dashboard at 0, radars flat — until something
+        # forces a recalc. fullCalcOnLoad makes it recompute the moment the file opens.
+        if force_recalc:
+            wbxml = z.read("xl/workbook.xml").decode("utf-8")
+            if "fullCalcOnLoad" not in wbxml:
+                wbxml = re.sub(r"<calcPr([^>]*?)/>", r'<calcPr\1 fullCalcOnLoad="1"/>',
+                               wbxml, count=1)
+                patched["xl/workbook.xml"] = wbxml.encode("utf-8")
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as out:
+            for item in z.infolist():
+                out.writestr(item, patched.get(item.filename) or z.read(item.filename))
+    return buf.getvalue()
+
+def _sheet_xml(template_path, sheet_name):
+    with zipfile.ZipFile(template_path) as z:
+        path = _sheet_paths(z).get(sheet_name)
+        if path is None: raise KeyError(f"no sheet named {sheet_name!r} in the template")
+        return z.read(path)
 
 def supported(assessment_type):
-    return assessment_type in LAYOUTS
+    return assessment_type in LAYOUTS or assessment_type == "ssdpma"
 
-def build(assessment_type, pillars, responses):
+def tracks(assessment_type):
+    """The separate workbooks this type exports as. One for the plain types; three for
+    SSDPMA — its SMA, Safety and DP scores come from three different source workbooks."""
+    if assessment_type == "ssdpma":
+        return [(k, v["label"]) for k, v in SSDPMA_TRACKS.items()]
+    return [(None, "Check sheet")] if assessment_type in LAYOUTS else []
+
+def build(assessment_type, pillars, responses, assessment=None):
     """Return (bytes, cells_written). `responses` is {question_id: {answer, comment}}."""
     layout = LAYOUTS.get(assessment_type)
     if not layout: raise ValueError(f"no check-sheet template for {assessment_type!r}")
@@ -123,22 +297,80 @@ def build(assessment_type, pillars, responses):
                 per[int(q["no"])] = {jcol: JUDGEMENT.get(ans), rcol: note or None}
                 total += 1
 
-    with zipfile.ZipFile(path) as z:
-        paths = _sheet_paths(z)
-        patched = {}
-        for sheet, edits in plan.items():
-            target = paths.get(sheet)
-            if not target: continue
-            patched[target], _ = _patch_sheet(z.read(target), layout["no_col"][sheet], edits)
-        # The template ships with cached formula results from an EMPTY sheet. Without this
-        # Excel can show those stale blanks — dashboard at 0, radars flat — until something
-        # forces a recalc. fullCalcOnLoad makes it recompute the moment the file opens.
-        wbxml = z.read("xl/workbook.xml").decode("utf-8")
-        if "fullCalcOnLoad" not in wbxml:
-            wbxml = re.sub(r"<calcPr([^>]*?)/>", r'<calcPr\1 fullCalcOnLoad="1"/>', wbxml, count=1)
-            patched["xl/workbook.xml"] = wbxml.encode("utf-8")
-        buf = io.BytesIO()
-        with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as out:
-            for item in z.infolist():
-                out.writestr(item, patched.get(item.filename) or z.read(item.filename))
-    return buf.getvalue(), total
+    patched = {}
+    for sheet, edits in plan.items():
+        patched[sheet], _ = _patch_sheet(_sheet_xml(path, sheet), layout["no_col"][sheet], edits)
+
+    cover = layout.get("cover")
+    if cover and assessment:
+        edits = {}
+        def _put(ref, val):
+            if not val: return
+            col, row = _split(ref)
+            edits.setdefault(row, {})[col] = val
+        date = (assessment.get("assessment_date") or "").strip()
+        _put(cover["site"], assessment.get("site_name"))
+        _put(cover["year"], date[:4] if len(date) >= 4 and date[:4].isdigit() else None)
+        _put(cover["date"], date)
+        names = [n for n in (assessment.get("assessor_a"), assessment.get("assessor_b")) if n]
+        for ref, name in zip(cover["assessors"], names):
+            _put(ref, name)
+        if edits:
+            patched[cover["sheet"]], _, _ = _patch_rows(_sheet_xml(path, cover["sheet"]), edits)
+
+    return _repack(path, patched), total
+
+def build_solid(track, sections, responses):
+    """One solidification workbook (Safety or DP) with every judged rubric level written
+    into its Judge cell. `sections` is the bank's list for that track; `responses` is
+    keyed <item id>__L<level>, the same key the assess page saves under.
+
+    Raises if the row map and the bank disagree — a silent skip here would mean a
+    judgement landing on the wrong item, which is worse than a failed download.
+    """
+    conf = SSDPMA_TRACKS[track]
+    path = TEMPLATE_DIR / conf["template"]
+    if not path.exists(): raise FileNotFoundError(f"missing export template {path}")
+    maps = _solid_maps()[track]
+    rows, judge_cols = maps["rows"], maps["judge_cols"]
+
+    unknown = [s["id"] for s in sections if s["id"] not in rows]
+    if unknown:
+        raise ValueError(f"{track}: no row mapped for {unknown[:5]} — row map is stale")
+
+    plan, total = {}, 0
+    for s in sections:
+        row = rows[s["id"]]
+        for lv in s.get("solid_rubric") or []:
+            key = f"{s['id']}__L{lv['level']}"
+            ans = (responses.get(key) or {}).get("answer") if isinstance(
+                responses.get(key), dict) else responses.get(key)
+            val = JUDGEMENT.get((ans or "").strip())
+            if not val: continue
+            total += 1
+            # Safety: the overall sheet IS the input, so every level is written there and
+            # mirrored onto the role sheet when one shows it.
+            # DP: the overall sheet's Judge cells are formulas reading the role sheets, so
+            # the role sheet is the input; only the BSAPIC levels no role sheet feeds are
+            # written onto the overall sheet directly.
+            target, direct = maps["role_targets"].get(key), maps["direct"].get(key)
+            if target:
+                sheet, col, r = target
+                plan.setdefault(sheet, {}).setdefault(int(r), {})[col] = val
+            if maps["overall_is_input"]:
+                col, r = judge_cols[int(lv["level"]) - 1], int(row)
+            elif direct:
+                col, r = _split(direct)
+            elif target:
+                continue        # DP: that cell is a formula reading the role sheet
+            else:
+                raise ValueError(f"{track}: {key} has nowhere to write — map is stale")
+            plan.setdefault(maps["overall_sheet"], {}).setdefault(r, {})[col] = val
+
+    patched, missing = {}, {}
+    for sheet, edits in plan.items():
+        patched[sheet], _, miss = _patch_rows(_sheet_xml(path, sheet), edits)
+        if miss: missing[sheet] = miss
+    if missing:
+        raise ValueError(f"{track}: rows not found in {missing} — row map is stale")
+    return _repack(path, patched), total

@@ -1455,6 +1455,7 @@ def api_scores(assessment_id):
     return jsonify({"scores":scores,"answered":answered,"total":len(all_qs),"level_names":LEVEL_NAMES})
 
 def _result_ssdpma(db, assessment, user):
+    from export import checksheet
     bank   = load_ssdpma_bank()
     resp   = get_responses_dict(db, assessment["id"])
     ans    = answers_only(resp)
@@ -1500,6 +1501,7 @@ def _result_ssdpma(db, assessment, user):
         solid_pillars=bank["solid_pillars"], grc_axes=GRC_AXES,
         topic_matrix=topic_matrix,
         level_names=LEVEL_NAMES, level_colors=LEVEL_COLORS,
+        checksheet_tracks=checksheet.tracks("ssdpma"),
         gc=dict(gc) if gc else None, user=user, unread=0)
 
 
@@ -1706,17 +1708,40 @@ def export_checksheet(assessment_id):
     if not checksheet.supported(assessment["type"]):
         flash(f"No check-sheet template for {assessment['type']} yet — use the Excel export.", "warning")
         return redirect(url_for("result", assessment_id=assessment_id))
-    pillars = load_questions(assessment["type"], assessment["scope"])
     resp = get_responses_dict(db, assessment_id)
+    name = f"{assessment['site_name']}_{assessment['assessment_date'] or ''}"
+    track = request.args.get("track")
     try:
-        data, n = checksheet.build(assessment["type"], pillars, resp)
+        if assessment["type"] == "ssdpma":
+            # Three separate workbooks — the SMA, Safety and DP scores come from three
+            # different source check sheets, so they cannot be one file.
+            conf = checksheet.SSDPMA_TRACKS.get(track)
+            if not conf:
+                flash("Pick which check sheet to export.", "warning")
+                return redirect(url_for("result", assessment_id=assessment_id))
+            bank = load_ssdpma_bank()
+            if conf["kind"] == "questions":
+                data, n = checksheet.build(conf["layout"], bank["sma"]["pillars"], resp,
+                                           dict(assessment))
+            else:
+                data, n = checksheet.build_solid(track, bank["sections"][track], resp)
+            fname = f"{conf['label']}_checksheet_{name}.xlsx"
+        else:
+            pillars = load_questions(assessment["type"], assessment["scope"])
+            data, n = checksheet.build(assessment["type"], pillars, resp, dict(assessment))
+            fname = f"SMA_checksheet_{name}.xlsx"
     except FileNotFoundError:
         flash("Check-sheet template is missing on the server.", "danger")
         return redirect(url_for("result", assessment_id=assessment_id))
+    except (ValueError, KeyError) as e:
+        # a stale row map must fail loudly, never ship a sheet with judgements on the
+        # wrong rows
+        app.logger.exception("check-sheet export failed")
+        flash(f"Check-sheet export failed: {e}", "danger")
+        return redirect(url_for("result", assessment_id=assessment_id))
     return send_file(io.BytesIO(data),
                      mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                     as_attachment=True,
-                     download_name=f"SMA_checksheet_{assessment['site_name']}_{assessment['assessment_date'] or ''}.xlsx")
+                     as_attachment=True, download_name=fname)
 
 
 @app.route("/delete/<int:assessment_id>", methods=["POST"])
