@@ -29,6 +29,18 @@
     </div>
   </div>
 
+  {# The answers written back into the ORIGINAL check sheets. Three files, not one:
+     SMA, Safety Solidification and DP Solidification come from three different source
+     workbooks, each with its own dashboard and radars. #}
+  <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
+    <span class="text-muted small">⬇ Check sheets:</span>
+    {% for track, label in checksheet_tracks %}
+      <a class="btn btn-outline-success btn-sm"
+         href="{{ url_for('export_checksheet', assessment_id=assessment.id, track=track) }}"
+         title="The original {{ label }} check sheet with your judgements filled in">{{ label }}</a>
+    {% endfor %}
+  </div>
+
   <!-- 3 headline scores -->
   <div class="row g-3 mb-4">
     {% set S = scores.sma %}
