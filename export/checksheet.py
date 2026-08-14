@@ -320,10 +320,12 @@ def build(assessment_type, pillars, responses, assessment=None):
 
     return _repack(path, patched), total
 
-def build_solid(track, sections, responses):
+def build_solid(track, sections, responses, twin_sections=None):
     """One solidification workbook (Safety or DP) with every judged rubric level written
     into its Judge cell. `sections` is the bank's list for that track; `responses` is
     keyed <item id>__L<level>, the same key the assess page saves under.
+    `twin_sections` is the OTHER track's list, used to fill this workbook's twin half
+    where that half is the same revision (see the note below).
 
     Raises if the row map and the bank disagree — a silent skip here would mean a
     judgement landing on the wrong item, which is worse than a failed download.
@@ -332,26 +334,62 @@ def build_solid(track, sections, responses):
     path = TEMPLATE_DIR / conf["template"]
     if not path.exists(): raise FileNotFoundError(f"missing export template {path}")
     maps = _solid_maps()[track]
-    rows, judge_cols = maps["rows"], maps["judge_cols"]
-
-    unknown = [s["id"] for s in sections if s["id"] not in rows]
-    if unknown:
-        raise ValueError(f"{track}: no row mapped for {unknown[:5]} — row map is stale")
 
     plan, total = {}, 0
+    _fill(plan, track, maps, sections, responses, strict=True)
+    total = _count(maps, sections, responses)
+
+    # Each source workbook carries the OTHER track's sheets too. Where that twin half is
+    # the same revision it gets filled, so the site receives one complete record — Att-3's
+    # 'Safety cal.' matches on 31 of 36 items (5 absent from that revision, left blank).
+    # Att-2 has no usable DP twin: its 'DP cal.' is a superseded 28-item checklist whose
+    # criteria were rewritten, so writing current judgements there would pin them to
+    # criteria the site was never assessed against. Deliberately not filled.
+    twin = maps.get("twin")
+    if twin and twin_sections:
+        _fill(plan, track + ":twin", twin, twin_sections, responses, strict=False)
+
+    patched, missing = {}, {}
+    for sheet, edits in plan.items():
+        patched[sheet], _, miss = _patch_rows(_sheet_xml(path, sheet), edits)
+        if miss: missing[sheet] = miss
+    if missing:
+        raise ValueError(f"{track}: rows not found in {missing} — row map is stale")
+    return _repack(path, patched), total
+
+def _count(maps, sections, responses):
+    n = 0
     for s in sections:
-        row = rows[s["id"]]
+        if s["id"] not in maps["rows"]: continue
+        for lv in s.get("solid_rubric") or []:
+            if _judgement(responses, f"{s['id']}__L{lv['level']}"): n += 1
+    return n
+
+def _judgement(responses, key):
+    r = responses.get(key)
+    ans = r.get("answer") if isinstance(r, dict) else r
+    return JUDGEMENT.get((ans or "").strip())
+
+def _fill(plan, label, maps, sections, responses, strict):
+    """Add one half's judgements to `plan`. strict=True means every bank item MUST have a
+    row — that half is the workbook's own track, so a gap there is a stale map. strict=False
+    is the twin half, where items genuinely absent from that revision are skipped."""
+    rows, judge_cols = maps["rows"], maps["judge_cols"]
+    if strict:
+        unknown = [s["id"] for s in sections if s["id"] not in rows]
+        if unknown:
+            raise ValueError(f"{label}: no row mapped for {unknown[:5]} — row map is stale")
+    for s in sections:
+        row = rows.get(s["id"])
+        if row is None: continue                 # not in this revision of the twin half
         for lv in s.get("solid_rubric") or []:
             key = f"{s['id']}__L{lv['level']}"
-            ans = (responses.get(key) or {}).get("answer") if isinstance(
-                responses.get(key), dict) else responses.get(key)
-            val = JUDGEMENT.get((ans or "").strip())
+            val = _judgement(responses, key)
             if not val: continue
-            total += 1
-            # Safety: the overall sheet IS the input, so every level is written there and
-            # mirrored onto the role sheet when one shows it.
-            # DP: the overall sheet's Judge cells are formulas reading the role sheets, so
-            # the role sheet is the input; only the BSAPIC levels no role sheet feeds are
+            # Safety-shaped half: the overall sheet IS the input, so every level is written
+            # there and mirrored onto the role sheet when one shows it.
+            # DP-shaped half: the overall sheet's Judge cells are formulas reading the role
+            # sheets, so the role sheet is the input; only levels no role sheet feeds are
             # written onto the overall sheet directly.
             target, direct = maps["role_targets"].get(key), maps["direct"].get(key)
             if target:
@@ -362,15 +400,7 @@ def build_solid(track, sections, responses):
             elif direct:
                 col, r = _split(direct)
             elif target:
-                continue        # DP: that cell is a formula reading the role sheet
+                continue        # that cell is a formula reading the role sheet
             else:
-                raise ValueError(f"{track}: {key} has nowhere to write — map is stale")
+                raise ValueError(f"{label}: {key} has nowhere to write — map is stale")
             plan.setdefault(maps["overall_sheet"], {}).setdefault(r, {})[col] = val
-
-    patched, missing = {}, {}
-    for sheet, edits in plan.items():
-        patched[sheet], _, miss = _patch_rows(_sheet_xml(path, sheet), edits)
-        if miss: missing[sheet] = miss
-    if missing:
-        raise ValueError(f"{track}: rows not found in {missing} — row map is stale")
-    return _repack(path, patched), total
