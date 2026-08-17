@@ -18,9 +18,38 @@ ET.register_namespace("", NS)
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "export_templates"
 
-# The sheet's dropdown allows exactly Yes / No / N/A. 'not_rolled_out' has no slot,
-# so it is left blank and said in the Reason column rather than forced into N/A.
+# Judgement vocabulary, per layout. 'not_rolled_out' is the one that differs, and it is
+# NOT cosmetic: every element on these sheets scores only once every question in it carries
+# a value ("=IF(SUM(C17:Q17)=R17,"done","to be done")" on the warehouse Calculation sheet,
+# the same gate the MFG '2nd Cal' sheets use). Leaving a cell blank therefore drops the
+# whole element to "-" and blanks the dashboard, however many other questions were answered.
 JUDGEMENT = {"yes": "Yes", "no": "No", "na": "N/A", "not_rolled_out": None}
+
+# The warehouse sheet's own dropdown offers "Yes, No, N/A, Not rolled out yet", and its
+# Calculation sheet counts that literal into the same "Other" bucket as N/A
+# (=COUNTIFS(...,"N/A")+COUNTIFS(...,"Not rolled out yet")). So writing it is the sheet's
+# own vocabulary, keeps the element complete, and still leaves the answer out of the
+# Yes/No ratio — it does not count against the site.
+WH_JUDGEMENT = {**JUDGEMENT, "not_rolled_out": "Not rolled out yet"}
+
+# Verbatim from the warehouse workbook's own dropdown source, 'Calculation sheet'!D2:D3 —
+# the cell is validated against that list, so the wording cannot be paraphrased.
+ASSESSMENT_TYPE_LABEL = {"self": "Self-assessment セルフアセスメント",
+                         "validation": "Validation assessment 妥当性評価"}
+
+
+def _assessor_names(assessment):
+    """Names actually recorded on this assessment, newest field first. Never falls back to
+    the default roster — an exported sheet must not name people who were not entered."""
+    raw = assessment.get("assessors_json")
+    if raw:
+        try:
+            names = [str(n).strip() for n in json.loads(raw) if str(n).strip()]
+            if names: return ", ".join(names)
+        except (ValueError, TypeError):
+            pass
+    return ", ".join(n.strip() for n in (assessment.get("assessor_a"),
+                                         assessment.get("assessor_b")) if (n or "").strip())
 
 # per type: template file, and per pillar the sheet name + judgement/reason columns
 LAYOUTS = {
@@ -34,6 +63,13 @@ LAYOUTS = {
         },
         # column holding the question No, per sheet
         "no_col": {"Leadership": "D", "TM Engagement": "D", "Organization": "D", "System": "E"},
+        "judgement": WH_JUDGEMENT,
+        # No Cover Sheet in this workbook — the single (Ref.)Dashboard carries the identity
+        # block, and it is the page the site actually reads. Labels C4:E4 etc. are merged,
+        # so the values belong in F. F7's wording must match the sheet's own dropdown
+        # ('Calculation sheet'!D2:D3) or the cell falls outside its validation list.
+        "identity": [{"sheet": "(Ref.)Dashboard", "site": "F4", "date": "F5",
+                      "assessors": "F6", "kind": "F7"}],
     },
     # Att-1 "Result of safety maturity validation assessment". Judgement/Reason are Y/Z
     # on the first three sheets and Z/AA on System — that sheet is shifted one column
@@ -53,6 +89,12 @@ LAYOUTS = {
         # figures and previous-validation scores are left blank for them to complete.
         "cover": {"sheet": "Cover Sheet", "site": "D6", "year": "H6", "date": "J6",
                   "assessors": ["B9", "B10", "B11"]},
+        # The two dashboard sheets carry their OWN Site/Date inputs — the labels in C4/C5
+        # are merged C:E, so the value belongs in F. They are not formulas off the Cover
+        # Sheet, so without this the summary the site actually reads is anonymous.
+        # (F6 "Assessment type" is pre-filled in the master; left alone.)
+        "identity": [{"sheet": "(Ref.)MA Dashboard",             "site": "F4", "date": "F5"},
+                     {"sheet": "(Ref.)MA Dashboard (DP_divide)", "site": "F4", "date": "F5"}],
     },
 }
 
@@ -279,6 +321,8 @@ def build(assessment_type, pillars, responses, assessment=None):
     path = TEMPLATE_DIR / layout["template"]
     if not path.exists(): raise FileNotFoundError(f"missing export template {path}")
 
+    judgement = layout.get("judgement", JUDGEMENT)
+
     # {sheet name: {question_no: {col: value}}}
     plan, total = {}, 0
     for pillar in pillars:
@@ -292,9 +336,10 @@ def build(assessment_type, pillars, responses, assessment=None):
                 ans = (r.get("answer") or "").strip()
                 if not ans and not (r.get("comment") or "").strip(): continue
                 note = (r.get("comment") or "").strip()
-                if ans == "not_rolled_out":
+                # only say it in the Reason column when the Judgement column cannot
+                if ans == "not_rolled_out" and not judgement.get(ans):
                     note = ("Not rolled out" + (" — " + note if note else ""))
-                per[int(q["no"])] = {jcol: JUDGEMENT.get(ans), rcol: note or None}
+                per[int(q["no"])] = {jcol: judgement.get(ans), rcol: note or None}
                 total += 1
 
     patched = {}
@@ -317,6 +362,23 @@ def build(assessment_type, pillars, responses, assessment=None):
             _put(ref, name)
         if edits:
             patched[cover["sheet"]], _, _ = _patch_rows(_sheet_xml(path, cover["sheet"]), edits)
+
+    if assessment:
+        date = (assessment.get("assessment_date") or "").strip()
+        for ident in layout.get("identity") or []:
+            edits = {}
+            for key, val in (("site", assessment.get("site_name")),
+                             ("date", date),
+                             ("assessors", _assessor_names(assessment)),
+                             ("kind", ASSESSMENT_TYPE_LABEL.get(
+                                 (assessment.get("kind") or "").strip()))):
+                ref = ident.get(key)
+                if not ref or not val: continue
+                col, row = _split(ref)
+                edits.setdefault(row, {})[col] = val
+            if edits:
+                patched[ident["sheet"]], _, _ = _patch_rows(
+                    _sheet_xml(path, ident["sheet"]), edits)
 
     return _repack(path, patched), total
 

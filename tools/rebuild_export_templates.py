@@ -40,6 +40,12 @@ SRC = {
               "SE09-PR-01-1-G_Appendix B Safety Maturity Assessment Sheet_rev5.xlsx",
     "safety": DL / "Att-2 Safety Solidification Assessment Sheet (Rev.0 Dec-2025).xlsx",
     "dp":     DL / "Att-3 Disaster Prevention audit check sheet.xlsx",
+    # The warehouse master, vendored the same way. Content-identical to the sheet the
+    # 159-question bank was built from (verified question-by-question: same No mapping,
+    # same judgement criteria on all 159), but it still carried the author's local
+    # absPath and docProps names, so it goes through the same sanitising pass.
+    "wh":     Path(__file__).resolve().parent.parent / "export_templates" / "sources" /
+              "Safety maturity assessment checklist for WH_Oct 2024.xlsx",
 }
 
 # No column, then Judgement / Reason / Remark / F-up. System Checklist is shifted +1.
@@ -61,6 +67,17 @@ MFG_COVER = {
 DASH = {"(Ref.)MA Dashboard": {4: {"F": None}},
         "(Ref.)MA Dashboard (DP_divide)": {4: {"F": None}}}
 
+# Warehouse. No Cover Sheet — the single (Ref.)Dashboard carries the identity block
+# (Site F4 / Date F5 / Assessor F6 / Assessment type F7), and there is no Remark or
+# F-up column, so Judgement + Reason are all a completed sheet would hold.
+WH_SHEETS = {
+    "Leadership":    ("D", ["K", "L"]),
+    "TM Engagement": ("D", ["K", "L"]),
+    "Organization":  ("D", ["K", "L"]),
+    "System":        ("E", ["L", "M"]),
+}
+WH_DASH = {"(Ref.)Dashboard": {4: {"F": None}, 5: {"F": None}, 6: {"F": None}}}
+
 
 def cell_plan_mfg():
     wb = openpyxl.load_workbook(SRC["mfg"], read_only=True, data_only=True)
@@ -70,6 +87,28 @@ def cell_plan_mfg():
         ncol = openpyxl.utils.column_index_from_string(nocol)
         for i, row in enumerate(ws.iter_rows(min_row=1, max_row=ws.max_row,
                                              max_col=32, values_only=True), 1):
+            v = row[ncol - 1]
+            if v is None:
+                continue
+            if not str(v).strip().replace(".0", "").isdigit():
+                continue
+            edits[i] = {c: None for c in cols}
+        plan[sheet] = edits
+    wb.close()
+    return plan
+
+
+def cell_plan_wh():
+    """Same shape as cell_plan_mfg, for the warehouse master. F7 (assessment type) is
+    deliberately NOT cleared — it is the master's own default and the exporter overwrites
+    it from the record's `kind`, so a sheet exported without one still reads sensibly."""
+    wb = openpyxl.load_workbook(SRC["wh"], read_only=True, data_only=True)
+    plan = {k: dict(v) for k, v in WH_DASH.items()}
+    for sheet, (nocol, cols) in WH_SHEETS.items():
+        ws, edits = wb[sheet], {}
+        ncol = openpyxl.utils.column_index_from_string(nocol)
+        for i, row in enumerate(ws.iter_rows(min_row=1, max_row=ws.max_row,
+                                             max_col=20, values_only=True), 1):
             v = row[ncol - 1]
             if v is None:
                 continue
@@ -173,8 +212,15 @@ def build(kind, template_name, plan, drop_drawing_on=None):
             links += c
     notes["external hyperlinks removed"] = links
 
+    # 4a. unreferenced junk parts. The warehouse master carries two "[trash]/NNNN.dat"
+    # blocks — FF FF FF FF then padding, stored uncompressed with a 1980 timestamp, the
+    # signature of a zip repair pass. No content type declares them and no rels reference
+    # them, so they are not OOXML parts at all; they would otherwise ride into every export.
+    drop = {n for n in z.namelist() if n.startswith("[trash]/")}
+    if drop:
+        notes["junk parts dropped"] = sorted(drop)
+
     # 4. evidence pictures
-    drop = set()
     if drop_drawing_on:
         sp = paths[drop_drawing_on]
         rp = sp.replace("worksheets/", "worksheets/_rels/") + ".rels"
@@ -200,7 +246,7 @@ def build(kind, template_name, plan, drop_drawing_on=None):
                              re.findall(r'Type="[^"]*/image"[^>]*Target="([^"]+)"',
                                         z.read(other).decode("utf-8"))}
             imgs -= keep
-            drop = {dpath, drels} | imgs
+            drop |= {dpath, drels} | imgs
             patched[sp] = re.sub(rb"<drawing[^>]*/>", b"", patched.get(sp) or z.read(sp), count=1)
             patched[rp] = re.sub(r'<Relationship[^>]*Id="%s"[^>]*/>' % re.escape(rid), "",
                                  rels, count=1).encode("utf-8")
@@ -263,39 +309,9 @@ def build(kind, template_name, plan, drop_drawing_on=None):
         print(f"   {k}: {v}")
 
 
-def scrub_in_place(name):
-    """The warehouse template was built before these steps existed; apply them to it too.
-    Its absPath still carried a personal OneDrive URL."""
-    p = OUT / name
-    z = zipfile.ZipFile(p)
-    patched, links = {}, 0
-    wbx = z.read("xl/workbook.xml").decode("utf-8")
-    had = "absPath" in wbx
-    patched["xl/workbook.xml"] = re.sub(r"<x15ac:absPath[^>]*/>", "", wbx).encode("utf-8")
-    for n in z.namelist():
-        if not re.match(r"xl/worksheets/sheet\d+\.xml$", n):
-            continue
-        rp = n.replace("worksheets/", "worksheets/_rels/") + ".rels"
-        rels = z.read(rp) if rp in z.namelist() else None
-        sx, rx, c = strip_hyperlinks(z.read(n), rels)
-        sx, f = strip_filters(sx)
-        if c or f:
-            patched[n] = sx
-            if rx is not None:
-                patched[rp] = rx
-            links += c
-    tmp = p.with_suffix(".tmp")
-    with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as w:
-        for item in z.infolist():
-            w.writestr(item, patched.get(item.filename) or z.read(item.filename))
-    z.close(); tmp.replace(p)
-    print(f"\n{name}  ({p.stat().st_size/1024:.0f} KB)")
-    print(f"   absPath removed: {had} | external hyperlinks removed: {links}")
-
-
 if __name__ == "__main__":
     build("mfg", "mfg_checksheet.xlsx", cell_plan_mfg(),
           drop_drawing_on="System Checklist")
     build("safety", "safety_solid_checksheet.xlsx", cell_plan_solid("safety_solid"))
     build("dp", "dp_solid_checksheet.xlsx", cell_plan_solid("dp_solid"))
-    scrub_in_place("warehouse_checksheet.xlsx")
+    build("wh", "warehouse_checksheet.xlsx", cell_plan_wh())
