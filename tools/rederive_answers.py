@@ -53,7 +53,7 @@ def plan(db, assessment_id=None, question_id=None):
         f"SELECT id, assessment_id, question_id, answer, detail FROM responses {where}",
         params).fetchall()
 
-    banks, changes = {}, []
+    banks, changes, review = {}, [], []
     for r in rows:
         aid = r["assessment_id"]
         if aid not in banks:
@@ -79,11 +79,17 @@ def plan(db, assessment_id=None, question_id=None):
         if derived is None:
             continue
         stored = r["answer"] or ""
-        if derived != stored:
-            changes.append({"row": r["id"], "assessment": aid, "type": atype,
-                            "qid": r["question_id"], "no": q.get("no"),
-                            "old": stored, "new": derived})
-    return changes
+        if derived == stored:
+            continue
+        rec = {"row": r["id"], "assessment": aid, "type": atype,
+               "qid": r["question_id"], "no": q.get("no"),
+               "old": stored, "new": derived}
+        # Only a blank gets repaired. An answer that derives to "" is NOT rewritten: on prod
+        # five rows on assessment 40 derive empty from detail that no longer satisfies the
+        # strict rule, and writing that would delete recorded judgements. Those are surfaced
+        # for a human to look at, never auto-applied.
+        (changes if derived else review).append(rec)
+    return changes, review
 
 
 def main():
@@ -97,14 +103,25 @@ def main():
 
     db = sqlite3.connect(args.db)
     db.row_factory = sqlite3.Row
-    changes = plan(db, args.assessment, args.question)
+    changes, review = plan(db, args.assessment, args.question)
+
+    if review:
+        print(f"{args.db}: {len(review)} recorded answer(s) now derive to EMPTY — "
+              "NOT repairable automatically\n")
+        print(f"{'assess':>6}  {'question':<14} {'no':>4}  recorded")
+        for c in review:
+            print(f"{c['assessment']:>6}  {c['qid']:<14} {str(c['no'] or ''):>4}  {c['old']}")
+        print("\nThese keep their recorded answer. The detail no longer satisfies the question's\n"
+              "rule (a respondent removed, an expected count raised), so re-deriving would\n"
+              "DELETE a judgement rather than repair one. Open each in the app and confirm the\n"
+              "respondent list is what you interviewed.\n")
 
     if not changes:
-        print(f"{args.db}: nothing to re-derive — every stored answer already agrees "
-              "with the current bank.")
+        print(f"{args.db}: no blank answers to repair — every stored answer either agrees "
+              "with the current bank or is listed above.")
         return 0
 
-    print(f"{args.db}: {len(changes)} stored answer(s) disagree with the current bank\n")
+    print(f"{args.db}: {len(changes)} blank answer(s) repairable from recorded evidence\n")
     print(f"{'assess':>6}  {'question':<14} {'no':>4}  {'stored':<14} -> new")
     for c in changes:
         print(f"{c['assessment']:>6}  {c['qid']:<14} {str(c['no'] or ''):>4}  "

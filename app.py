@@ -810,16 +810,22 @@ def get_responses_dict(db, assessment_id):
         except Exception: cmts = {}
         ans = r["answer"]
         # A responder question's answer is DERIVED from its detail, not typed by the assessor.
-        # Recompute it against the current bank instead of trusting the stored column: when a
-        # question is corrected (decision_rule, responders), answers written under the old rule
-        # would otherwise stay frozen — the assessor sees their Yes recorded on screen while the
-        # element silently keeps excluding the question from the score.
+        # Recompute it against the current bank so a corrected question (decision_rule,
+        # responders) stops being frozen at whatever the old rule produced.
+        #
+        # DELIBERATELY ASYMMETRIC: a non-empty derived value replaces the stored one, but an
+        # EMPTY derived value never does. Re-deriving live data on prod showed why — five
+        # answers on assessment 40 (MFG-LD-020, SY-052, SY-101, SY-114 = yes; SY-153 = no)
+        # derive to "" under the current bank, because their detail no longer satisfies the
+        # strict rule. Taking that result would silently delete five recorded judgements from
+        # the score on the next reload. Filling a blank is a repair; blanking a recorded
+        # answer is data loss, and it needs a human, not a read path.
         if det is not None:
             if ctx is None: ctx = _rederive_ctx(db, assessment_id)
             q = ctx[0].get(r["question_id"])
             if q is not None:
                 derived = derive_answer(q, det, ctx[1])
-                if derived is not None: ans = derived
+                if derived: ans = derived
         out[r["question_id"]] = {"answer":ans,"comment":r["comment"] or "","detail":det,
                                  "comments":cmts if isinstance(cmts, dict) else {}}
     return out
