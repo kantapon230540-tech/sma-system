@@ -6599,366 +6599,6 @@
     "sma_group_qids": [],
     "axis_source": "data-exact",
     "point_of_evaluation": "Resource and Organization for QM"
-   },
-   {
-    "id": "SS-031",
-    "topic": "BSFA Instructor",
-    "solid_pillar": "integration",
-    "solid_pillar_name": "TBD",
-    "primary_category": "Plant Management",
-    "axis": "Governance",
-    "tag": "安全",
-    "class": "new",
-    "roles": [],
-    "feeds": [
-     "safety_solid"
-    ],
-    "solid_rubric": [
-     {
-      "level": 1,
-      "grade": "C",
-      "criteria": "There is no Instructor.",
-      "judge": null,
-      "criteria_ja": "インストラクターがいない。",
-      "criteria_th": "ไม่มีผู้ฝึกสอน (Instructor)",
-      "translated": "draft"
-     },
-     {
-      "level": 2,
-      "grade": "B-",
-      "criteria": "There is no Master Instructor at the site, but at least one person who has completed Instructor training run by GBS or SBU is assigned to the Safety & Disaster-Prevention function.",
-      "judge": null,
-      "criteria_ja": "拠点にマスターインストラクターはいないが、GBSまたはSBUによるインストラクター教育を受講経験のあるものが、安全防災機能に1名以上配置されている。",
-      "criteria_th": "ที่ไซต์งานยังไม่มี Master Instructor แต่มีผู้ที่ผ่านการอบรมหลักสูตร Instructor ซึ่งจัดโดย GBS หรือ SBU อย่างน้อย 1 คน ประจำอยู่ในหน่วยงานความปลอดภัยและป้องกันภัยพิบัติ (DP)",
-      "translated": "draft"
-     },
-     {
-      "level": 3,
-      "grade": "B",
-      "criteria": "At least one Master Instructor is assigned at the site.",
-      "judge": null,
-      "criteria_ja": "マスターインストラクターが1名以上配置されている。",
-      "criteria_th": "มี Master Instructor ประจำอยู่ที่ไซต์งานอย่างน้อย 1 คน",
-      "translated": "draft"
-     },
-     {
-      "level": 4,
-      "grade": "B+",
-      "criteria": "Training by a Master Instructor is being carried out, but not all departments have been trained and certified.",
-      "judge": null,
-      "criteria_ja": "マスターインストラクターによる教育が実施されているが、全部署には教育・認定がされていない。",
-      "criteria_th": "มีการจัดอบรมโดย Master Instructor แล้ว แต่ยังอบรมและรับรองไม่ครบทุกแผนก",
-      "translated": "draft"
-     },
-     {
-      "level": 5,
-      "grade": "A",
-      "criteria": "All managers in every department have completed Master Instructor training and are certified.",
-      "judge": null,
-      "criteria_ja": "各部署のマネージャー全員がマスターインストラクター教育を受講しており、認定されている。",
-      "criteria_th": "ผู้จัดการของทุกแผนกทุกคนได้เข้ารับการอบรม Master Instructor และได้รับการรับรองแล้ว",
-      "translated": "draft"
-     }
-    ],
-    "sma_group_key": null,
-    "sma_group_qids": [],
-    "axis_source": "data-pillar-default",
-    "point_of_evaluation": "Example of SE international certification",
-    "topic_ja": "BSFA インストラクター",
-    "topic_th": "ผู้ฝึกสอน BSFA"
-   },
-   {
-    "id": "SS-032",
-    "topic": "Document Management",
-    "solid_pillar": "integration",
-    "solid_pillar_name": "TBD",
-    "primary_category": "Plant Management",
-    "axis": "Governance",
-    "tag": null,
-    "class": "bsapic",
-    "roles": [
-     "Safety Mgr",
-     "Line Mgr",
-     "Supervisor",
-     "Operator"
-    ],
-    "feeds": [
-     "safety_solid"
-    ],
-    "solid_rubric": [
-     {
-      "level": 1,
-      "grade": "C",
-      "criteria": "The respondent can present the latest government-issued safety requirements.",
-      "judge": null,
-      "criteria_ja": "回答者は、最新の政府が発行した安全要求を提示できる。",
-      "translated": "draft"
-     },
-     {
-      "level": 2,
-      "grade": "B-",
-      "criteria": "The manager can present a list distinguishing mandatory from non-mandatory safety documents.",
-      "judge": null,
-      "criteria_ja": "管理者は、必須の安全文書とそうでないものをリストで提示できる。",
-      "translated": "draft"
-     },
-     {
-      "level": 3,
-      "grade": "B",
-      "criteria": "Every site OH&S standard has an assigned document owner; and 3 respondents can explain how their assigned safety documents are kept under latest-version control.",
-      "judge": null,
-      "criteria_ja": "全ての安全衛生に関する事業所の標準は管理者がいる。また、3人の回答者は、割り当てられた安全文書がどのように最新版管理されているか説明できる。",
-      "translated": "draft"
-     },
-     {
-      "level": 4,
-      "grade": "B+",
-      "criteria": "The OH&S document/record register is periodically reviewed and kept under latest-version control (removing duplicates, updating owners, standardizing format).",
-      "judge": null,
-      "criteria_ja": "安全衛生に関する文書・記録の一覧表は定期的に見直されて最新版管理されている。（不要な重複の廃棄・文書管理者の更新・表示形式の統一）",
-      "translated": "draft"
-     },
-     {
-      "level": 5,
-      "grade": "A",
-      "criteria": "Best practices on document management from other sites/industry have been obtained and adopted at the site; or benchmarking results vs other sites exist.",
-      "judge": null,
-      "criteria_ja": "他事業所/業界の文書管理に関する好事例を入手し、自拠点へ落とし込みしていることを確認できる。または、他事業所と比較した結果がある。",
-      "translated": "draft"
-     }
-    ],
-    "sma_group_key": null,
-    "sma_group_qids": [],
-    "topic_ja": "文書管理",
-    "axis_source": "data-pillar-default"
-   },
-   {
-    "id": "SS-033",
-    "topic": "Change Management",
-    "solid_pillar": "integration",
-    "solid_pillar_name": "TBD",
-    "primary_category": "Plant Management",
-    "axis": "Governance",
-    "tag": null,
-    "class": "bsapic",
-    "roles": [
-     "Safety Mgr",
-     "Line Mgr",
-     "Supervisor",
-     "Operator"
-    ],
-    "feeds": [
-     "safety_solid"
-    ],
-    "solid_rubric": [
-     {
-      "level": 1,
-      "grade": "C",
-      "criteria": "The initiator, reviewer and approver of changes are appointed, and their roles/responsibilities are defined.",
-      "judge": null,
-      "criteria_ja": "変更の起案者、審議者、承認者が任命されている。また、それぞれの役割・責任が定義されている。",
-      "translated": "draft"
-     },
-     {
-      "level": 2,
-      "grade": "B-",
-      "criteria": "The initiator/reviewer/approver of changes have received change-management (4M change) training, and records exist.",
-      "judge": null,
-      "criteria_ja": "変更の起案者・審議者・承認者は、変更管理(4M変更）の教育を受けている。また、その記録がある。",
-      "translated": "draft"
-     },
-     {
-      "level": 3,
-      "grade": "B",
-      "criteria": "The respondent can explain how a proposed change is reviewed; the site safety rules/work standards are analyzed together with the proposal.",
-      "judge": null,
-      "criteria_ja": "回答者は、起案された変更がどのように審議されるか説明できる。また、事業所の安全ルール・作業標準が提案内容と共に分析されている。\n３つの変更事例で、安全に関する審議と承認が確認できる。",
-      "translated": "draft"
-     },
-     {
-      "level": 4,
-      "grade": "B+",
-      "criteria": "Risk assessment is part of the change-management procedure; potential-risk analysis for changes is confirmable from the RA and change records.",
-      "judge": null,
-      "criteria_ja": "RAは、変更管理手順の一部となっており、変更に伴う潜在的なリスク分析を行うことがRAおよび変更記録から確認できる。",
-      "translated": "draft"
-     },
-     {
-      "level": 5,
-      "grade": "A",
-      "criteria": "In a 50% sample of change requests over the past 6 months, hazards/risks that materialized at other sites during similar changes and other sites best practices are considered.",
-      "judge": null,
-      "criteria_ja": "過去6か月の変更管理要求の50%のサンプルチェックにおいて、類似の変更時に他事業所で顕在化した危険源・リスク、他事業所のベストプラクティスが含まれている。",
-      "translated": "draft"
-     }
-    ],
-    "sma_group_key": null,
-    "sma_group_qids": [],
-    "topic_ja": "変更管理",
-    "axis_source": "data-pillar-default"
-   },
-   {
-    "id": "SS-034",
-    "topic": "Management Commitment",
-    "solid_pillar": "integration",
-    "solid_pillar_name": "TBD",
-    "primary_category": "Plant Management",
-    "axis": "Governance",
-    "tag": null,
-    "class": "bsapic",
-    "roles": [
-     "Safety Mgr",
-     "Line Mgr",
-     "Supervisor",
-     "Operator"
-    ],
-    "feeds": [
-     "safety_solid"
-    ],
-    "solid_rubric": [
-     {
-      "level": 2,
-      "grade": "B-",
-      "criteria": "At least 3 teammates stated that reporting hazards or improvement opportunities brings no reprimand/retaliation, or that a rule prohibits it.",
-      "judge": null,
-      "criteria_ja": "少なくとも3人の技能員は、危険源や（改善の）機会を報告時に、叱責・報復が無い、またはそれを禁止するルールがある と回答した。",
-      "translated": "draft"
-     }
-    ],
-    "sma_group_key": null,
-    "sma_group_qids": [],
-    "topic_ja": "マネジメントコミットメント",
-    "axis_source": "data-pillar-default"
-   },
-   {
-    "id": "SS-035",
-    "topic": "Emergency Planning",
-    "solid_pillar": "integration",
-    "solid_pillar_name": "TBD",
-    "primary_category": "Plant Management",
-    "axis": "Governance",
-    "tag": null,
-    "class": "bsapic",
-    "roles": [
-     "Safety Mgr",
-     "Line Mgr",
-     "Supervisor",
-     "Operator"
-    ],
-    "feeds": [
-     "safety_solid"
-    ],
-    "solid_rubric": [
-     {
-      "level": 1,
-      "grade": "C",
-      "criteria": "The safety-related parts of the plant emergency response procedures have been confirmed for legal compliance by the safety function.",
-      "judge": null,
-      "criteria_ja": "自工場の緊急時対応手順の安全に関わるものは、安全機能により法令順守が確認されている。",
-      "translated": "draft"
-     },
-     {
-      "level": 2,
-      "grade": "B-",
-      "criteria": "Emergency-drill records exist for the past year, and the drill review is complete.",
-      "judge": null,
-      "criteria_ja": "過去1年間、緊急事態訓練の記録がある、また訓練のレビューが完了している。",
-      "translated": "draft"
-     },
-     {
-      "level": 3,
-      "grade": "B",
-      "criteria": "Multiple emergency scenarios have been developed.",
-      "judge": null,
-      "criteria_ja": "複数のシナリオが策定されている。",
-      "translated": "draft"
-     },
-     {
-      "level": 4,
-      "grade": "B+",
-      "criteria": "Reasonably foreseeable emergencies are identified; drills based on them are run across all shifts; emergency response procedures are documented.",
-      "judge": null,
-      "criteria_ja": "合理的に予見可能な緊急事態が特定され、訓練もそれに基づいて全てのシフトで実施されている。また、緊急事態対応手順が文書化されているか。",
-      "translated": "draft"
-     },
-     {
-      "level": 5,
-      "grade": "A",
-      "criteria": "The respondent can show adoption of other plants best practices / improvements to emergency procedures; or benchmarking results vs other sites exist.",
-      "judge": null,
-      "criteria_ja": "回答者は、緊急事態の対応手順について、他工場の好事例を取り入れたり工夫していることを示すことができる。または、他事業所と比較した結果がある。",
-      "translated": "draft"
-     }
-    ],
-    "sma_group_key": null,
-    "sma_group_qids": [],
-    "topic_ja": "緊急事態計画",
-    "axis_source": "data-pillar-default"
-   },
-   {
-    "id": "SS-036",
-    "topic": "Communication",
-    "solid_pillar": "integration",
-    "solid_pillar_name": "TBD",
-    "primary_category": "Plant Management",
-    "axis": "Governance",
-    "tag": null,
-    "class": "bsapic",
-    "roles": [
-     "Safety Mgr",
-     "Line Mgr",
-     "Supervisor",
-     "Operator"
-    ],
-    "feeds": [
-     "safety_solid"
-    ],
-    "solid_rubric": [
-     {
-      "level": 1,
-      "grade": "C",
-      "criteria": "Confirm the safety section manager conducts safety communication in the plant (legal requirements, 4M changes, standard revisions, etc.).",
-      "judge": null,
-      "criteria_ja": "安全担当課長が、工場内で安全に関するコミュニケーションを行っているか確認する（法的要求事項、4M変更、標準改訂等）。",
-      "translated": "draft"
-     },
-     {
-      "level": 2,
-      "grade": "B-",
-      "criteria": "Confirm onboarding safety training covers accident situations, major risks and their reduction methods.",
-      "judge": null,
-      "criteria_ja": "入社時の安全関連の教育において、災害発生状況、重大リスクおよびその低減方法が含まれているかどうか確認する。",
-      "translated": "draft"
-     },
-     {
-      "level": 3,
-      "grade": "B",
-      "criteria": "Confirm teammates know whom to report to when they find safety issues (accidents, near-misses, defects, etc.).",
-      "judge": null,
-      "criteria_ja": "技能員は、安全関連の課題（災害・ヒヤリ・不具合など）を発見した際に、だれに報告すべきかを知っているか確認する。",
-      "translated": "draft"
-     },
-     {
-      "level": 4,
-      "grade": "B+",
-      "criteria": "Confirm teammates receive feedback from management on the response after reporting accidents/near-misses/defects.",
-      "judge": null,
-      "criteria_ja": "技能員は、災害・ヒヤリ・不具合を管理者に報告した後、管理者からその対応について報告を受けているかどうか確認する。",
-      "translated": "draft"
-     },
-     {
-      "level": 5,
-      "grade": "A",
-      "criteria": "Confirm teammates run safety-improvement activities not only individually/in their dept but also in small groups / cross-functional teams (CFT).",
-      "judge": null,
-      "criteria_ja": "技能員が、安全に関する改善活動を行う際は、自身/自部署だけでなく、小集団・CFTで行っているかどうか確認する。",
-      "translated": "draft"
-     }
-    ],
-    "sma_group_key": null,
-    "sma_group_qids": [],
-    "topic_ja": "コミュニケーション",
-    "axis_source": "data-pillar-default"
    }
   ],
   "dp_solid": [
@@ -8590,7 +8230,373 @@
     "sma_group_key": null,
     "sma_group_qids": [],
     "axis_source": "data-exact"
+   }
+  ]
+ },
+ "appendix_not_scored": {
+  "safety_solid": [
+   {
+    "id": "SS-031",
+    "topic": "BSFA Instructor",
+    "solid_pillar": "integration",
+    "solid_pillar_name": "TBD",
+    "primary_category": "Plant Management",
+    "axis": "Governance",
+    "tag": "安全",
+    "class": "new",
+    "roles": [],
+    "feeds": [
+     "safety_solid"
+    ],
+    "solid_rubric": [
+     {
+      "level": 1,
+      "grade": "C",
+      "criteria": "There is no Instructor.",
+      "judge": null,
+      "criteria_ja": "インストラクターがいない。",
+      "criteria_th": "ไม่มีผู้ฝึกสอน (Instructor)",
+      "translated": "draft"
+     },
+     {
+      "level": 2,
+      "grade": "B-",
+      "criteria": "There is no Master Instructor at the site, but at least one person who has completed Instructor training run by GBS or SBU is assigned to the Safety & Disaster-Prevention function.",
+      "judge": null,
+      "criteria_ja": "拠点にマスターインストラクターはいないが、GBSまたはSBUによるインストラクター教育を受講経験のあるものが、安全防災機能に1名以上配置されている。",
+      "criteria_th": "ที่ไซต์งานยังไม่มี Master Instructor แต่มีผู้ที่ผ่านการอบรมหลักสูตร Instructor ซึ่งจัดโดย GBS หรือ SBU อย่างน้อย 1 คน ประจำอยู่ในหน่วยงานความปลอดภัยและป้องกันภัยพิบัติ (DP)",
+      "translated": "draft"
+     },
+     {
+      "level": 3,
+      "grade": "B",
+      "criteria": "At least one Master Instructor is assigned at the site.",
+      "judge": null,
+      "criteria_ja": "マスターインストラクターが1名以上配置されている。",
+      "criteria_th": "มี Master Instructor ประจำอยู่ที่ไซต์งานอย่างน้อย 1 คน",
+      "translated": "draft"
+     },
+     {
+      "level": 4,
+      "grade": "B+",
+      "criteria": "Training by a Master Instructor is being carried out, but not all departments have been trained and certified.",
+      "judge": null,
+      "criteria_ja": "マスターインストラクターによる教育が実施されているが、全部署には教育・認定がされていない。",
+      "criteria_th": "มีการจัดอบรมโดย Master Instructor แล้ว แต่ยังอบรมและรับรองไม่ครบทุกแผนก",
+      "translated": "draft"
+     },
+     {
+      "level": 5,
+      "grade": "A",
+      "criteria": "All managers in every department have completed Master Instructor training and are certified.",
+      "judge": null,
+      "criteria_ja": "各部署のマネージャー全員がマスターインストラクター教育を受講しており、認定されている。",
+      "criteria_th": "ผู้จัดการของทุกแผนกทุกคนได้เข้ารับการอบรม Master Instructor และได้รับการรับรองแล้ว",
+      "translated": "draft"
+     }
+    ],
+    "sma_group_key": null,
+    "sma_group_qids": [],
+    "axis_source": "data-pillar-default",
+    "point_of_evaluation": "Example of SE international certification",
+    "topic_ja": "BSFA インストラクター",
+    "topic_th": "ผู้ฝึกสอน BSFA"
    },
+   {
+    "id": "SS-032",
+    "topic": "Document Management",
+    "solid_pillar": "integration",
+    "solid_pillar_name": "TBD",
+    "primary_category": "Plant Management",
+    "axis": "Governance",
+    "tag": null,
+    "class": "bsapic",
+    "roles": [
+     "Safety Mgr",
+     "Line Mgr",
+     "Supervisor",
+     "Operator"
+    ],
+    "feeds": [
+     "safety_solid"
+    ],
+    "solid_rubric": [
+     {
+      "level": 1,
+      "grade": "C",
+      "criteria": "The respondent can present the latest government-issued safety requirements.",
+      "judge": null,
+      "criteria_ja": "回答者は、最新の政府が発行した安全要求を提示できる。",
+      "translated": "draft"
+     },
+     {
+      "level": 2,
+      "grade": "B-",
+      "criteria": "The manager can present a list distinguishing mandatory from non-mandatory safety documents.",
+      "judge": null,
+      "criteria_ja": "管理者は、必須の安全文書とそうでないものをリストで提示できる。",
+      "translated": "draft"
+     },
+     {
+      "level": 3,
+      "grade": "B",
+      "criteria": "Every site OH&S standard has an assigned document owner; and 3 respondents can explain how their assigned safety documents are kept under latest-version control.",
+      "judge": null,
+      "criteria_ja": "全ての安全衛生に関する事業所の標準は管理者がいる。また、3人の回答者は、割り当てられた安全文書がどのように最新版管理されているか説明できる。",
+      "translated": "draft"
+     },
+     {
+      "level": 4,
+      "grade": "B+",
+      "criteria": "The OH&S document/record register is periodically reviewed and kept under latest-version control (removing duplicates, updating owners, standardizing format).",
+      "judge": null,
+      "criteria_ja": "安全衛生に関する文書・記録の一覧表は定期的に見直されて最新版管理されている。（不要な重複の廃棄・文書管理者の更新・表示形式の統一）",
+      "translated": "draft"
+     },
+     {
+      "level": 5,
+      "grade": "A",
+      "criteria": "Best practices on document management from other sites/industry have been obtained and adopted at the site; or benchmarking results vs other sites exist.",
+      "judge": null,
+      "criteria_ja": "他事業所/業界の文書管理に関する好事例を入手し、自拠点へ落とし込みしていることを確認できる。または、他事業所と比較した結果がある。",
+      "translated": "draft"
+     }
+    ],
+    "sma_group_key": null,
+    "sma_group_qids": [],
+    "topic_ja": "文書管理",
+    "axis_source": "data-pillar-default"
+   },
+   {
+    "id": "SS-033",
+    "topic": "Change Management",
+    "solid_pillar": "integration",
+    "solid_pillar_name": "TBD",
+    "primary_category": "Plant Management",
+    "axis": "Governance",
+    "tag": null,
+    "class": "bsapic",
+    "roles": [
+     "Safety Mgr",
+     "Line Mgr",
+     "Supervisor",
+     "Operator"
+    ],
+    "feeds": [
+     "safety_solid"
+    ],
+    "solid_rubric": [
+     {
+      "level": 1,
+      "grade": "C",
+      "criteria": "The initiator, reviewer and approver of changes are appointed, and their roles/responsibilities are defined.",
+      "judge": null,
+      "criteria_ja": "変更の起案者、審議者、承認者が任命されている。また、それぞれの役割・責任が定義されている。",
+      "translated": "draft"
+     },
+     {
+      "level": 2,
+      "grade": "B-",
+      "criteria": "The initiator/reviewer/approver of changes have received change-management (4M change) training, and records exist.",
+      "judge": null,
+      "criteria_ja": "変更の起案者・審議者・承認者は、変更管理(4M変更）の教育を受けている。また、その記録がある。",
+      "translated": "draft"
+     },
+     {
+      "level": 3,
+      "grade": "B",
+      "criteria": "The respondent can explain how a proposed change is reviewed; the site safety rules/work standards are analyzed together with the proposal.",
+      "judge": null,
+      "criteria_ja": "回答者は、起案された変更がどのように審議されるか説明できる。また、事業所の安全ルール・作業標準が提案内容と共に分析されている。\n３つの変更事例で、安全に関する審議と承認が確認できる。",
+      "translated": "draft"
+     },
+     {
+      "level": 4,
+      "grade": "B+",
+      "criteria": "Risk assessment is part of the change-management procedure; potential-risk analysis for changes is confirmable from the RA and change records.",
+      "judge": null,
+      "criteria_ja": "RAは、変更管理手順の一部となっており、変更に伴う潜在的なリスク分析を行うことがRAおよび変更記録から確認できる。",
+      "translated": "draft"
+     },
+     {
+      "level": 5,
+      "grade": "A",
+      "criteria": "In a 50% sample of change requests over the past 6 months, hazards/risks that materialized at other sites during similar changes and other sites best practices are considered.",
+      "judge": null,
+      "criteria_ja": "過去6か月の変更管理要求の50%のサンプルチェックにおいて、類似の変更時に他事業所で顕在化した危険源・リスク、他事業所のベストプラクティスが含まれている。",
+      "translated": "draft"
+     }
+    ],
+    "sma_group_key": null,
+    "sma_group_qids": [],
+    "topic_ja": "変更管理",
+    "axis_source": "data-pillar-default"
+   },
+   {
+    "id": "SS-034",
+    "topic": "Management Commitment",
+    "solid_pillar": "integration",
+    "solid_pillar_name": "TBD",
+    "primary_category": "Plant Management",
+    "axis": "Governance",
+    "tag": null,
+    "class": "bsapic",
+    "roles": [
+     "Safety Mgr",
+     "Line Mgr",
+     "Supervisor",
+     "Operator"
+    ],
+    "feeds": [
+     "safety_solid"
+    ],
+    "solid_rubric": [
+     {
+      "level": 2,
+      "grade": "B-",
+      "criteria": "At least 3 teammates stated that reporting hazards or improvement opportunities brings no reprimand/retaliation, or that a rule prohibits it.",
+      "judge": null,
+      "criteria_ja": "少なくとも3人の技能員は、危険源や（改善の）機会を報告時に、叱責・報復が無い、またはそれを禁止するルールがある と回答した。",
+      "translated": "draft"
+     }
+    ],
+    "sma_group_key": null,
+    "sma_group_qids": [],
+    "topic_ja": "マネジメントコミットメント",
+    "axis_source": "data-pillar-default"
+   },
+   {
+    "id": "SS-035",
+    "topic": "Emergency Planning",
+    "solid_pillar": "integration",
+    "solid_pillar_name": "TBD",
+    "primary_category": "Plant Management",
+    "axis": "Governance",
+    "tag": null,
+    "class": "bsapic",
+    "roles": [
+     "Safety Mgr",
+     "Line Mgr",
+     "Supervisor",
+     "Operator"
+    ],
+    "feeds": [
+     "safety_solid"
+    ],
+    "solid_rubric": [
+     {
+      "level": 1,
+      "grade": "C",
+      "criteria": "The safety-related parts of the plant emergency response procedures have been confirmed for legal compliance by the safety function.",
+      "judge": null,
+      "criteria_ja": "自工場の緊急時対応手順の安全に関わるものは、安全機能により法令順守が確認されている。",
+      "translated": "draft"
+     },
+     {
+      "level": 2,
+      "grade": "B-",
+      "criteria": "Emergency-drill records exist for the past year, and the drill review is complete.",
+      "judge": null,
+      "criteria_ja": "過去1年間、緊急事態訓練の記録がある、また訓練のレビューが完了している。",
+      "translated": "draft"
+     },
+     {
+      "level": 3,
+      "grade": "B",
+      "criteria": "Multiple emergency scenarios have been developed.",
+      "judge": null,
+      "criteria_ja": "複数のシナリオが策定されている。",
+      "translated": "draft"
+     },
+     {
+      "level": 4,
+      "grade": "B+",
+      "criteria": "Reasonably foreseeable emergencies are identified; drills based on them are run across all shifts; emergency response procedures are documented.",
+      "judge": null,
+      "criteria_ja": "合理的に予見可能な緊急事態が特定され、訓練もそれに基づいて全てのシフトで実施されている。また、緊急事態対応手順が文書化されているか。",
+      "translated": "draft"
+     },
+     {
+      "level": 5,
+      "grade": "A",
+      "criteria": "The respondent can show adoption of other plants best practices / improvements to emergency procedures; or benchmarking results vs other sites exist.",
+      "judge": null,
+      "criteria_ja": "回答者は、緊急事態の対応手順について、他工場の好事例を取り入れたり工夫していることを示すことができる。または、他事業所と比較した結果がある。",
+      "translated": "draft"
+     }
+    ],
+    "sma_group_key": null,
+    "sma_group_qids": [],
+    "topic_ja": "緊急事態計画",
+    "axis_source": "data-pillar-default"
+   },
+   {
+    "id": "SS-036",
+    "topic": "Communication",
+    "solid_pillar": "integration",
+    "solid_pillar_name": "TBD",
+    "primary_category": "Plant Management",
+    "axis": "Governance",
+    "tag": null,
+    "class": "bsapic",
+    "roles": [
+     "Safety Mgr",
+     "Line Mgr",
+     "Supervisor",
+     "Operator"
+    ],
+    "feeds": [
+     "safety_solid"
+    ],
+    "solid_rubric": [
+     {
+      "level": 1,
+      "grade": "C",
+      "criteria": "Confirm the safety section manager conducts safety communication in the plant (legal requirements, 4M changes, standard revisions, etc.).",
+      "judge": null,
+      "criteria_ja": "安全担当課長が、工場内で安全に関するコミュニケーションを行っているか確認する（法的要求事項、4M変更、標準改訂等）。",
+      "translated": "draft"
+     },
+     {
+      "level": 2,
+      "grade": "B-",
+      "criteria": "Confirm onboarding safety training covers accident situations, major risks and their reduction methods.",
+      "judge": null,
+      "criteria_ja": "入社時の安全関連の教育において、災害発生状況、重大リスクおよびその低減方法が含まれているかどうか確認する。",
+      "translated": "draft"
+     },
+     {
+      "level": 3,
+      "grade": "B",
+      "criteria": "Confirm teammates know whom to report to when they find safety issues (accidents, near-misses, defects, etc.).",
+      "judge": null,
+      "criteria_ja": "技能員は、安全関連の課題（災害・ヒヤリ・不具合など）を発見した際に、だれに報告すべきかを知っているか確認する。",
+      "translated": "draft"
+     },
+     {
+      "level": 4,
+      "grade": "B+",
+      "criteria": "Confirm teammates receive feedback from management on the response after reporting accidents/near-misses/defects.",
+      "judge": null,
+      "criteria_ja": "技能員は、災害・ヒヤリ・不具合を管理者に報告した後、管理者からその対応について報告を受けているかどうか確認する。",
+      "translated": "draft"
+     },
+     {
+      "level": 5,
+      "grade": "A",
+      "criteria": "Confirm teammates run safety-improvement activities not only individually/in their dept but also in small groups / cross-functional teams (CFT).",
+      "judge": null,
+      "criteria_ja": "技能員が、安全に関する改善活動を行う際は、自身/自部署だけでなく、小集団・CFTで行っているかどうか確認する。",
+      "translated": "draft"
+     }
+    ],
+    "sma_group_key": null,
+    "sma_group_qids": [],
+    "topic_ja": "コミュニケーション",
+    "axis_source": "data-pillar-default"
+   }
+  ],
+  "dp_solid": [
    {
     "id": "DP-033",
     "topic": "Document Management",
@@ -8885,5 +8891,6 @@
     "axis_source": "existing"
    }
   ]
- }
+ },
+ "appendix_note": "Rows present in the source workbook below the scored table (Safety rows 41,49-57; DP rows 51-59) with no pillar / Point of Evaluation / Primary Category assigned. Not scored. Source: SSDPMA_BTMV_REAL/2_Solid-Safety_BTMV.xlsx, 3_Solid-DP_BTMV.xlsx."
 }
