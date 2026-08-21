@@ -789,15 +789,38 @@ def calculate_ssdpma_scores(bank, responses):
             "dp_solid":     _solid_track(bank["sections"]["dp_solid"], responses, sp)}
 
 
+def _rederive_ctx(db, assessment_id):
+    """(question-by-id index, role_config) for an assessment's type. Built lazily — only
+    responder questions store a `detail`, so most assessments never need it."""
+    a = db.execute("SELECT type, scope FROM assessments WHERE id=?", (assessment_id,)).fetchone()
+    if not a:
+        return {}, {}
+    index = {q["id"]: q for q in all_questions_flat(load_questions(a["type"], a["scope"]))}
+    return index, load_type_meta(a["type"]).get("role_config", {})
+
+
 def get_responses_dict(db, assessment_id):
     rows = db.execute("SELECT question_id, answer, comment, detail, comments FROM responses WHERE assessment_id=?",(assessment_id,)).fetchall()
+    ctx = None
     out = {}
     for r in rows:
         try: det = json.loads(r["detail"]) if r["detail"] else None
         except Exception: det = None
         try: cmts = json.loads(r["comments"]) if r["comments"] else {}
         except Exception: cmts = {}
-        out[r["question_id"]] = {"answer":r["answer"],"comment":r["comment"] or "","detail":det,
+        ans = r["answer"]
+        # A responder question's answer is DERIVED from its detail, not typed by the assessor.
+        # Recompute it against the current bank instead of trusting the stored column: when a
+        # question is corrected (decision_rule, responders), answers written under the old rule
+        # would otherwise stay frozen — the assessor sees their Yes recorded on screen while the
+        # element silently keeps excluding the question from the score.
+        if det is not None:
+            if ctx is None: ctx = _rederive_ctx(db, assessment_id)
+            q = ctx[0].get(r["question_id"])
+            if q is not None:
+                derived = derive_answer(q, det, ctx[1])
+                if derived is not None: ans = derived
+        out[r["question_id"]] = {"answer":ans,"comment":r["comment"] or "","detail":det,
                                  "comments":cmts if isinstance(cmts, dict) else {}}
     return out
 
@@ -1727,7 +1750,7 @@ def export_checksheet(assessment_id):
                 # the other track too, for the twin half this workbook carries
                 other = "dp_solid" if track == "safety_solid" else "safety_solid"
                 data, n = checksheet.build_solid(track, bank["sections"][track], resp,
-                                                 bank["sections"][other])
+                                                 bank["sections"][other], dict(assessment))
             fname = f"{conf['label']}_checksheet_{name}.xlsx"
         else:
             pillars = load_questions(assessment["type"], assessment["scope"])
