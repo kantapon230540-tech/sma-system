@@ -92,9 +92,13 @@ LAYOUTS = {
         # The two dashboard sheets carry their OWN Site/Date inputs — the labels in C4/C5
         # are merged C:E, so the value belongs in F. They are not formulas off the Cover
         # Sheet, so without this the summary the site actually reads is anonymous.
-        # (F6 "Assessment type" is pre-filled in the master; left alone.)
-        "identity": [{"sheet": "(Ref.)MA Dashboard",             "site": "F4", "date": "F5"},
-                     {"sheet": "(Ref.)MA Dashboard (DP_divide)", "site": "F4", "date": "F5"}],
+        # F6 is "Assessment type", and the master ships it hardcoded to
+        # "Validation assessment 妥当性評価" — so a SELF-assessment exported without this
+        # would carry two summary pages labelled Validation. It is written from the record.
+        "identity": [{"sheet": "(Ref.)MA Dashboard",             "site": "F4", "date": "F5",
+                      "kind": "F6"},
+                     {"sheet": "(Ref.)MA Dashboard (DP_divide)", "site": "F4", "date": "F5",
+                      "kind": "F6"}],
     },
 }
 
@@ -107,6 +111,23 @@ SSDPMA_TRACKS = {
                      "template": "safety_solid_checksheet.xlsx"},
     "dp_solid":     {"label": "Solidification-DP",       "kind": "solid",
                      "template": "dp_solid_checksheet.xlsx"},
+}
+
+# Site/Date on the solidification workbooks. These have no Cover Sheet block like the MFG
+# master — the Report and its (ref.) cover carry `Site` in B4 (merged B:C, value in D4,
+# merged D:F) and `Date` in G4 (value in J4, merged J:O). Without this they go out
+# anonymous, which is how BMT's name survived on them for so long.
+#
+# Only the half this workbook actually fills is named. Att-2's DP half is a superseded
+# revision and is deliberately never written, so putting a site name on `DP Cover` there
+# would assert a DP assessment that did not happen.
+SOLID_IDENTITY = {
+    "safety_solid": [{"sheet": "Safety Report",       "site": "D4", "date": "J4"},
+                     {"sheet": "(ref.) Safety Cover", "site": "D4", "date": "J4"}],
+    "dp_solid":     [{"sheet": "DP Report",           "site": "D4", "date": "J4"},
+                     {"sheet": "DP Cover",            "site": "D4", "date": "J4"},
+                     # the Safety twin half IS filled in this workbook, so it is named too
+                     {"sheet": "Safety Cover",        "site": "D4", "date": "J4"}],
 }
 
 _MAPS_CACHE = {}
@@ -363,26 +384,33 @@ def build(assessment_type, pillars, responses, assessment=None):
         if edits:
             patched[cover["sheet"]], _, _ = _patch_rows(_sheet_xml(path, cover["sheet"]), edits)
 
-    if assessment:
-        date = (assessment.get("assessment_date") or "").strip()
-        for ident in layout.get("identity") or []:
-            edits = {}
-            for key, val in (("site", assessment.get("site_name")),
-                             ("date", date),
-                             ("assessors", _assessor_names(assessment)),
-                             ("kind", ASSESSMENT_TYPE_LABEL.get(
-                                 (assessment.get("kind") or "").strip()))):
-                ref = ident.get(key)
-                if not ref or not val: continue
-                col, row = _split(ref)
-                edits.setdefault(row, {})[col] = val
-            if edits:
-                patched[ident["sheet"]], _, _ = _patch_rows(
-                    _sheet_xml(path, ident["sheet"]), edits)
+    _write_identity(path, patched, layout.get("identity"), assessment)
 
     return _repack(path, patched), total
 
-def build_solid(track, sections, responses, twin_sections=None):
+
+def _write_identity(path, patched, idents, assessment):
+    """Fill the Site/Date/Assessor/Type block on the sheets the site actually reads.
+    Skipped silently when the record has nothing to say — an exported sheet must never
+    invent identity, and must never leave the previous site's showing."""
+    if not assessment or not idents: return
+    date = (assessment.get("assessment_date") or "").strip()
+    for ident in idents:
+        edits = {}
+        for key, val in (("site", assessment.get("site_name")),
+                         ("date", date),
+                         ("assessors", _assessor_names(assessment)),
+                         ("kind", ASSESSMENT_TYPE_LABEL.get(
+                             (assessment.get("kind") or "").strip()))):
+            ref = ident.get(key)
+            if not ref or not val: continue
+            col, row = _split(ref)
+            edits.setdefault(row, {})[col] = val
+        if edits:
+            patched[ident["sheet"]], _, _ = _patch_rows(
+                _sheet_xml(path, ident["sheet"]), edits)
+
+def build_solid(track, sections, responses, twin_sections=None, assessment=None):
     """One solidification workbook (Safety or DP) with every judged rubric level written
     into its Judge cell. `sections` is the bank's list for that track; `responses` is
     keyed <item id>__L<level>, the same key the assess page saves under.
@@ -417,6 +445,7 @@ def build_solid(track, sections, responses, twin_sections=None):
         if miss: missing[sheet] = miss
     if missing:
         raise ValueError(f"{track}: rows not found in {missing} — row map is stale")
+    _write_identity(path, patched, SOLID_IDENTITY.get(track), assessment)
     return _repack(path, patched), total
 
 def _count(maps, sections, responses):
